@@ -6,10 +6,11 @@ cd ../db/postgres
 ./start.sh
 echo "Starting core-engine"
 cd ../../core_engine
-./start.sh
+./start.sh $1
 echo "Starting datahub"
+sleep 10
 cd ../datahub
-./start.sh
+./start.sh $1
 echo "Starting docs"
 cd ../docs
 ./start.sh
