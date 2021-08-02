@@ -13,4 +13,4 @@ cd ../datahub
 echo "Starting docs"
 cd ../docs
 ./start.sh
-echo "All containers up"
+echo "All containers up."
