@@ -50,25 +50,32 @@ def deploy_document_classifier(
     min_inference_units: int, endpoint_name: str, model_arn: str
 ):
 
-    bashCommand = f"aws comprehend create-endpoint --desired-inference-units {min_inference_units} --endpoint-name {endpoint_name} --model-arn {model_arn}"
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    response = json.loads(output.decode("UTF-8"))
+    response = client.create_endpoint(
+        EndpointName=endpoint_name,
+        ModelArn=model_arn,
+        DesiredInferenceUnits=min_inference_units,
+    )
+    # bashCommand = f"aws comprehend create-endpoint --desired-inference-units {min_inference_units} --endpoint-name {endpoint_name} --model-arn {model_arn}"
+    # process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    # output, error = process.communicate()
+    # response = json.loads(output.decode("UTF-8"))
     return {"endpoint_arn": response.get("EndpointArn", None)}
 
 
 def undeploy_document_classifier(endpoint_arn: str):
-    bashCommand = f"aws comprehend delete-endpoint --endpoint-arn {endpoint_arn}"
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
-    output, error = process.communicate()
+    response = client.delete_endpoint(EndpointArn=endpoint_arn)
+    # bashCommand = f"aws comprehend delete-endpoint --endpoint-arn {endpoint_arn}"
+    # process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+    # output, error = process.communicate()
 
 
 def get_predictions(endpoint_arn: str, text: str):
-    bashCommand = (
-        f"aws comprehend classify-document --endpoint-arn {endpoint_arn} --text"
-    )
-    bashCommand_list = bashCommand.split()
-    bashCommand_list.append(text)
-    process = subprocess.Popen(bashCommand_list, stdout=subprocess.PIPE)
-    output, error = process.communicate()
-    return json.loads(output.decode("UTF-8"))
+    response = client.classify_document(Text=text, EndpointArn=endpoint_arn)
+    # bashCommand = (
+    #     f"aws comprehend classify-document --endpoint-arn {endpoint_arn} --text"
+    # )
+    # bashCommand_list = bashCommand.split()
+    # bashCommand_list.append(text)
+    # process = subprocess.Popen(bashCommand_list, stdout=subprocess.PIPE)
+    # output, error = process.communicate()
+    return json.loads(response)
