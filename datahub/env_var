@@ -1,0 +1,4 @@
+core_url=http://synapse-core:5000
+datahub_url=http://synapse-datahub:7000
+label_studio_url=http://synapse-label-studio-app:8080
+db_url=synapse-postgres:5432

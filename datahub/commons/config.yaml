@@ -1,0 +1,65 @@
+core_engine:
+  aws:
+    project_router:
+      create_project: !ENV ${core_url}/aws/rekog/create_project
+      delete_project: !ENV ${core_url}/aws/rekog/delete_project
+      project_description: !ENV ${core_url}/aws/rekog/get_project_description
+      get_all_projects: !ENV ${core_url}/aws/rekog/get_all_projects
+    model_router:
+      start_training: !ENV ${core_url}/aws/rekog/start_training
+      deploy_model: !ENV ${core_url}/aws/rekog/deploy_model
+      undeploy_model: !ENV ${core_url}/aws/rekog/undeploy_model
+      delete_model: !ENV ${core_url}/aws/rekog/delete_model
+      get_model_evaluation: !ENV ${core_url}/aws/rekog/get_model_evaluation
+      get_model_manifest: !ENV ${core_url}/aws/rekog/get_model_manifest
+      get_predictions: !ENV ${core_url}/aws/rekog/get_predictions
+    sagemaker_router:
+      start_training_job: !ENV ${core_url}/aws/sagemaker/start_training_job
+      stop_training_job: !ENV ${core_url}/aws/sagemaker/stop_training_job
+      describe_training_job: !ENV ${core_url}/aws/sagemaker/describe_training_job
+      list_training_job: !ENV ${core_url}/aws/sagemaker/list_training_job
+    comprehend_router:
+      create_document_classifier: !ENV ${core_url}/aws/comprehend/create_document_classifier
+      delete_document_classifier: !ENV ${core_url}/aws/comprehend/delete_document_classifier
+      describe_document_classifier: !ENV ${core_url}/aws/comprehend/describe_document_classifier
+      list_document_classifier: !ENV ${core_url}/aws/comprehend/list_document_classifier
+      stop_training_document_classifier: !ENV ${core_url}/aws/comprehend/stop_training_document_classifier
+      deploy_document_classifier: !ENV ${core_url}/aws/comprehend/deploy_document_classifier
+      undeploy_document_classifier: !ENV ${core_url}/aws/comprehend/undeploy_document_classifier
+      get_predictions: !ENV ${core_url}/aws/comprehend/get_predictions
+  label_studio_router:
+    transform_annotations: !ENV ${core_url}/label_studio/transform_annotations
+  gcp:
+    automl:
+      text:
+        create_classification_dataset: !ENV ${core_url}/gcp/automl/create_text_classification_dataset
+        create_ner_dataset: !ENV ${core_url}/gcp/automl/create_ner_dataset
+        get_predictions: !ENV ${core_url}/gcp/automl/get_text_predictions
+        train_classification_model: !ENV ${core_url}/gcp/automl/train_text_classification_model
+        train_ner_model: !ENV ${core_url}/gcp/automl/train_ner_model
+      image:
+        create_image_classification_dataset: !ENV ${core_url}/gcp/automl/create_image_classification_dataset
+        create_object_detection_dataset: !ENV ${core_url}/gcp/automl/create_object_detection_dataset
+        get_image_predictions: !ENV ${core_url}/gcp/automl/get_image_predictions
+        train_image_classification_model: !ENV ${core_url}/gcp/automl/train_image_classification_model
+        train_image_classification_edge_model: !ENV ${core_url}/gcp/automl/train_image_classification_edge_model
+        train_object_detection_model: !ENV ${core_url}/gcp/automl/train_object_detection_model
+        train_object_detection_edge_model: !ENV ${core_url}/gcp/automl/train_object_detection_edge_model
+      common:
+        import_dataset: !ENV ${core_url}/gcp/automl/import_dataset
+        deploy_model: !ENV ${core_url}/gcp/automl/deploy_model
+        undeploy_model: !ENV ${core_url}/gcp/automl/undeploy_model
+        list_models: !ENV ${core_url}/gcp/automl/list_models
+        get_model_description: !ENV ${core_url}/gcp/automl/get_model_description
+        delete_model: !ENV ${core_url}/gcp/automl/delete_model
+        list_datasets: !ENV ${core_url}/gcp/automl/list_datasets
+        get_dataset_description: !ENV ${core_url}/gcp/automl/get_dataset_description
+        delete_dataset: !ENV ${core_url}/gcp/automl/delete_dataset
+        get_operation_details: !ENV ${core_url}/gcp/automl/get_operation_details
+
+label_studio:
+  endpoint:
+    label_studio_project: !ENV ${label_studio_url}/api/projects
+    s3_storage: !ENV ${label_studio_url}/api/storages/s3
+    gcs_storage: !ENV ${label_studio_url}/api/storages/gcs
+  token: "vaibhavsatpathyisstud"

@@ -1,0 +1,1 @@
+streamlit run data_governance.py --server.port 8501

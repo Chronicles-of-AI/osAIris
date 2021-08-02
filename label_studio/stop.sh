@@ -1,0 +1,1 @@
+docker rm -f synapse-label-studio-app synapse-label-studio-db
