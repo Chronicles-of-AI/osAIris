@@ -134,3 +134,4 @@ label_studio/postgres-data/
 label_studio/mydata/
 datahub/data/
 core_engine/data/
+streamlit/token.json
