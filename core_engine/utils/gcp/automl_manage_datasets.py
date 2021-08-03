@@ -23,7 +23,6 @@ def list_datasets(project_id: str, region: str):
     request = automl.ListDatasetsRequest(parent=project_location, filter="")
     response = client.list_datasets(request=request)
 
-    print("List of datasets:")
     all_datasets = []
     for dataset in response:
         dataset_dict = {

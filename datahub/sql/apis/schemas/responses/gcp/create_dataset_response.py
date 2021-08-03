@@ -26,3 +26,8 @@ class CreateObjectDetectionDataset(BaseModel):
     project_id: str
     display_name: str
     region: str
+
+
+class CreateDatasetResponse(BaseModel):
+    dataset_name: str
+    dataset_id: str
