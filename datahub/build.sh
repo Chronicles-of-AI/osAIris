@@ -1,1 +1,1 @@
-docker build -t synapse-datahub .
+docker build -t osairis-datahub .

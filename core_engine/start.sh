@@ -8,8 +8,8 @@ then
         -e AWS_DEFAULT_REGION="us-east-2" \
         -v "$(pwd)":/app \
         --env-file env_var \
-        --network synapse-bridge \
-        --name synapse-core synapse-core
+        --network osairis-bridge \
+        --name osairis-core osairis-core
 elif [ $1 == "gcp" ]
 then
     docker run -d \
@@ -19,8 +19,8 @@ then
         -v "$(pwd)":/app \
         -v ${GOOGLE_APPLICATION_CREDENTIALS}:/app/data/google_credential.json \
         --env-file env_var \
-        --network synapse-bridge \
-        --name synapse-core synapse-core
+        --network osairis-bridge \
+        --name osairis-core osairis-core
 else
     echo "Cloud platform provided is neither aws or gcp"
 fi

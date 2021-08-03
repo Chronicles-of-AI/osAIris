@@ -1,1 +1,1 @@
-docker rm -f synapse-core
+docker rm -f osairis-core

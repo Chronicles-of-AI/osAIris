@@ -5,7 +5,7 @@ import os
 import json
 
 IP = os.environ.get("IP", "192.168.1.100")
-st.title("SynapSe")
+st.title("osAIris")
 DATA_HUB = f"http://{IP}:7000"
 token_obj = json.load(open("token.json", "r"))
 token = token_obj.get("token")

@@ -1,1 +1,1 @@
-docker rm -f synapse-postgres
+docker rm -f osairis-postgres

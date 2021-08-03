@@ -18,18 +18,18 @@ class DatabaseManager:
         event.listen(
             self.Base.metadata,
             "before_create",
-            DDL("CREATE SCHEMA IF NOT EXISTS synapse_schema"),
+            DDL("CREATE SCHEMA IF NOT EXISTS osairis_schema"),
         )
 
     @staticmethod
     def sharedInstance():
-        """ Static access method. """
+        """Static access method."""
         if DatabaseManager.__instance is None:
             DatabaseManager()
         return DatabaseManager.__instance
 
     def __init__(self):
-        """Virtually private constructor. """
+        """Virtually private constructor."""
         if DatabaseManager.__instance is not None:
             try:
                 raise Exception("Instance exists!")
@@ -42,7 +42,7 @@ class DatabaseManager:
             postgres_url = os.environ.get("db_url")
             self.db_url = f"postgresql://postgres:postgres@{postgres_url}/postgres"
             # logging.info(f"Database Url: {self.db_url}")
-            self.metadata = MetaData(schema="synapse_schema")
+            self.metadata = MetaData(schema="osairis_schema")
             self.engine = create_engine(self.db_url, pool_pre_ping=True)
             self.Base = declarative_base(metadata=self.metadata)
             self.SessionMaker = sessionmaker(bind=self.engine)

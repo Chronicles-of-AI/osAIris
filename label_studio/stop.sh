@@ -1,1 +1,1 @@
-docker rm -f synapse-label-studio-app synapse-label-studio-db
+docker rm -f osairis-label-studio-app osairis-label-studio-db

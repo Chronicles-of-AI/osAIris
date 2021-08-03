@@ -9,10 +9,10 @@ then
         -e algorithm="HS256" \
         --env-file env_var \
         -v "$(pwd)":/app \
-        --link synapse-core:synapse-core \
-        --link synapse-postgres:synapse-postgres \
-        --network synapse-bridge \
-        --name synapse-datahub synapse-datahub
+        --link osairis-core:osairis-core \
+        --link osairis-postgres:osairis-postgres \
+        --network osairis-bridge \
+        --name osairis-datahub osairis-datahub
 elif [ $1 == "gcp" ]
 then
     docker run -d \
@@ -23,10 +23,10 @@ then
         --env-file env_var \
         -v "$(pwd)":/app \
         -v ${GOOGLE_APPLICATION_CREDENTIALS}:/app/data/google_credential.json \
-        --link synapse-core:synapse-core \
-        --link synapse-postgres:synapse-postgres \
-        --network synapse-bridge \
-        --name synapse-datahub synapse-datahub
+        --link osairis-core:osairis-core \
+        --link osairis-postgres:osairis-postgres \
+        --network osairis-bridge \
+        --name osairis-datahub osairis-datahub
 else
     echo "Cloud platform provided is neither aws or gcp"
 fi

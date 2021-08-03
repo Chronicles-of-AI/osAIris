@@ -1,1 +1,1 @@
-docker build -t synapse-postgres:latest .
+docker build -t osairis-postgres:latest .

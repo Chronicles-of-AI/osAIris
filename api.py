@@ -67,7 +67,7 @@ def custom_openapi():
     if app.openapi_schema:
         return app.openapi_schema
     openapi_schema = get_openapi(
-        title="osAIris",
+        title="osairis",
         version="0.2 - Beta",
         description="MLOps made simple",
         routes=app.routes,

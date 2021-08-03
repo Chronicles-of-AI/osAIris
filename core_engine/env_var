@@ -1,2 +1,2 @@
-core_url=http://synapse-core:5000
-datahub_url=http://synapse-datahub:7000
+core_url=http://osairis-core:5000
+datahub_url=http://osairis-datahub:7000

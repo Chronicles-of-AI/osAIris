@@ -1,1 +1,1 @@
-docker rm -f synapse-datahub
+docker rm -f osairis-datahub

@@ -1,1 +1,1 @@
-docker build -t synapse-core .
+docker build -t osairis-core .

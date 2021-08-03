@@ -1,1 +1,1 @@
-docker rm -f synapse-docs
+docker rm -f osairis-docs
