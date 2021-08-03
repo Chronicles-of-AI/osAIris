@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sql.apis.schemas.requests.gcp.dataset_management_request import (
     ListDatasets,
     DescriptionDataset,
@@ -16,6 +16,7 @@ manage_dataset_router = APIRouter()
 @manage_dataset_router.post("/gcp/automl/list_datasets")
 def list_datasets(
     list_datasets_request: ListDatasets,
+    token: str = Depends(oauth2_scheme),
 ):
     return ManageDatasetController().list_datasets_controller(
         request=list_datasets_request
@@ -25,6 +26,7 @@ def list_datasets(
 @manage_dataset_router.post("/gcp/automl/get_dataset_description")
 def get_dataset_description(
     get_dataset_description_request: DescriptionDataset,
+    token: str = Depends(oauth2_scheme),
 ):
     return ManageDatasetController().get_dataset_description_controller(
         request=get_dataset_description_request
@@ -34,6 +36,7 @@ def get_dataset_description(
 @manage_dataset_router.post("/gcp/automl/delete_dataset")
 def delete_dataset(
     delete_dataset_request: DeleteDataset,
+    token: str = Depends(oauth2_scheme),
 ):
     return ManageDatasetController().delete_dataset_controller(
         request=delete_dataset_request
