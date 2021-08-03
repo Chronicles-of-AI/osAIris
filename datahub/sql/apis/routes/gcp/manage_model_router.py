@@ -6,6 +6,10 @@ from sql.apis.schemas.requests.gcp.model_management_request import (
     DeleteModels,
 )
 from sql.controllers.gcp.model_management_controller import ManageModelController
+from fastapi.security import OAuth2PasswordBearer
+from commons.auth import decodeJWT
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 manage_model_router = APIRouter()
 

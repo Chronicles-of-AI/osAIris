@@ -5,6 +5,10 @@ from sql.apis.schemas.requests.gcp.dataset_management_request import (
     DeleteDataset,
 )
 from sql.controllers.gcp.dataset_management_controller import ManageDatasetController
+from fastapi.security import OAuth2PasswordBearer
+from commons.auth import decodeJWT
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 manage_dataset_router = APIRouter()
 

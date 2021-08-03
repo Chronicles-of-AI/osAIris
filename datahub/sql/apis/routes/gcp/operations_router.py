@@ -1,5 +1,9 @@
 from fastapi import APIRouter
 from sql.controllers.gcp.operations_controller import OperationsController
+from fastapi.security import OAuth2PasswordBearer
+from commons.auth import decodeJWT
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 operations_router = APIRouter()
 

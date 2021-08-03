@@ -2,6 +2,10 @@ from fastapi import APIRouter
 from typing import List, Optional
 from sql.apis.schemas.requests.gcp.import_dataset_request import ImportDataset
 from sql.controllers.gcp.import_dataset_controller import ImportDatasetController
+from fastapi.security import OAuth2PasswordBearer
+from commons.auth import decodeJWT
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 import_dataset_router = APIRouter()
 

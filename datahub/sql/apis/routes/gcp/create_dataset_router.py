@@ -7,6 +7,10 @@ from sql.apis.schemas.requests.gcp.create_dataset_request import (
     CreateObjectDetectionDataset,
 )
 from sql.controllers.gcp.create_dataset_controller import CreateDatasetController
+from fastapi.security import OAuth2PasswordBearer
+from commons.auth import decodeJWT
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 create_dataset_router = APIRouter()
 

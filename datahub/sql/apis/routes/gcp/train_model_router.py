@@ -5,6 +5,10 @@ from sql.apis.schemas.requests.gcp.train_model_request import (
     TrainImageEdgeModel,
 )
 from sql.controllers.gcp.train_model_controller import TrainModelController
+from fastapi.security import OAuth2PasswordBearer
+from commons.auth import decodeJWT
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 train_model_router = APIRouter()
 
