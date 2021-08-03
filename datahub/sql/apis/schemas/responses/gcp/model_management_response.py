@@ -2,25 +2,7 @@ from typing import List
 from pydantic import BaseModel
 
 
-class ManageModel(BaseModel):
-    project_id: str
+class ManageModelResponse(BaseModel):
+    operation_id: str
     model_id: str
-    region: str
-
-
-class ListModels(BaseModel):
-    project_id: str
-    region: str
-    dataset_id: str = None
-
-
-class DescriptionModels(BaseModel):
-    project_id: str
-    region: str
-    model_id: str = None
-
-
-class DeleteModels(BaseModel):
-    project_id: str
-    region: str
-    model_id: str = None
+    status: str
