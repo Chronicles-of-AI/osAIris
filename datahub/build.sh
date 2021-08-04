@@ -1,1 +1,1 @@
-docker build -t osairis-datahub .
+docker build -t datahub/osairis:latest .

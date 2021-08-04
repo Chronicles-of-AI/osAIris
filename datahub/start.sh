@@ -12,7 +12,7 @@ then
         --link osairis-core:osairis-core \
         --link osairis-postgres:osairis-postgres \
         --network osairis-bridge \
-        --name osairis-datahub osairis-datahub
+        --name osairis-datahub datahub/osairis
 elif [ $1 == "gcp" ]
 then
     docker run -d \
@@ -26,7 +26,7 @@ then
         --link osairis-core:osairis-core \
         --link osairis-postgres:osairis-postgres \
         --network osairis-bridge \
-        --name osairis-datahub osairis-datahub
+        --name osairis-datahub datahub/osairis
 else
     echo "Cloud platform provided is neither aws or gcp"
 fi

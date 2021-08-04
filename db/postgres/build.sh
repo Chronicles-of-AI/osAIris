@@ -1,1 +1,1 @@
-docker build -t osairis-postgres:latest .
+docker build -t postgres/osairis:latest .

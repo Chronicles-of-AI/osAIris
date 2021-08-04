@@ -9,7 +9,7 @@ then
         -v "$(pwd)":/app \
         --env-file env_var \
         --network osairis-bridge \
-        --name osairis-core osairis-core
+        --name osairis-core core/osairis
 elif [ $1 == "gcp" ]
 then
     docker run -d \
@@ -20,7 +20,7 @@ then
         -v ${GOOGLE_APPLICATION_CREDENTIALS}:/app/data/google_credential.json \
         --env-file env_var \
         --network osairis-bridge \
-        --name osairis-core osairis-core
+        --name osairis-core core/osairis
 else
     echo "Cloud platform provided is neither aws or gcp"
 fi

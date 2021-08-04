@@ -1,1 +1,1 @@
-docker build -t osairis-core .
+docker build -t core/osairis:latest .
