@@ -101,7 +101,7 @@ services:
         environment: 
             - SPEC_URL=http://127.0.0.1:7000/openapi.json
             - PAGE_TITLE=osairis Docs
-            - PAGE_FAVICON="https://github.com/Chronicles-of-AI/osAIris/blob/08046e496f728a9e545805a37fca4e72dec4ea51/docs/osAIris.jpeg"
+            - PAGE_FAVICON=https://github.com/Chronicles-of-AI/osAIris/blob/ce6e33adf3bc0a9ca6e2e1cc16a49c16a983a798/docs/logo.jpeg?raw=true
         ports: 
             - 8081:80
         depends_on: 

@@ -73,7 +73,7 @@ def custom_openapi():
         routes=app.routes,
     )
     openapi_schema["info"]["x-logo"] = {
-        "url": "https://github.com/Chronicles-of-AI/osAIris/blob/08046e496f728a9e545805a37fca4e72dec4ea51/docs/osAIris.jpeg?raw=true"
+        "url": "https://github.com/Chronicles-of-AI/osAIris/blob/ce6e33adf3bc0a9ca6e2e1cc16a49c16a983a798/docs/logo.jpeg?raw=true"
     }
     app.openapi_schema = openapi_schema
     return app.openapi_schema
