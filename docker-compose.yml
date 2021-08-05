@@ -1,0 +1,116 @@
+version: "3.3"
+services:
+    app:
+        stdin_open: true
+        tty: true
+        image: heartexlabs/label-studio:latest
+        container_name: osairis-label-studio-app
+        ports:
+            - 8080:8080
+        depends_on:
+            - db
+        environment:
+            - GOOGLE_APPLICATION_CREDENTIALS=/label-studio/data/google_credential.json
+            - DJANGO_DB=default
+            - POSTGRE_NAME=postgres
+            - POSTGRE_USER=postgres
+            - POSTGRE_PASSWORD=postgres
+            - POSTGRE_PORT=5432
+            - POSTGRE_HOST=db
+            - LABEL_STUDIO_DISABLE_SIGNUP_WITHOUT_LINK=true
+            - LABEL_STUDIO_USERNAME=admin@osairis.com
+            - LABEL_STUDIO_PASSWORD=password
+            - LABEL_STUDIO_USER_TOKEN=vaibhavsatpathyisstud
+            - LABEL_STUDIO_HOST=${LABEL_STUDIO_HOST:-}
+        volumes:
+            - ./label_studio/mydata:/label-studio/data:rw
+            - ${GOOGLE_APPLICATION_CREDENTIALS}:/label-studio/data/google_credential.json
+            - static:/label-studio/label_studio:rw
+        command: [ "./deploy/wait-for-postgres.sh", "bash", "/label-studio/deploy/start_label_studio.sh" ]
+        networks:
+            - osairis
+
+    db:
+        image: postgres:12
+        restart: always
+        container_name: osairis-label-studio-db
+        ports:
+            - 5433:5432
+        environment:
+            - POSTGRES_HOST_AUTH_METHOD=trust
+        volumes:
+            - ${POSTGRES_DATA_DIR:-./label_studio/postgres-data}:/var/lib/postgresql/data
+        networks:
+            - osairis
+
+    osairis_db:
+        image: postgres:12
+        container_name: osairis-postgres
+        environment: 
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        volumes: 
+            - ./db/postgres/postgres-data:/var/lib/postgresql/data
+        ports: 
+            - 5432:5432
+        networks: 
+            - osairis
+
+    osairis_core:
+        build: core_engine/.
+        image: osairis/core:latest
+        container_name: osairis-core
+        environment: 
+            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            - AWS_DEFAULT_REGION=us-east-2
+            - GOOGLE_APPLICATION_CREDENTIALS=/app/data/google_credential.json
+        volumes:
+            - ./core_engine:/app
+            - ${GOOGLE_APPLICATION_CREDENTIALS}:/app/data/google_credential.json
+        ports: 
+            - 5000:5000
+        networks: 
+            - osairis
+
+    osairis_datahub:
+        build: datahub/.
+        image: osairis/datahub:latest
+        container_name: osairis-datahub
+        env_file: datahub/env_var
+        environment: 
+            - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+            - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+            - AWS_DEFAULT_REGION=us-east-2
+            - GOOGLE_APPLICATION_CREDENTIALS=/app/data/google_credential.json
+            - secret='b9c8e5acc65e88f817ec58d94b9664cba1385a77a1a63c1e8fa8cd5e5c5852c2'
+            - algorithm=HS256
+        volumes: 
+            - ./datahub:/app
+            - ${GOOGLE_APPLICATION_CREDENTIALS}:/app/data/google_credential.json
+        ports: 
+            - 7000:7000
+        depends_on: 
+            - osairis_db
+        networks: 
+            - osairis
+    
+    osairis_docs:
+        image: redocly/redoc:latest
+        container_name: osairis-docs
+        environment: 
+            - SPEC_URL=http://127.0.0.1:7000/openapi.json
+            - PAGE_TITLE=osairis Docs
+            - PAGE_FAVICON="https://github.com/Chronicles-of-AI/osAIris/blob/08046e496f728a9e545805a37fca4e72dec4ea51/docs/osAIris.jpeg"
+        ports: 
+            - 8081:80
+        depends_on: 
+            - osairis_datahub
+        networks: 
+            - osairis
+volumes:
+  static: {}
+  
+networks: 
+    osairis:
+        name: osairis-network
