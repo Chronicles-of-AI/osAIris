@@ -14,6 +14,17 @@ class ComprehendController:
         )
 
     def create_document_classifier_controller(self, request):
+        """[summary]
+
+        Args:
+            request ([type]): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
         try:
             uuid = str(int(datetime.now().timestamp()))
             create_document_classifier_request = request.dict(exclude_none=True)
@@ -52,123 +63,219 @@ class ComprehendController:
             raise error
 
     def delete_document_classifier_controller(self, request):
-        delete_document_classifier_request = request.dict(exclude_none=True)
-        delete_document_classifier_url = self.core_aws_comprehend_config.get(
-            "delete_document_classifier"
-        )
-        response, status_code = APIInterface.post(
-            route=delete_document_classifier_url,
-            data=delete_document_classifier_request,
-        )
-        if status_code == 200:
-            crud_request = {
-                "model_id": request.DocumentClassifierArn,
-                "status": "Deleted",
-                "updated": datetime.now(),
-            }
-            self.CRUDModel.update(crud_request)
-            return {"status": "classifier deleted"}
-        else:
-            # TODO: error
-            pass
-            return {"status": "deletion failed"}
+        """[summary]
+
+        Args:
+            request ([type]): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            delete_document_classifier_request = request.dict(exclude_none=True)
+            delete_document_classifier_url = self.core_aws_comprehend_config.get(
+                "delete_document_classifier"
+            )
+            response, status_code = APIInterface.post(
+                route=delete_document_classifier_url,
+                data=delete_document_classifier_request,
+            )
+            if status_code == 200:
+                crud_request = {
+                    "model_id": request.DocumentClassifierArn,
+                    "status": "Deleted",
+                    "updated": datetime.now(),
+                }
+                self.CRUDModel.update(crud_request)
+                return {"status": "classifier deleted"}
+            else:
+                # TODO: error
+                pass
+                return {"status": "deletion failed"}
+        except Exception as error:
+            raise error
 
     def describe_document_classifier_controller(self, request):
-        describe_document_classifier_request = request.dict(exclude_none=True)
-        describe_document_classifier_url = self.core_aws_comprehend_config.get(
-            "describe_document_classifier"
-        )
-        response, status_code = APIInterface.post(
-            route=describe_document_classifier_url,
-            data=describe_document_classifier_request,
-        )
-        return response
+        """[summary]
+
+        Args:
+            request ([type]): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            describe_document_classifier_request = request.dict(exclude_none=True)
+            describe_document_classifier_url = self.core_aws_comprehend_config.get(
+                "describe_document_classifier"
+            )
+            response, status_code = APIInterface.post(
+                route=describe_document_classifier_url,
+                data=describe_document_classifier_request,
+            )
+            return response
+        except Exception as error:
+            raise error
 
     def stop_training_document_classifier_controller(self, request):
-        stop_training_document_classifier_request = request.dict(exclude_none=True)
-        stop_training_document_classifier_url = self.core_aws_comprehend_config.get(
-            "stop_training_document_classifier"
-        )
-        response, status_code = APIInterface.post(
-            route=stop_training_document_classifier_url,
-            data=stop_training_document_classifier_request,
-        )
-        if status_code == 200:
-            crud_request = {
-                "model_id": request.DocumentClassifierArn,
-                "status": "Stopped",
-                "updated": datetime.now(),
-            }
-            self.CRUDModel.update(crud_request)
-            return {"status": "training stopped"}
-        else:
-            # TODO: error
-            pass
-            return {"status": "training failed"}
+        """[summary]
+
+        Args:
+            request ([type]): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            stop_training_document_classifier_request = request.dict(exclude_none=True)
+            stop_training_document_classifier_url = self.core_aws_comprehend_config.get(
+                "stop_training_document_classifier"
+            )
+            response, status_code = APIInterface.post(
+                route=stop_training_document_classifier_url,
+                data=stop_training_document_classifier_request,
+            )
+            if status_code == 200:
+                crud_request = {
+                    "model_id": request.DocumentClassifierArn,
+                    "status": "Stopped",
+                    "updated": datetime.now(),
+                }
+                self.CRUDModel.update(crud_request)
+                return {"status": "training stopped"}
+            else:
+                # TODO: error
+                pass
+                return {"status": "training failed"}
+        except Exception as error:
+            raise error
 
     def list_document_classifier_controller(self):
-        list_document_classifier_url = self.core_aws_comprehend_config.get(
-            "list_document_classifier"
-        )
-        response, status_code = APIInterface.get(
-            route=list_document_classifier_url,
-        )
-        return response
+        """[summary]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            list_document_classifier_url = self.core_aws_comprehend_config.get(
+                "list_document_classifier"
+            )
+            response, status_code = APIInterface.get(
+                route=list_document_classifier_url,
+            )
+            return response
+        except Exception as error:
+            raise error
 
     def deploy_document_classifier_controller(self, request):
-        uuid = str(int(datetime.now().timestamp()))
-        deploy_document_classifier_request = request.dict(exclude_none=True)
-        deploy_document_classifier_url = self.core_aws_comprehend_config.get(
-            "deploy_document_classifier"
-        )
-        response, status_code = APIInterface.post(
-            route=deploy_document_classifier_url,
-            data=deploy_document_classifier_request,
-        )
-        deployment_crud_request = {
-            "UUID": uuid,
-            "model_id": request.model_arn,
-            "deployment_endpoint": response.get("endpoint_arn"),
-            "created": datetime.now(),
-            "status": "Deployed",
-        }
-        if status_code == 200:
-            self.CRUDDeployment.create(**deployment_crud_request)
-            response.update({"status": "model deployed successfully"})
-            return response
-        else:
-            # TODO: error
-            pass
-            return {"status": "model deployment failed"}
+        """[summary]
+
+        Args:
+            request ([type]): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            uuid = str(int(datetime.now().timestamp()))
+            deploy_document_classifier_request = request.dict(exclude_none=True)
+            deploy_document_classifier_url = self.core_aws_comprehend_config.get(
+                "deploy_document_classifier"
+            )
+            response, status_code = APIInterface.post(
+                route=deploy_document_classifier_url,
+                data=deploy_document_classifier_request,
+            )
+            deployment_crud_request = {
+                "UUID": uuid,
+                "model_id": request.model_arn,
+                "deployment_endpoint": response.get("endpoint_arn"),
+                "created": datetime.now(),
+                "status": "Deployed",
+            }
+            if status_code == 200:
+                self.CRUDDeployment.create(**deployment_crud_request)
+                response.update({"status": "model deployed successfully"})
+                return response
+            else:
+                # TODO: error
+                pass
+                return {"status": "model deployment failed"}
+        except Exception as error:
+            raise error
 
     def undeploy_document_classifier_controller(self, request):
-        undeploy_document_classifier_request = request.dict(exclude_none=True)
-        undeploy_document_classifier_url = self.core_aws_comprehend_config.get(
-            "undeploy_document_classifier"
-        )
-        response, status_code = APIInterface.post(
-            route=undeploy_document_classifier_url,
-            data=undeploy_document_classifier_request,
-        )
-        undeployment_crud_request = {
-            "deployment_endpoint": request.endpoint_arn,
-            "updated": datetime.now(),
-            "status": "UnDeployed",
-        }
-        if status_code == 200:
-            self.CRUDDeployment.update_by_endpoint(
-                deployment_request=undeployment_crud_request
+        """[summary]
+
+        Args:
+            request ([type]): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            undeploy_document_classifier_request = request.dict(exclude_none=True)
+            undeploy_document_classifier_url = self.core_aws_comprehend_config.get(
+                "undeploy_document_classifier"
             )
-            return {"status": "model undeployed successfully"}
-        else:
-            # TODO: error
-            pass
-            return {"status": "model undeployment failed"}
+            response, status_code = APIInterface.post(
+                route=undeploy_document_classifier_url,
+                data=undeploy_document_classifier_request,
+            )
+            undeployment_crud_request = {
+                "deployment_endpoint": request.endpoint_arn,
+                "updated": datetime.now(),
+                "status": "UnDeployed",
+            }
+            if status_code == 200:
+                self.CRUDDeployment.update_by_endpoint(
+                    deployment_request=undeployment_crud_request
+                )
+                return {"status": "model undeployed successfully"}
+            else:
+                # TODO: error
+                pass
+                return {"status": "model undeployment failed"}
+        except Exception as error:
+            raise error
 
     def get_predictions_controller(self, endpoint_arn: str, text: str):
-        get_predictions_url = self.core_aws_comprehend_config.get("get_predictions")
-        response, status_code = APIInterface.get(
-            route=get_predictions_url,
-            params={"endpoint_arn": endpoint_arn, "text": text},
-        )
-        return response
+        """[summary]
+
+        Args:
+            endpoint_arn (str): [description]
+            text (str): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            get_predictions_url = self.core_aws_comprehend_config.get("get_predictions")
+            response, status_code = APIInterface.get(
+                route=get_predictions_url,
+                params={"endpoint_arn": endpoint_arn, "text": text},
+            )
+            return response
+        except Exception as error:
+            raise error

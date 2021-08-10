@@ -25,22 +25,36 @@ class OperationsController:
         }
 
     def get_operation_details_controller(self, operation_id):
-        get_operation_details_url = (
-            self.gcp_config.get("automl").get("common").get("get_operation_details")
-        )
-        response, status_code = APIInterface.get(
-            route=get_operation_details_url, params={"operation_id": operation_id}
-        )
-        if response.get("operation_completed"):
-            operation_data = self.CRUDOperations.read(operation_id=operation_id)
-            current_stage = operation_data.get("functional_stage")
-            service_id = operation_data.get("service_id")
-            self.functional_stages.get(current_stage)(
-                operation_id=operation_id,
-                service_id=service_id,
-                status=response.get("status_metadata"),
-                error=response.get("error_message"),
+        """[summary]
+
+        Args:
+            operation_id ([type]): [description]
+
+        Raises:
+            error: [description]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            get_operation_details_url = (
+                self.gcp_config.get("automl").get("common").get("get_operation_details")
             )
-            return response
-        else:
-            return response
+            response, status_code = APIInterface.get(
+                route=get_operation_details_url, params={"operation_id": operation_id}
+            )
+            if response.get("operation_completed"):
+                operation_data = self.CRUDOperations.read(operation_id=operation_id)
+                current_stage = operation_data.get("functional_stage")
+                service_id = operation_data.get("service_id")
+                self.functional_stages.get(current_stage)(
+                    operation_id=operation_id,
+                    service_id=service_id,
+                    status=response.get("status_metadata"),
+                    error=response.get("error_message"),
+                )
+                return response
+            else:
+                return response
+        except Exception as error:
+            raise error
