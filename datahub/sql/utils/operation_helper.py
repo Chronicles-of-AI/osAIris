@@ -9,20 +9,26 @@ from datetime import datetime
 
 
 def update_operations_record(operation_id: str, status: str, error: str):
-    operation_request = {
-        "operation_id": operation_id,
-        "status": status,
-        "error": error,
-        "updated": datetime.now(),
-    }
-    CRUDOperations().update(operation_request=operation_request)
+    try:
+        operation_request = {
+            "operation_id": operation_id,
+            "status": status,
+            "error": error,
+            "updated": datetime.now(),
+        }
+        CRUDOperations().update(operation_request=operation_request)
+    except Exception as error:
+        raise error
 
 
 def delete_dataset_operation(
     operation_id: str, service_id: str, status: str, error: str = ""
 ):
-    update_operations_record(operation_id=operation_id, status=status, error=error)
-    CRUDDataset().update(dataset_id=service_id, status="Deleted")
+    try:
+        update_operations_record(operation_id=operation_id, status=status, error=error)
+        CRUDDataset().update(dataset_id=service_id, status="Deleted")
+    except Exception as error:
+        raise error
 
 
 def import_dataset_operation(

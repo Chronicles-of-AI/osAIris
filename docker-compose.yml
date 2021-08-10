@@ -68,6 +68,7 @@ services:
         volumes:
             - ./core_engine:/app
             - ${GOOGLE_APPLICATION_CREDENTIALS}:/app/data/google_credential.json
+            - ./logs:/app/logs
         ports: 
             - 5000:5000
         networks: 
@@ -87,6 +88,7 @@ services:
             - algorithm=HS256
         volumes: 
             - ./datahub:/app
+            - ./logs:/app/logs
             - ${GOOGLE_APPLICATION_CREDENTIALS}:/app/data/google_credential.json
         ports: 
             - 7000:7000

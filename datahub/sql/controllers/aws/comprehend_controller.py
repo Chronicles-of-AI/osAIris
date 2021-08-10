@@ -14,37 +14,42 @@ class ComprehendController:
         )
 
     def create_document_classifier_controller(self, request):
-        uuid = str(int(datetime.now().timestamp()))
-        create_document_classifier_request = request.dict(exclude_none=True)
-        create_document_classifier_url = self.core_aws_comprehend_config.get(
-            "create_document_classifier"
-        )
-        response, status_code = APIInterface.post(
-            route=create_document_classifier_url,
-            data=create_document_classifier_request,
-        )
-        if status_code == 200:
-            crud_request = {
-                "model_id": response.get("document_classifier_arn"),
-                "dataset_id": create_document_classifier_request.get("InputDataConfig"),
-                "artifacts": create_document_classifier_request.get("OutputDataConfig"),
-                "alias_name": create_document_classifier_request.get(
-                    "DocumentClassifierName"
-                ),
-                "auto_trigger": False,
-                "UUID": uuid,
-                "status": "Running",
-                "created": datetime.now(),
-            }
-            self.CRUDModel.create(**crud_request)
-            return {
-                "document_classifier_arn": response.get("document_classifier_arn"),
-                "status": "training started",
-            }
-        else:
-            # TODO: error
-            pass
-            return {"status": "training failed"}
+        try:
+            uuid = str(int(datetime.now().timestamp()))
+            create_document_classifier_request = request.dict(exclude_none=True)
+            create_document_classifier_url = self.core_aws_comprehend_config.get(
+                "create_document_classifier"
+            )
+            response, status_code = APIInterface.post(
+                route=create_document_classifier_url,
+                data=create_document_classifier_request,
+            )
+            if status_code == 200:
+                crud_request = {
+                    "model_id": response.get("document_classifier_arn"),
+                    "dataset_id": create_document_classifier_request.get(
+                        "InputDataConfig"
+                    ),
+                    "artifacts": create_document_classifier_request.get(
+                        "OutputDataConfig"
+                    ),
+                    "alias_name": create_document_classifier_request.get(
+                        "DocumentClassifierName"
+                    ),
+                    "auto_trigger": False,
+                    "UUID": uuid,
+                    "status": "Running",
+                    "created": datetime.now(),
+                }
+                self.CRUDModel.create(**crud_request)
+                return {
+                    "document_classifier_arn": response.get("document_classifier_arn"),
+                    "status": "training started",
+                }
+            else:
+                raise {"status": "training failed"}
+        except Exception as error:
+            raise error
 
     def delete_document_classifier_controller(self, request):
         delete_document_classifier_request = request.dict(exclude_none=True)

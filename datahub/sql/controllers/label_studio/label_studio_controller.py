@@ -5,6 +5,9 @@ from commons.external_call import APIInterface
 from sql import config
 from sql.utils.s3_helper import write_annotations_to_s3
 from sql.utils.gcs_helper import upload_blob_string
+from sql import logger
+
+logging = logger(__name__)
 
 
 class ProjectController:
@@ -17,13 +20,23 @@ class ProjectController:
         self.header = {"Authorization": f"Token {self.label_studio_token}"}
 
     def create_project_controller(self, request):
-        create_project_request = request.dict(exclude_none=True)
-        create_project_url = self.label_studio_config.get("label_studio_project")
-        response, status_code = APIInterface.post(
-            route=create_project_url, data=create_project_request, headers=self.header
-        )
-        print(f"createw project response : {response}")
-        return response
+        try:
+            logging.info(
+                f"Creating a annotation project on Label Studio with request: {request}"
+            )
+            create_project_request = request.dict(exclude_none=True)
+            create_project_url = self.label_studio_config.get("label_studio_project")
+            logging.info(f"{create_project_url=}")
+            response, status_code = APIInterface.post(
+                route=create_project_url,
+                data=create_project_request,
+                headers=self.header,
+            )
+            logging.debug(f"createw project response : {response}")
+            return response
+        except Exception as error:
+            logging.error(f"Error in create project controller: {error}")
+            raise error
 
     def delete_project_controller(self, request):
         delete_project_url = f"{self.label_studio_config.get('label_studio_project')}/{request.project_id}"

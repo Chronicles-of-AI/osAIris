@@ -27,17 +27,20 @@ def create_document_classifier(
     create_document_classifier_request: CreateDocumentClassifier,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = ComprehendController().create_document_classifier_controller(
-            create_document_classifier_request
-        )
-        return CreateDocumentClassifierResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    try:
+        if decodeJWT(token=token):
+            response = ComprehendController().create_document_classifier_controller(
+                create_document_classifier_request
+            )
+            return CreateDocumentClassifierResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as e:
+        raise e
 
 
 @comprehend_router.post(

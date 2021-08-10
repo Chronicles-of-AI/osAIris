@@ -1,4 +1,4 @@
-core_url=osairis_core:5000
-datahub_url=osairis_datahub:7000
-label_studio_url=app:8080
+core_url=http://osairis_core:5000
+datahub_url=http://osairis_datahub:7000
+label_studio_url=http://app:8080
 db_url=osairis_db:5432

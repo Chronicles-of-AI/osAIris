@@ -1,5 +1,6 @@
 # Database Manager
 from sql.database.database_manager import DatabaseManager
+from commons.logger import logger
 
 database_manager = DatabaseManager.sharedInstance()
 Base = database_manager.Base

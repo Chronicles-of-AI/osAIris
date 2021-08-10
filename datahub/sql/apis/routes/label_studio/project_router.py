@@ -24,15 +24,21 @@ project_router = APIRouter()
 def create_project(
     create_project_request: CreateProject, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = ProjectController().create_project_controller(create_project_request)
-        return CreateProjectResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    try:
+        if decodeJWT(token=token):
+            response = ProjectController().create_project_controller(
+                create_project_request
+            )
+            # return CreateProjectResponse(**response)
+            return response
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @project_router.delete("/label_studio/delete_project", response_model=ProjectResponse)
