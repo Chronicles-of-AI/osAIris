@@ -1,5 +1,6 @@
+import logging
 from commons.external_call import APIInterface
-from sql import config
+from sql import config, logger
 from sql.crud.operation_crud import CRUDOperations
 from sql.utils.operation_helper import (
     import_dataset_operation,
@@ -9,6 +10,8 @@ from sql.utils.operation_helper import (
     undeploy_model_operation,
     train_model_operation,
 )
+
+logging = logger(__name__)
 
 
 class OperationsController:
@@ -25,18 +28,19 @@ class OperationsController:
         }
 
     def get_operation_details_controller(self, operation_id):
-        """[summary]
+        """[Controller function to get operation details]
 
         Args:
-            operation_id ([type]): [description]
+            operation_id ([str]): [Unique identifier for operation]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [operation details]
         """
         try:
+            logging.info("executing get_operation_details_controller function")
             get_operation_details_url = (
                 self.gcp_config.get("automl").get("common").get("get_operation_details")
             )
@@ -57,4 +61,7 @@ class OperationsController:
             else:
                 return response
         except Exception as error:
+            logging.error(
+                f"Error in get_operation_details_controller function: {error}"
+            )
             raise error

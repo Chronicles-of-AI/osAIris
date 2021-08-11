@@ -1,8 +1,11 @@
+import logging
 from commons.external_call import APIInterface
-from sql import config
+from sql import config, logger
 from sql.crud.import_data_crud import CRUDDataImport
 from sql.crud.operation_crud import CRUDOperations
 from datetime import datetime
+
+logging = logger(__name__)
 
 
 class ImportDatasetController:
@@ -12,15 +15,16 @@ class ImportDatasetController:
         self.gcp_config = config.get("core_engine").get("gcp")
 
     def create_operation_record(self, api_response: dict):
-        """[summary]
+        """[Controller function to create operations record]
 
         Args:
-            api_response (dict): [description]
+            api_response (dict): [create operation record response]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
         """
         try:
+            logging.info("executing create_operation_record function")
             operation_crud_request = {
                 "operation_id": api_response.get("operation_id"),
                 "status": api_response.get("status"),
@@ -32,21 +36,23 @@ class ImportDatasetController:
             }
             self.CRUDOperations.create(**operation_crud_request)
         except Exception as error:
+            logging.error(f"Error in create_operation_record function: {error}")
             raise error
 
     def create_import_dataset_controller(self, request):
-        """[summary]
+        """[Controller function to import dataset]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [import dataset request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [type]: [import dataset response]
         """
         try:
+            logging.info("executing create_import_dataset_controller function")
             uuid = str(int(datetime.now().timestamp()) * 10000)
             data_import_url = (
                 self.gcp_config.get("automl").get("common").get("import_dataset")
@@ -66,8 +72,9 @@ class ImportDatasetController:
                 self.create_operation_record(api_response=response)
                 return response
             else:
-                # TODO: error
-                pass
-                return {"status": "import dataset failed"}
+                raise Exception({"status": "import dataset failed"})
         except Exception as error:
+            logging.error(
+                f"Error in create_import_dataset_controller function: {error}"
+            )
             raise error

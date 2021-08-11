@@ -22,7 +22,7 @@ def upload_blob_string(
         error: [Error in file upload]
 
     Returns:
-        [type]: [GCS URI for uploaded file]
+        [str]: [GCS URI for uploaded file]
     """
     try:
         logging.info("Upload to GCS bucket")
@@ -30,8 +30,6 @@ def upload_blob_string(
         bucket = storage_client.bucket(bucket_name)
         blob = bucket.blob(destination_file_name)
         blob.upload_from_string(file, content_type=content_type)
-
-        logging.debug("Uploaded to {}.".format(destination_file_name))
         gcs_uri = "gs://" + bucket_name + "/" + destination_file_name
         return gcs_uri
     except Exception as error:

@@ -1,17 +1,15 @@
-# from apis import config
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import MetaData, create_engine, DDL, event
 import os
 
-# from contextlib import contextmanager
-
-# from apis.common.utils import logger
+# from sql import logger
 
 # logging = logger(__name__)
 
 
 class DatabaseManager:
+
     __instance = None
 
     def __setup_schema(self):
@@ -35,10 +33,8 @@ class DatabaseManager:
                 raise Exception("Instance exists!")
             except Exception as e:
                 print(e)
-                # logging.info(e)
+                # logging.error(e)
         else:
-            # TODO: Remove hardcoding
-            # self.db_url = config.get("database").get("POSTGRES_URI")
             postgres_url = os.environ.get("db_url")
             self.db_url = f"postgresql://postgres:postgres@{postgres_url}/postgres"
             # logging.info(f"Database Url: {self.db_url}")

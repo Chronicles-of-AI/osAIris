@@ -1,5 +1,9 @@
+import logging
 from sql.crud.user_crud import CRUDUser
 from commons.auth import encrypt_password, verify_hash_password, signJWT
+from sql import logger
+
+logging = logger(__name__)
 
 
 class UserManagementController:
@@ -7,18 +11,19 @@ class UserManagementController:
         self.CRUDUser = CRUDUser()
 
     def register_user_controller(self, request):
-        """[summary]
+        """[Controller to register new user]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [create new user request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [authorization details]
         """
         try:
+            logging.info("executing register new user function")
             password_hash = encrypt_password(password=request.password)
             user_obj = self.CRUDUser.read(user_name=request.user_name)
             if user_obj is not None:
@@ -34,21 +39,23 @@ class UserManagementController:
             access_token = signJWT(username=request.user_name)
             return {"access_token": access_token, "token_type": "bearer"}
         except Exception as error:
+            logging.error(f"Error in register_user_controller function: {error}")
             raise error
 
     def login_user_controller(self, request):
-        """[summary]
+        """[Controller for user login]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [user login details]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [authorization details]
         """
         try:
+            logging.info("executing login user function")
             user_obj = self.CRUDUser.read(user_name=request.username)
             if verify_hash_password(
                 plain_password=request.password,
@@ -59,4 +66,5 @@ class UserManagementController:
             else:
                 return None
         except Exception as error:
+            logging.error(f"Error in login_user_controller function: {error}")
             raise error

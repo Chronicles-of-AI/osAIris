@@ -1,7 +1,10 @@
 from datetime import datetime
+import logging
 from commons.external_call import APIInterface
-from sql import config
+from sql import config, logger
 from sql.crud.model_crud import CRUDModel
+
+logging = logger(__name__)
 
 
 class SagemakerController:
@@ -12,18 +15,19 @@ class SagemakerController:
         )
 
     def start_training_job_controller(self, request):
-        """[summary]
+        """[Controller function to start training job for AWS Sagemaker project]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [AWS Sagemaker Start Training job request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [AWS Sagemaker Start Training job response]
         """
         try:
+            logging.info("executing start_training_job_controller function")
             uuid = str(int(datetime.now().timestamp()))
             start_training_request = request.dict(exclude_none=True)
             start_training_url = self.core_aws_model_config.get("start_training_job")
@@ -45,25 +49,25 @@ class SagemakerController:
                 response.update({"status": "training started"})
                 return response
             else:
-                # TODO: error
-                pass
-                return {"status": "training failed"}
+                raise Exception({"status": "training failed"})
         except Exception as error:
+            logging.error(f"Error in start_training_job_controller function: {error}")
             raise error
 
     def stop_training_job_controller(self, request):
-        """[summary]
+        """[Controller function to stop training job for AWS Sagemaker project]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [AWS Sagemaker Stop Training job request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [AWS Sagemaker Training job status]
         """
         try:
+            logging.info("executing stop_training_job_controller function")
             stop_training_request = request.dict(exclude_none=True)
             stop_training_url = self.core_aws_model_config.get("stop_training_job")
             response, status_code = APIInterface.post(
@@ -78,25 +82,25 @@ class SagemakerController:
                 self.CRUDModel.update_by_alias_name(crud_request)
                 return {"status": "training stopped"}
             else:
-                # TODO: error
-                pass
-                return {"status": "training failed"}
+                raise Exception({"status": "training failed"})
         except Exception as error:
+            logging.error(f"Error in stop_training_job_controller function: {error}")
             raise error
 
     def describe_training_job_controller(self, request):
-        """[summary]
+        """[Controller function to describe training job for AWS Sagemaker project]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [AWS Sagemaker Describe Training job request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [AWS Sagemaker Training job details]
         """
         try:
+            logging.info("executing describe_training_job_controller function")
             describe_training_request = request.dict(exclude_none=True)
             describe_training_url = self.core_aws_model_config.get(
                 "describe_training_job"
@@ -106,20 +110,25 @@ class SagemakerController:
             )
             return response
         except Exception as error:
+            logging.error(
+                f"Error in describe_training_job_controller function: {error}"
+            )
             raise error
 
     def list_training_job_controller(self):
-        """[summary]
+        """[Controller function to list training job for AWS Sagemaker project]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [List of AWS Sagemaker Training jobs]
         """
         try:
+            logging.info("executing list_training_job_controller function")
             list_training_url = self.core_aws_model_config.get("list_training_job")
             response, status_code = APIInterface.get(route=list_training_url)
             return response
         except Exception as error:
+            logging.error(f"Error in list_training_job_controller function: {error}")
             raise error

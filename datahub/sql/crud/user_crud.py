@@ -1,36 +1,42 @@
-from sql import session
+import logging
+from sql import session, logger
 from sql.orm_models.user import User
+
+logging = logger(__name__)
 
 
 class CRUDUser:
     def create(self, **kwargs):
-        """[summary]
+        """[CRUD function to create a new User record]
 
         Raises:
-            error: [description]
+            error: [Error returned from the DB layer]
         """
         try:
+            logging.info("CRUDUser create request")
             user = User(**kwargs)
             with session() as transaction_session:
                 transaction_session.add(user)
                 transaction_session.commit()
                 transaction_session.refresh(user)
         except Exception as error:
+            logging.error(f"Error in CRUDUser create function : {error}")
             raise error
 
     def read(self, user_name: str):
-        """[summary]
+        """[CRUD function to read a User record]
 
         Args:
-            user_name (str): [description]
+            user_name (str): [User name to filter the record]
 
         Raises:
-            error: [description]
+            error: [Error returned from the DB layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [user record matching the criteria]
         """
         try:
+            logging.info("CRUDUser read request")
             with session() as transaction_session:
                 obj: User = (
                     transaction_session.query(User)
@@ -42,6 +48,7 @@ class CRUDUser:
             else:
                 return None
         except Exception as error:
+            logging.error(f"Error in CRUDUser read function : {error}")
             raise error
 
     def update():

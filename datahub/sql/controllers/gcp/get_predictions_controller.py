@@ -1,7 +1,10 @@
+import logging
 from google.cloud.storage import bucket
 from commons.external_call import APIInterface
-from sql import config
+from sql import config, logger
 from sql.utils.gcs_helper import upload_blob_string
+
+logging = logger(__name__)
 
 
 class GetPredictionController:
@@ -9,18 +12,19 @@ class GetPredictionController:
         self.gcp_config = config.get("core_engine").get("gcp")
 
     def text_model_predictions_controller(self, request):
-        """[summary]
+        """[Controller function to get text classification prediction]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [text classification prediction request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [Predicted response]
         """
         try:
+            logging.info("executing text_model_predictions_controller function")
             get_predictions_url = (
                 self.gcp_config.get("automl").get("text").get("get_predictions")
             )
@@ -31,6 +35,9 @@ class GetPredictionController:
             )
             return response
         except Exception as error:
+            logging.error(
+                f"Error in text_model_prediction_controller function: {error}"
+            )
             raise error
 
     def image_model_predictions_controller(
@@ -42,23 +49,24 @@ class GetPredictionController:
         gcs_file_name: str,
         file_bytes,
     ):
-        """[summary]
+        """[Controller function to get image classification prediction]
 
         Args:
-            project_id (str): [description]
-            model_id (str): [description]
-            region (str): [description]
-            bucket_name (str): [description]
-            gcs_file_name (str): [description]
-            file_bytes ([type]): [description]
+            project_id (str): [project id for image classification model]
+            model_id (str): [model id for image classification model]
+            region (str): [region the model is deployed in]
+            bucket_name (str): [bucket where prediction image is saved]
+            gcs_file_name (str): [file name saved on GCS bucket]
+            file_bytes ([bytes]): [file data in byte format]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [predicted response]
         """
         try:
+            logging.info("executing image_model_predictions_controller function")
             gcs_uri = upload_blob_string(
                 bucket_name=bucket_name,
                 file=file_bytes,
@@ -80,4 +88,7 @@ class GetPredictionController:
             )
             return response
         except Exception as error:
+            logging.error(
+                f"Error in image_model_predictions_controller function: {error}"
+            )
             raise error

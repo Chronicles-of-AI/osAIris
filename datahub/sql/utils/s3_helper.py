@@ -8,18 +8,18 @@ client = boto3.client("s3")
 
 
 def write_annotations_to_s3(bucket_name: str, json_data: dict, prefix: str):
-    """[summary]
+    """[The function uploads the file directly to S3 bucket]
 
     Args:
-        bucket_name (str): [description]
-        json_data (dict): [description]
-        prefix (str): [description]
+        bucket_name (str): [S3 bucket name the file needs to be uploaded to]
+        json_data (dict): [file content in json format]
+        prefix (str): [file prefix on S3 bucket]
 
     Raises:
-        error: [description]
+        error: [Error raised by BOTO3 client]
 
     Returns:
-        [type]: [description]
+        [str]: [S3 URI of the file uploaded]
     """
     try:
         file_name = f"{prefix}/annotations_{str(datetime.now().timestamp())}.json"
@@ -35,16 +35,16 @@ def write_annotations_to_s3(bucket_name: str, json_data: dict, prefix: str):
 
 
 def read_annotations_from_s3(input_data_s3_uri: str):
-    """[summary]
+    """[This function is used to read a file from S3 bucket]
 
     Args:
-        input_data_s3_uri (str): [description]
+        input_data_s3_uri (str): [S3 URI of the file to be read]
 
     Raises:
-        error: [description]
+        error: [Error raised by BOTO3 client]
 
     Returns:
-        [type]: [description]
+        [dict]: [annotation data read from the S3 file]
     """
     try:
         bucket_name = input_data_s3_uri.split("//")[-1].split("/")[0]

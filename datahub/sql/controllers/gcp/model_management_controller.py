@@ -1,8 +1,11 @@
+import logging
 from commons.external_call import APIInterface
-from sql import config
+from sql import config, logger
 from sql.crud.deployment_crud import CRUDDeployment
 from sql.crud.operation_crud import CRUDOperations
 from datetime import datetime
+
+logging = logger(__name__)
 
 
 class ManageModelController:
@@ -12,16 +15,17 @@ class ManageModelController:
         self.gcp_config = config.get("core_engine").get("gcp")
 
     def create_operation_record(self, api_response: dict, functional_stage: str):
-        """[summary]
+        """[Controller function to create operations record]
 
         Args:
-            api_response (dict): [description]
-            functional_stage (str): [description]
+            api_response (dict): [API response from operations creation]
+            functional_stage (str): [current functional stage of flow]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
         """
         try:
+            logging.info("executing create_operation_record function")
             operation_crud_request = {
                 "operation_id": api_response.get("operation_id"),
                 "status": api_response.get("status"),
@@ -33,21 +37,23 @@ class ManageModelController:
             }
             self.CRUDOperations.create(**operation_crud_request)
         except Exception as error:
+            logging.error(f"Error in create_operation_record function: {error}")
             raise error
 
     def deploy_model_controller(self, request):
-        """[summary]
+        """[Controller function to deploy trained model]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [model deployment request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [deployed model response]
         """
         try:
+            logging.info("executing deploy_model_controller function")
             uuid = str(int(datetime.now().timestamp()) * 10000)
             deploy_model_url = (
                 self.gcp_config.get("automl").get("common").get("deploy_model")
@@ -74,25 +80,25 @@ class ManageModelController:
                     "status": response.get("status"),
                 }
             else:
-                # TODO: error
-                pass
-                return {"status": "model deployment failed"}
+                raise Exception({"status": "model deployment failed"})
         except Exception as error:
+            logging.error(f"Error in deploy_model_controller function: {error}")
             raise error
 
     def undeploy_model_controller(self, request):
-        """[summary]
+        """[Controller function to un-deploy trained model]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [model un-deployment request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [un-deployed model response]
         """
         try:
+            logging.info("executing undeploy_model_controller function")
             undeploy_model_url = (
                 self.gcp_config.get("automl").get("common").get("undeploy_model")
             )
@@ -117,25 +123,25 @@ class ManageModelController:
                     "status": response.get("status"),
                 }
             else:
-                # TODO: error
-                pass
-                return {"status": "model undeployment failed"}
+                raise Exception({"status": "model undeployment failed"})
         except Exception as error:
+            logging.error(f"Error in undeploy_model_controller function: {error}")
             raise error
 
     def list_model_controller(self, request):
-        """[summary]
+        """[Controller function to list all trained model]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [get list of model request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [list of all models]
         """
         try:
+            logging.info("executing list_model_controller function")
             list_model_url = (
                 self.gcp_config.get("automl").get("common").get("list_models")
             )
@@ -146,21 +152,23 @@ class ManageModelController:
             )
             return response
         except Exception as error:
+            logging.error(f"Error in list_model_controller function: {error}")
             raise error
 
     def get_model_description_controller(self, request):
-        """[summary]
+        """[Controller function to get all trained model]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [get list of model request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [list of all models]
         """
         try:
+            logging.info("executing get_model_description_controller function")
             model_description_url = (
                 self.gcp_config.get("automl").get("common").get("get_model_description")
             )
@@ -171,21 +179,25 @@ class ManageModelController:
             )
             return response
         except Exception as error:
+            logging.error(
+                f"Error in get_model_description_controller function: {error}"
+            )
             raise error
 
     def delete_model_controller(self, request):
-        """[summary]
+        """[Controller function to delete a trained model]
 
         Args:
-            request ([type]): [description]
+            request ([dict]): [delete model request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [dict]: [Deleted model details]
         """
         try:
+            logging.info("executing delete_model_controller function")
             delete_model_url = (
                 self.gcp_config.get("automl").get("common").get("delete_model")
             )
@@ -210,8 +222,7 @@ class ManageModelController:
                     "status": response.get("status"),
                 }
             else:
-                # TODO: error
-                pass
-                return {"status": "model undeployment failed"}
+                raise Exception({"status": "model undeployment failed"})
         except Exception as error:
+            logging.error(f"Error in delete_model_controller function: {error}")
             raise error

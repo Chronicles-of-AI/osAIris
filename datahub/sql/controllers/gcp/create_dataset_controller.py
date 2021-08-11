@@ -1,7 +1,9 @@
 from commons.external_call import APIInterface
-from sql import config
+from sql import config, logger
 from sql.crud.dataset_crud import CRUDDataset
 from datetime import datetime
+
+logging = logger(__name__)
 
 
 class CreateDatasetController:
@@ -10,18 +12,22 @@ class CreateDatasetController:
         self.CRUDDataset = CRUDDataset()
 
     def create_text_classification_dataset_controller(self, request):
-        """[summary]
+        """[Controller function to create GCP text classification dataset]
 
         Args:
-            request ([type]): [description]
+            request ([type]): [create text classification request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [str]: [dataset_name]
+            [str]: [dataset_id]
         """
         try:
+            logging.info(
+                "executing create_text_classification_dataset_controller function"
+            )
             uuid = str(int(datetime.now().timestamp()) * 10000)
             create_dataset_url = (
                 self.gcp_config.get("automl")
@@ -48,25 +54,28 @@ class CreateDatasetController:
                     "dataset_id": response.get("dataset_id"),
                 }
             else:
-                # TODO: error
-                pass
-                return {"status": "create dataset failed"}
+                raise Exception({"status": "create dataset failed"})
         except Exception as error:
+            logging.error(
+                f"Error in create_text_classification_dataset_controller function: {error}"
+            )
             raise error
 
     def create_ner_dataset_controller(self, request):
-        """[summary]
+        """[Controller function to create GCP NER dataset]
 
         Args:
-            request ([type]): [description]
+            request ([type]): [create ner extraction dataset request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [str]: [dataset_name]
+            [str]: [dataset_id]
         """
         try:
+            logging.info("executing create_ner_dataset_controller function")
             uuid = str(int(datetime.now().timestamp()) * 10000)
             create_dataset_url = (
                 self.gcp_config.get("automl").get("text").get("create_ner_dataset")
@@ -89,25 +98,28 @@ class CreateDatasetController:
                     "dataset_id": response.get("dataset_id"),
                 }
             else:
-                # TODO: error
-                pass
-                return {"status": "create dataset failed"}
+                raise Exception({"status": "create dataset failed"})
         except Exception as error:
+            logging.error(f"Error in create_ner_dataset_controller function: {error}")
             raise error
 
     def create_image_classification_dataset_controller(self, request):
-        """[summary]
+        """[Controller function to create image classification dataset]
 
         Args:
-            request ([type]): [description]
+            request ([type]): [create image classification dataset request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [str]: [dataset_name]
+            [str]: [dataset_id]
         """
         try:
+            logging.info(
+                "executing create_image_classification_dataset_controller function"
+            )
             uuid = str(int(datetime.now().timestamp()) * 10000)
             create_dataset_url = (
                 self.gcp_config.get("automl")
@@ -132,25 +144,30 @@ class CreateDatasetController:
                     "dataset_id": response.get("dataset_id"),
                 }
             else:
-                # TODO: error
-                pass
-                return {"status": "create dataset failed"}
+                raise Exception({"status": "create dataset failed"})
         except Exception as error:
+            logging.error(
+                f"Error in create_image_classification_dataset_controller function: {error}"
+            )
             raise error
 
     def create_object_detection_dataset_controller(self, request):
-        """[summary]
+        """[Controller function to create object detection dataset]
 
         Args:
-            request ([type]): [description]
+            request ([type]): [create object detection dataset request]
 
         Raises:
-            error: [description]
+            error: [Error raised from controller layer]
 
         Returns:
-            [type]: [description]
+            [str]: [dataset_name]
+            [str]: [dataset_id]
         """
         try:
+            logging.info(
+                "executing create_object_detection_dataset_controller function"
+            )
             uuid = str(int(datetime.now().timestamp()) * 10000)
             create_dataset_url = (
                 self.gcp_config.get("automl")
@@ -175,8 +192,9 @@ class CreateDatasetController:
                     "dataset_id": response.get("dataset_id"),
                 }
             else:
-                # TODO: error
-                pass
-                return {"status": "create dataset failed"}
+                raise Exception({"status": "create dataset failed"})
         except Exception as error:
+            logging.error(
+                f"Error in create_object_detection_dataset_controller function: {error}"
+            )
             raise error
