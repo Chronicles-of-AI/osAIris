@@ -18,14 +18,30 @@ def import_dataset(
     import_dataset_request: ImportDataset,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = ImportDatasetController().create_import_dataset_controller(
-            request=import_dataset_request
-        )
-        return ImportDatasetResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        import_dataset_request (ImportDataset): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = ImportDatasetController().create_import_dataset_controller(
+                request=import_dataset_request
+            )
+            return ImportDatasetResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error

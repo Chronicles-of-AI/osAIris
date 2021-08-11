@@ -9,9 +9,23 @@ get_predictions_router = APIRouter()
 def get_text_predictions(
     get_text_predictions_request: GetPredictions,
 ):
-    return GetPredictionController().text_model_predictions_controller(
-        request=get_text_predictions_request
-    )
+    """[summary]
+
+    Args:
+        get_text_predictions_request (GetPredictions): [description]
+
+    Raises:
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        return GetPredictionController().text_model_predictions_controller(
+            request=get_text_predictions_request
+        )
+    except Exception as error:
+        raise error
 
 
 @get_predictions_router.post("/gcp/automl/get_image_predictions")
@@ -23,11 +37,30 @@ async def get_image_predictions(
     gcs_file_name: str,
     file: UploadFile = File(...),
 ):
-    return GetPredictionController().image_model_predictions_controller(
-        project_id=project_id,
-        model_id=model_id,
-        region=region,
-        bucket_name=bucket_name,
-        gcs_file_name=gcs_file_name,
-        file_bytes=await file.read(),
-    )
+    """[summary]
+
+    Args:
+        project_id (str): [description]
+        model_id (str): [description]
+        region (str): [description]
+        bucket_name (str): [description]
+        gcs_file_name (str): [description]
+        file (UploadFile, optional): [description]. Defaults to File(...).
+
+    Raises:
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        return GetPredictionController().image_model_predictions_controller(
+            project_id=project_id,
+            model_id=model_id,
+            region=region,
+            bucket_name=bucket_name,
+            gcs_file_name=gcs_file_name,
+            file_bytes=await file.read(),
+        )
+    except Exception as error:
+        raise error

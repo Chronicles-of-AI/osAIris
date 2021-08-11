@@ -25,17 +25,33 @@ def list_datasets(
     list_datasets_request: ListDatasets,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = ManageDatasetController().list_datasets_controller(
-            request=list_datasets_request
-        )
-        return ListDatasetsResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        list_datasets_request (ListDatasets): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = ManageDatasetController().list_datasets_controller(
+                request=list_datasets_request
+            )
+            return ListDatasetsResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @manage_dataset_router.post(
@@ -45,17 +61,33 @@ def get_dataset_description(
     get_dataset_description_request: DescriptionDataset,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = ManageDatasetController().get_dataset_description_controller(
-            request=get_dataset_description_request
-        )
-        return DescriptionDatasetsResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        get_dataset_description_request (DescriptionDataset): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = ManageDatasetController().get_dataset_description_controller(
+                request=get_dataset_description_request
+            )
+            return DescriptionDatasetsResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @manage_dataset_router.post(
@@ -65,14 +97,30 @@ def delete_dataset(
     delete_dataset_request: DeleteDataset,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = ManageDatasetController().delete_dataset_controller(
-            request=delete_dataset_request
-        )
-        return DeleteDatasetResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        delete_dataset_request (DeleteDataset): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = ManageDatasetController().delete_dataset_controller(
+                request=delete_dataset_request
+            )
+            return DeleteDatasetResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error

@@ -24,6 +24,19 @@ project_router = APIRouter()
 def create_project(
     create_project_request: CreateProject, token: str = Depends(oauth2_scheme)
 ):
+    """[summary]
+
+    Args:
+        create_project_request (CreateProject): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
     try:
         if decodeJWT(token=token):
             response = ProjectController().create_project_controller(
@@ -45,15 +58,33 @@ def create_project(
 def delete_project(
     delete_project_request: Project, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = ProjectController().delete_project_controller(delete_project_request)
-        return ProjectResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        delete_project_request (Project): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = ProjectController().delete_project_controller(
+                delete_project_request
+            )
+            return ProjectResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @project_router.get(
@@ -65,19 +96,37 @@ def export_annotations(
     bucket_name: str,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = ProjectController().export_annotations_controller(
-            project_id=project_id,
-            service_provider=service_provider,
-            bucket_name=bucket_name,
-        )
-        return ExportAnnotationResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        project_id (int): [description]
+        service_provider (str): [description]
+        bucket_name (str): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = ProjectController().export_annotations_controller(
+                project_id=project_id,
+                service_provider=service_provider,
+                bucket_name=bucket_name,
+            )
+            return ExportAnnotationResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @project_router.post(
@@ -87,14 +136,30 @@ def transform_annotations(
     transform_annotation_request: TransformAnnotation,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = ProjectController().transform_annotations_controller(
-            transform_annotation_request
-        )
-        return TransformAnnotationResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        transform_annotation_request (TransformAnnotation): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = ProjectController().transform_annotations_controller(
+                transform_annotation_request
+            )
+            return TransformAnnotationResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error

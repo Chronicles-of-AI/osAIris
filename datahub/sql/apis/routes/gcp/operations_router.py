@@ -16,14 +16,30 @@ def get_operations(
     operation_id: str,
     token: str = Depends(oauth2_scheme),
 ):
-    if decodeJWT(token=token):
-        response = OperationsController().get_operation_details_controller(
-            operation_id=operation_id
-        )
-        return OperationsResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        operation_id (str): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = OperationsController().get_operation_details_controller(
+                operation_id=operation_id
+            )
+            return OperationsResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error

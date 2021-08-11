@@ -24,32 +24,66 @@ storage_router = APIRouter()
 def create_s3_storage(
     create_storage_request: CreateStorage, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = StorageController().create_s3_storage_controller(
-            create_storage_request
-        )
-        return CreateStorageResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        create_storage_request (CreateStorage): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = StorageController().create_s3_storage_controller(
+                create_storage_request
+            )
+            return CreateStorageResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @storage_router.post("/label_studio/sync_s3_storage", response_model=StorageResponse)
 async def sync_s3_storage(
     sync_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = StorageController().sync_s3_storage_controller(sync_storage_request)
-        return StorageResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        sync_storage_request (Storage): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = StorageController().sync_s3_storage_controller(
+                sync_storage_request
+            )
+            return StorageResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @storage_router.delete(
@@ -58,17 +92,33 @@ async def sync_s3_storage(
 def delete_s3_storage(
     delete_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = StorageController().delete_s3_storage_controller(
-            delete_storage_request
-        )
-        return StorageDeleteResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        delete_storage_request (Storage): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = StorageController().delete_s3_storage_controller(
+                delete_storage_request
+            )
+            return StorageDeleteResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @storage_router.post(
@@ -77,17 +127,33 @@ def delete_s3_storage(
 def create_gcs_storage(
     create_storage_request: CreateGCSStorage, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = StorageController().create_gcs_storage_controller(
-            create_storage_request
-        )
-        return CreateGCSStorageResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        create_storage_request (CreateGCSStorage): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = StorageController().create_gcs_storage_controller(
+                create_storage_request
+            )
+            return CreateGCSStorageResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @storage_router.post(
@@ -96,15 +162,33 @@ def create_gcs_storage(
 async def sync_gcs_storage(
     sync_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = StorageController().sync_gcs_storage_controller(sync_storage_request)
-        return CreateGCSStorageResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        sync_storage_request (Storage): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = StorageController().sync_gcs_storage_controller(
+                sync_storage_request
+            )
+            return CreateGCSStorageResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
 
 
 @storage_router.delete(
@@ -113,14 +197,30 @@ async def sync_gcs_storage(
 def delete_gcs_storage(
     delete_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    if decodeJWT(token=token):
-        response = StorageController().delete_gcs_storage_controller(
-            delete_storage_request
-        )
-        return StorageDeleteResponse(**response)
-    else:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid access token",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    """[summary]
+
+    Args:
+        delete_storage_request (Storage): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [description]
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        if decodeJWT(token=token):
+            response = StorageController().delete_gcs_storage_controller(
+                delete_storage_request
+            )
+            return StorageDeleteResponse(**response)
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        raise error
