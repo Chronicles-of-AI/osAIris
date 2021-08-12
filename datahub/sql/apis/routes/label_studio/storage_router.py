@@ -13,7 +13,9 @@ from sql.apis.schemas.responses.label_studio.storage_response import (
 from sql.controllers.label_studio.label_studio_controller import StorageController
 from fastapi.security import OAuth2PasswordBearer
 from commons.auth import decodeJWT
+from sql import logger
 
+logging = logger(__name__)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 storage_router = APIRouter()
 
@@ -24,20 +26,22 @@ storage_router = APIRouter()
 def create_s3_storage(
     create_storage_request: CreateStorage, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to add S3 storage to Label studio project]
 
     Args:
-        create_storage_request (CreateStorage): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        create_storage_request (CreateStorage): [Create storage request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [CreateStorageResponse]: [Create storage response]
     """
     try:
+        logging.info("Calling /label_studio/create_s3_storage endpoint")
+        logging.debug(f"Request: {create_storage_request}")
         if decodeJWT(token=token):
             response = StorageController().create_s3_storage_controller(
                 create_storage_request
@@ -50,6 +54,7 @@ def create_s3_storage(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/create_s3_storage endpoint: {error}")
         raise error
 
 
@@ -57,20 +62,22 @@ def create_s3_storage(
 async def sync_s3_storage(
     sync_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to sync data into label studio project]
 
     Args:
-        sync_storage_request (Storage): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        sync_storage_request (Storage): [Sync storage request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [StorageResponse]: [Sync storage response]
     """
     try:
+        logging.info("Calling /label_studio/sync_s3_storage endpoint")
+        logging.debug(f"Request: {sync_storage_request}")
         if decodeJWT(token=token):
             response = StorageController().sync_s3_storage_controller(
                 sync_storage_request
@@ -83,6 +90,7 @@ async def sync_s3_storage(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/sync_s3_storage endpoint: {error}")
         raise error
 
 
@@ -92,20 +100,22 @@ async def sync_s3_storage(
 def delete_s3_storage(
     delete_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to remove S3 storage from label studio project]
 
     Args:
-        delete_storage_request (Storage): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        delete_storage_request (Storage): [Delete S3 storage request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [StorageDeleteResponse]: [Delete S3 storage from label studio project response]
     """
     try:
+        logging.info("Calling /label_studio/delete_s3_storage endpoint")
+        logging.debug(f"Request: {delete_storage_request}")
         if decodeJWT(token=token):
             response = StorageController().delete_s3_storage_controller(
                 delete_storage_request
@@ -118,6 +128,7 @@ def delete_s3_storage(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/delete_s3_storage endpoint: {error}")
         raise error
 
 
@@ -127,20 +138,22 @@ def delete_s3_storage(
 def create_gcs_storage(
     create_storage_request: CreateGCSStorage, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to add GCS storage to label studio project]
 
     Args:
-        create_storage_request (CreateGCSStorage): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        create_storage_request (CreateGCSStorage): [Add GCS storage to label studio project request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [CreateGCSStorageResponse]: [Add GCS storage to label studio project response]
     """
     try:
+        logging.info("Calling /label_studio/create_gcs_storage endpoint")
+        logging.debug(f"Request: {create_storage_request}")
         if decodeJWT(token=token):
             response = StorageController().create_gcs_storage_controller(
                 create_storage_request
@@ -153,6 +166,7 @@ def create_gcs_storage(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/create_gcs_storage endpoint: {error}")
         raise error
 
 
@@ -162,20 +176,22 @@ def create_gcs_storage(
 async def sync_gcs_storage(
     sync_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to sync data into label studio project]
 
     Args:
-        sync_storage_request (Storage): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        sync_storage_request (Storage): [Sync storage request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [CreateGCSStorageResponse]: [Sync storage response]
     """
     try:
+        logging.info("Calling /label_studio/sync_gcs_storage endpoint")
+        logging.debug(f"Request: {sync_storage_request}")
         if decodeJWT(token=token):
             response = StorageController().sync_gcs_storage_controller(
                 sync_storage_request
@@ -188,6 +204,7 @@ async def sync_gcs_storage(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/sync_gcs_storage endpoint: {error}")
         raise error
 
 
@@ -197,20 +214,22 @@ async def sync_gcs_storage(
 def delete_gcs_storage(
     delete_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to remove GCS storage from label studio project]
 
     Args:
-        delete_storage_request (Storage): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        delete_storage_request (Storage): [Delete GCS storage request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [StorageDeleteResponse]: [Delete GCS storage from label studio project response]
     """
     try:
+        logging.info("Calling /label_studio/delete_gcs_storage endpoint")
+        logging.debug(f"Request: {delete_storage_request}")
         if decodeJWT(token=token):
             response = StorageController().delete_gcs_storage_controller(
                 delete_storage_request
@@ -223,4 +242,5 @@ def delete_gcs_storage(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/delete_gcs_storage endpoint: {error}")
         raise error

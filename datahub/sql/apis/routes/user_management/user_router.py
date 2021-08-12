@@ -8,25 +8,29 @@ from sql.apis.schemas.responses.user_management.user_response import (
     LoginResponse,
 )
 from fastapi.security import OAuth2PasswordRequestForm
+from sql import logger
 
+logging = logger(__name__)
 user_router = APIRouter()
 
 
 @user_router.post("/user/register", response_model=RegisterResponse)
 def register_user(register_user_request: Register):
-    """[summary]
+    """[API router to register new user into the system]
 
     Args:
-        register_user_request (Register): [description]
+        register_user_request (Register): [New user details]
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [RegisterResponse]: [Register new user response]
     """
     try:
+        logging.info("Calling /user/register endpoint")
+        logging.debug(f"Request: {register_user_request}")
         user_obj = UserManagementController().register_user_controller(
             register_user_request
         )
@@ -37,24 +41,25 @@ def register_user(register_user_request: Register):
         else:
             return RegisterResponse(**user_obj)
     except Exception as error:
+        logging.error(f"Error in /user/register endpoint: {error}")
         raise error
 
 
 @user_router.post("/user/login", response_model=LoginResponse)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    """[summary]
+    """[API router to login existing user]
 
     Args:
-        form_data (OAuth2PasswordRequestForm, optional): [description]. Defaults to Depends().
+        form_data (OAuth2PasswordRequestForm, optional): [User details to login the user]. Defaults to Depends().
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [LoginResponse]: [Login response]
     """
     try:
+        logging.info("Calling /user/login endpoint")
         valid_user = UserManagementController().login_user_controller(form_data)
         if not valid_user:
             raise HTTPException(
@@ -62,4 +67,5 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             )
         return LoginResponse(**valid_user)
     except Exception as error:
+        logging.error(f"Error in /user/login endpoint: {error}")
         raise error

@@ -13,7 +13,9 @@ from sql.apis.schemas.responses.label_studio.project_response import (
 )
 from fastapi.security import OAuth2PasswordBearer
 from commons.auth import decodeJWT
+from sql import logger
 
+logging = logger(__name__)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 project_router = APIRouter()
 
@@ -24,20 +26,22 @@ project_router = APIRouter()
 def create_project(
     create_project_request: CreateProject, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to create label studio project]
 
     Args:
-        create_project_request (CreateProject): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        create_project_request (CreateProject): [Create label studio project request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [CreateProjectResponse]: [Label studio created project details]
     """
     try:
+        logging.info("Calling /label_studio/create_project endpoint")
+        logging.debug(f"Request: {create_project_request}")
         if decodeJWT(token=token):
             response = ProjectController().create_project_controller(
                 create_project_request
@@ -51,6 +55,7 @@ def create_project(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/create_project endpoint: {error}")
         raise error
 
 
@@ -58,20 +63,22 @@ def create_project(
 def delete_project(
     delete_project_request: Project, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to delte label studio project]
 
     Args:
-        delete_project_request (Project): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        delete_project_request (Project): [Delete label studio project request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [ProjectResponse]: [Label studio deleted project details]
     """
     try:
+        logging.info("Calling /label_studio/delete_project endpoint")
+        logging.debug(f"Request: {delete_project_request}")
         if decodeJWT(token=token):
             response = ProjectController().delete_project_controller(
                 delete_project_request
@@ -84,6 +91,7 @@ def delete_project(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/delete_project endpoint: {error}")
         raise error
 
 
@@ -96,22 +104,24 @@ def export_annotations(
     bucket_name: str,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to export annotated data from label studio project]
 
     Args:
-        project_id (int): [description]
-        service_provider (str): [description]
-        bucket_name (str): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        project_id (int): [Label studio project id]
+        service_provider (str): [Cloud service provided (AWS or GCP)]
+        bucket_name (str): [Cloud bucket name to store the annotation file]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [ExportAnnotationResponse]: [Exported annotation cloud URI]
     """
     try:
+        logging.info("Calling /label_studio/export_annotations endpoint")
+        logging.debug(f"Request: {project_id=},{service_provider=},{bucket_name=}")
         if decodeJWT(token=token):
             response = ProjectController().export_annotations_controller(
                 project_id=project_id,
@@ -126,6 +136,7 @@ def export_annotations(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/export_annotations endpoint: {error}")
         raise error
 
 
@@ -136,20 +147,22 @@ def transform_annotations(
     transform_annotation_request: TransformAnnotation,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to transform the exported annotation as per requirement]
 
     Args:
-        transform_annotation_request (TransformAnnotation): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        transform_annotation_request (TransformAnnotation): [Transform annotation request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [TransformAnnotationResponse]: [Transformed annotation cloud URI]
     """
     try:
+        logging.info("Calling /label_studio/transform_annotations endpoint")
+        logging.debug(f"Request: {transform_annotation_request}")
         if decodeJWT(token=token):
             response = ProjectController().transform_annotations_controller(
                 transform_annotation_request
@@ -162,4 +175,5 @@ def transform_annotations(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /label_studio/transform_annotations endpoint: {error}")
         raise error
