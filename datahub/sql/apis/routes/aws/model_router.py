@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import Optional
 from sql.apis.schemas.requests.aws.model_request import (
@@ -10,7 +11,9 @@ from sql.apis.schemas.responses.aws.model_response import ModelStatus
 from sql.controllers.aws.model_controller import ModelController
 from fastapi.security import OAuth2PasswordBearer
 from commons.auth import decodeJWT
+from sql import logger
 
+logging = logger(__name__)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 model_router = APIRouter()
 
@@ -19,20 +22,22 @@ model_router = APIRouter()
 def start_training(
     start_training_request: StartTraining, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to start training on AWS Rekognition]
 
     Args:
-        start_training_request (StartTraining): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        start_training_request (StartTraining): [start training on AWS rekognition]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [ModelStatus]: [Start Training response from AWS Rekognition]
     """
     try:
+        logging.info("Calling /aws/rekog/start_training endpoint")
+        logging.debug(f"Request: {start_training_request}")
         if decodeJWT(token=token):
             response = ModelController().train_model_controller(start_training_request)
             return ModelStatus(**response)
@@ -43,6 +48,7 @@ def start_training(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/start_training endpoint: {error}")
         raise error
 
 
@@ -50,20 +56,22 @@ def start_training(
 def deploy_model(
     deploy_model_request: DeployModel, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to deploy trained AWS Rekognition model]
 
     Args:
-        deploy_model_request (DeployModel): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        deploy_model_request (DeployModel): [deploy AWS rekognition trained model]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [ModelStatus]: [Deploy model response from AWS Rekognition]
     """
     try:
+        logging.info("Calling /aws/rekog/deploy_model endpoint")
+        logging.debug(f"Request: {deploy_model_request}")
         if decodeJWT(token=token):
             response = ModelController().deploy_model_controller(deploy_model_request)
             return ModelStatus(**response)
@@ -74,6 +82,7 @@ def deploy_model(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/deploy_model endpoint: {error}")
         raise error
 
 
@@ -81,20 +90,22 @@ def deploy_model(
 def undeploy_model(
     undeploy_model_request: UndeployModel, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to un-deploy trained AWS Rekognition model]
 
     Args:
-        undeploy_model_request (UndeployModel): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        undeploy_model_request (UndeployModel): [un-deploy AWS rekognition trained model]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [ModelStatus]: [Un-Deploy model response from AWS Rekognition]
     """
     try:
+        logging.info("Calling /aws/rekog/undeploy_model endpoint")
+        logging.debug(f"Request: {undeploy_model_request}")
         if decodeJWT(token=token):
             response = ModelController().undeploy_model_controller(
                 undeploy_model_request
@@ -107,6 +118,7 @@ def undeploy_model(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/undeploy_model endpoint: {error}")
         raise error
 
 
@@ -114,20 +126,22 @@ def undeploy_model(
 def delete_model(
     delete_model_request: DeleteModel, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to delete trained AWS Rekognition model]
 
     Args:
-        delete_model_request (DeleteModel): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        delete_model_request (DeleteModel): [Delete AWS rekognition trained model]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [ModelStatus]: [Delete model response from AWS Rekognition]
     """
     try:
+        logging.info("Calling /aws/rekog/delete_model endpoint")
+        logging.debug(f"Request: {delete_model_request}")
         if decodeJWT(token=token):
             response = ModelController().delete_model_controller(delete_model_request)
             return ModelStatus(**response)
@@ -138,6 +152,7 @@ def delete_model(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/delete_model endpoint: {error}")
         raise error
 
 
@@ -147,21 +162,23 @@ def get_model_evaluation(
     version_name: Optional[str] = None,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to get evaluation matrix for AWS Rekognition model]
 
     Args:
-        project_arn (str): [description]
-        version_name (Optional[str], optional): [description]. Defaults to None.
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        project_arn (str): [Unique identifier for AWS Rekognition project]
+        version_name (str, optional): [Unique identifier for AWS Rekognition model version]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [evaluation matrix for deployed model]
     """
     try:
+        logging.info("Calling /aws/rekog/get_model_evaluation endpoint")
+        logging.debug(f"Request: {project_arn=},{version_name=}")
         if decodeJWT(token=token):
             response = ModelController().get_evaluation_controller(
                 project_arn=project_arn, version_name=version_name
@@ -174,6 +191,7 @@ def get_model_evaluation(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/get_model_evaluation endpoint: {error}")
         raise error
 
 
@@ -183,21 +201,23 @@ def get_model_manifest(
     version_name: Optional[str] = None,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to get model manifest details for AWS Rekognition model]
 
     Args:
-        project_arn (str): [description]
-        version_name (Optional[str], optional): [description]. Defaults to None.
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        project_arn (str): [Unique identifier for AWS Rekognition project]
+        version_name (str, optional): [Unique identifier for AWS Rekognition model version]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [model manifest details for deployed model]
     """
     try:
+        logging.info("Calling /aws/rekog/get_model_manifest endpoint")
+        logging.debug(f"Request: {project_arn=},{version_name=}")
         if decodeJWT(token=token):
             response = ModelController().get_manifest_controller(
                 project_arn=project_arn, version_name=version_name
@@ -210,6 +230,7 @@ def get_model_manifest(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/get_model_manifest endpoint: {error}")
         raise error
 
 
@@ -220,25 +241,31 @@ def get_predictions(
     confidence_threshold: int = 50,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to run inference on AWS Rekognition model]
 
     Args:
-        project_version_arn (str): [description]
-        s3_uri (str): [description]
-        confidence_threshold (int, optional): [description]. Defaults to 50.
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        project_version_arn (str): [Unique identifier for AWS Rekognition model]
+        s3_uri (str): [S3 URI for the test image]
+        confidence_threshold (int): [confidence threshold]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [inference results from deployed AWS Rekognition model]
     """
     try:
+        logging.info("Calling /aws/rekog/get_predictions endpoint")
+        logging.debug(
+            f"Request: {project_version_arn=},{s3_uri=},{confidence_threshold=}"
+        )
         return ModelController().get_predictions_controller(
             project_version_arn=project_version_arn,
             s3_uri=s3_uri,
             confidence_threshold=confidence_threshold,
         )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/get_predictions endpoint: {error}")
         raise error

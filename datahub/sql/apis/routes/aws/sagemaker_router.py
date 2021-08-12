@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from yaml.tokens import ValueToken
 from sql.apis.schemas.requests.aws.sagemaker_request import (
@@ -11,7 +12,9 @@ from sql.apis.schemas.responses.aws.sagemaker_response import (
 from sql.controllers.aws.sagemaker_controller import SagemakerController
 from fastapi.security import OAuth2PasswordBearer
 from commons.auth import decodeJWT
+from sql import logger
 
+logging = logger(__name__)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 sagemaker_router = APIRouter()
 
@@ -22,20 +25,22 @@ sagemaker_router = APIRouter()
 def start_training_job(
     create_training_job_request: CreateTrainingJob, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to start training job on AWS Sagemaker]
 
     Args:
-        create_training_job_request (CreateTrainingJob): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        create_training_job_request (CreateTrainingJob): [AWS Sagemaker start training job request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [AWS Sagemaker start training response]
     """
     try:
+        logging.info("Calling /aws/sagemaker/start_training_job endpoint")
+        logging.debug(f"Request: {create_training_job_request}")
         if decodeJWT(token=token):
             response = SagemakerController().start_training_job_controller(
                 create_training_job_request
@@ -48,6 +53,7 @@ def start_training_job(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/sagemaker/start_training_job endpoint: {error}")
         raise error
 
 
@@ -57,20 +63,22 @@ def start_training_job(
 def stop_training_job(
     stop_training_job_request: TrainingJob, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to stop training job on AWS Sagemaker]
 
     Args:
-        stop_training_job_request (TrainingJob): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        stop_training_job_request (TrainingJob): [AWS Sagemaker stop training job request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [AWS Sagemaker stop training response]
     """
     try:
+        logging.info("Calling /aws/sagemaker/stop_training_job endpoint")
+        logging.debug(f"Request: {stop_training_job_request}")
         if decodeJWT(token=token):
             response = SagemakerController().stop_training_job_controller(
                 stop_training_job_request
@@ -83,6 +91,7 @@ def stop_training_job(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/sagemaker/stop_training_job endpoint: {error}")
         raise error
 
 
@@ -90,20 +99,22 @@ def stop_training_job(
 def describe_training_job(
     describe_training_job_request: TrainingJob, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to describe a training job on AWS Sagemaker]
 
     Args:
-        describe_training_job_request (TrainingJob): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        describe_training_job_request (TrainingJob): [AWS Sagemaker describe training job request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [AWS Sagemaker describe training job response]
     """
     try:
+        logging.info("Calling /aws/sagemaker/describe_training_job endpoint")
+        logging.debug(f"Request: {describe_training_job_request}")
         if decodeJWT(token=token):
             response = SagemakerController().describe_training_job_controller(
                 describe_training_job_request
@@ -116,24 +127,28 @@ def describe_training_job(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(
+            f"Error in /aws/sagemaker/describe_training_job endpoint: {error}"
+        )
         raise error
 
 
 @sagemaker_router.get("/aws/sagemaker/list_training_job")
 def list_training_job(token: str = Depends(oauth2_scheme)):
-    """[summary]
+    """[API router to list all the training jobs on AWS Sagemaker]
 
     Args:
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [AWS Sagemaker list of all training jobs]
     """
     try:
+        logging.info("Calling /aws/sagemaker/list_training_job endpoint")
         if decodeJWT(token=token):
             response = SagemakerController().list_training_job_controller()
             return response
@@ -144,4 +159,5 @@ def list_training_job(token: str = Depends(oauth2_scheme)):
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/sagemaker/list_training_job endpoint: {error}")
         raise error

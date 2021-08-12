@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List, Optional
 from sql.apis.schemas.requests.aws.project_request import (
@@ -11,7 +12,9 @@ from sql.apis.schemas.responses.aws.project_response import (
 from sql.controllers.aws.project_controller import ProjectController
 from fastapi.security import OAuth2PasswordBearer
 from commons.auth import decodeJWT
+from sql import logger
 
+logging = logger(__name__)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 project_router = APIRouter()
 
@@ -20,20 +23,22 @@ project_router = APIRouter()
 def create_project(
     create_project_request: CreateProject, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to create project on AWS Rekognition]
 
     Args:
-        create_project_request (CreateProject): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        create_project_request (CreateProject): [AWS Rekognition create project request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [CreateProjectResponse]: [AWS Rekognition create project response]
     """
     try:
+        logging.info("Calling /aws/rekog/create_project endpoint")
+        logging.debug(f"Request: {create_project_request}")
         if decodeJWT(token=token):
             response = ProjectController().create_project(
                 request=create_project_request
@@ -46,6 +51,7 @@ def create_project(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/create_project endpoint: {error}")
         raise error
 
 
@@ -53,20 +59,22 @@ def create_project(
 def delete_project(
     delete_project_request: DeleteProject, token: str = Depends(oauth2_scheme)
 ):
-    """[summary]
+    """[API router to delete project on AWS Rekognition]
 
     Args:
-        delete_project_request (DeleteProject): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        delete_project_request (DeleteProject): [AWS Rekognition create project request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [DeleteProjectResponse]: [AWS Rekognition delete project response]
     """
     try:
+        logging.info("Calling /aws/rekog/delete_project endpoint")
+        logging.debug(f"Request: {delete_project_request}")
         if decodeJWT(token=token):
             response = ProjectController().delete_project(
                 request=delete_project_request
@@ -79,24 +87,26 @@ def delete_project(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/delete_project endpoint: {error}")
         raise error
 
 
 @project_router.get("/aws/rekog/get_all_projects")
 def get_all_projects(token: str = Depends(oauth2_scheme)):
-    """[summary]
+    """[API router to get all AWS Rekognition projects]
 
     Args:
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [List of all AWS Rekognition projects]
     """
     try:
+        logging.info("Calling /aws/rekog/get_all_projects endpoint")
         if decodeJWT(token=token):
             response = ProjectController().get_all_projects()
             return response
@@ -107,6 +117,7 @@ def get_all_projects(token: str = Depends(oauth2_scheme)):
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/get_all_projects endpoint: {error}")
         raise error
 
 
@@ -116,21 +127,23 @@ def get_project_status(
     version_names: Optional[str] = None,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to get AWS Rekognition project description]
 
     Args:
-        project_arn (str): [description]
-        version_names (Optional[str], optional): [description]. Defaults to None.
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        project_arn (str): [Unique identifier for AWS Rekognition project]
+        version_names (Optional[str], optional): [Unique identifier for AWS Rekognition project version]. Defaults to None.
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [dict]: [AWS Rekognition project description]
     """
     try:
+        logging.info("Calling /aws/rekog/get_project_description endpoint")
+        logging.debug(f"Request: {project_arn=},{version_names=}")
         if decodeJWT(token=token):
             response = ProjectController().get_project_description(
                 project_arn=project_arn, version_names=version_names
@@ -143,4 +156,5 @@ def get_project_status(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /aws/rekog/get_project_description endpoint: {error}")
         raise error
