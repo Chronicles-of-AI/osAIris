@@ -12,7 +12,9 @@ from sql.apis.schemas.responses.gcp.dataset_management_response import (
 from sql.controllers.gcp.dataset_management_controller import ManageDatasetController
 from fastapi.security import OAuth2PasswordBearer
 from commons.auth import decodeJWT
+from sql import logger
 
+logging = logger(__name__)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/login")
 
 manage_dataset_router = APIRouter()
@@ -25,20 +27,22 @@ def list_datasets(
     list_datasets_request: ListDatasets,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to list all AutoML datasets]
 
     Args:
-        list_datasets_request (ListDatasets): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        list_datasets_request (ListDatasets): [AutoML list all datasets request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [ListDatasetsResponse]: [List of all the datasets imported in AutoML]
     """
     try:
+        logging.info("Calling /gcp/automl/list_datasets endpoint")
+        logging.debug(f"Request: {list_datasets_request}")
         if decodeJWT(token=token):
             response = ManageDatasetController().list_datasets_controller(
                 request=list_datasets_request
@@ -51,6 +55,7 @@ def list_datasets(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /gcp/automl/list_datasets endpoint: {error}")
         raise error
 
 
@@ -61,20 +66,22 @@ def get_dataset_description(
     get_dataset_description_request: DescriptionDataset,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to get description of AutoML dataset]
 
     Args:
-        get_dataset_description_request (DescriptionDataset): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        get_dataset_description_request (DescriptionDataset): [Get AutoML dataset description request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [DescriptionDatasetsResponse]: [Description of the AutoML dataset]
     """
     try:
+        logging.info("Calling /gcp/automl/get_dataset_description endpoint")
+        logging.debug(f"Request: {get_dataset_description_request}")
         if decodeJWT(token=token):
             response = ManageDatasetController().get_dataset_description_controller(
                 request=get_dataset_description_request
@@ -87,6 +94,7 @@ def get_dataset_description(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /gcp/automl/get_dataset_description endpoint: {error}")
         raise error
 
 
@@ -97,20 +105,22 @@ def delete_dataset(
     delete_dataset_request: DeleteDataset,
     token: str = Depends(oauth2_scheme),
 ):
-    """[summary]
+    """[API router to delete a AutoML dataset]
 
     Args:
-        delete_dataset_request (DeleteDataset): [description]
-        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+        delete_dataset_request (DeleteDataset): [AutoML delete dataset request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [description]
-        error: [description]
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
 
     Returns:
-        [type]: [description]
+        [DeleteDatasetResponse]: [delete AutoML dataset response]
     """
     try:
+        logging.info("Calling /gcp/automl/delete_dataset endpoint")
+        logging.debug(f"Request: {delete_dataset_request}")
         if decodeJWT(token=token):
             response = ManageDatasetController().delete_dataset_controller(
                 request=delete_dataset_request
@@ -123,4 +133,5 @@ def delete_dataset(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
+        logging.error(f"Error in /gcp/automl/delete_dataset endpoint: {error}")
         raise error
