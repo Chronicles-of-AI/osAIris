@@ -1,6 +1,8 @@
 from google.cloud import automl
+from core_engine import logger
 
 client = automl.AutoMlClient()
+logging = logger(__name__)
 
 # Sample variable values
 # project_id = "us-gcp-ame-con-be2-npd-1"
@@ -9,15 +11,35 @@ client = automl.AutoMlClient()
 
 
 def import_training_data(project_id: str, dataset_id: str, gcs_path: str, region: str):
-    dataset_full_id = client.dataset_path(project_id, region, dataset_id)
-    input_uris = gcs_path.split(",")
-    gcs_source = automl.GcsSource(input_uris=input_uris)
-    input_config = automl.InputConfig(gcs_source=gcs_source)
-    response = client.import_data(name=dataset_full_id, input_config=input_config)
-    return {
-        "operation_id": response.operation.name,
-        "project_id": project_id,
-        "region": region,
-        "status": "Import In-Progress",
-        "dataset_id": dataset_id,
-    }
+    """[Import all Training Data]
+
+    Args:
+        project_id (str): [Unique Identifier for your Project]
+        dataset_id (str): [Unique Identifier for your Dataset]
+        gcs_path (str): [GCS Path for all the stored Annotated Data]
+        region (str): [Region]
+
+    Raises:
+        error: [Error]
+
+    Returns:
+        [dict]: [Status]
+    """
+    try:
+        logging.info(f"Import Training Data: {project_id}")
+        logging.info(f"{dataset_id=}")
+        dataset_full_id = client.dataset_path(project_id, region, dataset_id)
+        input_uris = gcs_path.split(",")
+        gcs_source = automl.GcsSource(input_uris=input_uris)
+        input_config = automl.InputConfig(gcs_source=gcs_source)
+        response = client.import_data(name=dataset_full_id, input_config=input_config)
+        return {
+            "operation_id": response.operation.name,
+            "project_id": project_id,
+            "region": region,
+            "status": "Import In-Progress",
+            "dataset_id": dataset_id,
+        }
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error
