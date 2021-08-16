@@ -19,7 +19,7 @@ train_model_router = APIRouter()
 @train_model_router.post(
     "/gcp/automl/train_text_classification_model", response_model=TrainModelResponse
 )
-def create_text_classification_dataset(
+async def create_text_classification_dataset(
     train_text_classification_model_request: TrainTextModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -62,7 +62,7 @@ def create_text_classification_dataset(
 @train_model_router.post(
     "/gcp/automl/train_ner_model", response_model=TrainModelResponse
 )
-def create_ner_dataset(
+async def create_ner_dataset(
     train_ner_model_request: TrainTextModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -101,7 +101,7 @@ def create_ner_dataset(
 @train_model_router.post(
     "/gcp/automl/train_image_classification_model", response_model=TrainModelResponse
 )
-def create_image_classification_training(
+async def create_image_classification_training(
     train_image_classification_model_request: TrainImageModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -145,7 +145,7 @@ def create_image_classification_training(
     "/gcp/automl/train_image_classification_edge_model",
     response_model=TrainModelResponse,
 )
-def create_image_classification_edge_training(
+async def create_image_classification_edge_training(
     train_image_classification_edge_model_request: TrainImageEdgeModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -190,7 +190,7 @@ def create_image_classification_edge_training(
 @train_model_router.post(
     "/gcp/automl/train_object_detection_model", response_model=TrainModelResponse
 )
-def create_object_detection_training(
+async def create_object_detection_training(
     train_object_detection_model_request: TrainImageModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -231,7 +231,7 @@ def create_object_detection_training(
 @train_model_router.post(
     "/gcp/automl/train_object_detection_edge_model", response_model=TrainModelResponse
 )
-def create_object_detection_edge_training(
+async def create_object_detection_edge_training(
     train_object_detection_edge_model_request: TrainImageEdgeModel,
     token: str = Depends(oauth2_scheme),
 ):

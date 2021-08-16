@@ -15,7 +15,7 @@ import_dataset_router = APIRouter()
 @import_dataset_router.post(
     "/gcp/automl/import_dataset", response_model=ImportDatasetResponse
 )
-def import_dataset(
+async def import_dataset(
     import_dataset_request: ImportDataset,
     token: str = Depends(oauth2_scheme),
 ):

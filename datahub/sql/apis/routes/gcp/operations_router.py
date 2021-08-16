@@ -14,7 +14,7 @@ operations_router = APIRouter()
 @operations_router.get(
     "/gcp/automl/get_operation_details", response_model=OperationsResponse
 )
-def get_operations(
+async def get_operations(
     operation_id: str,
     token: str = Depends(oauth2_scheme),
 ):

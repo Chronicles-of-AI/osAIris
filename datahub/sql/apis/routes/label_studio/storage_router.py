@@ -23,7 +23,7 @@ storage_router = APIRouter()
 @storage_router.post(
     "/label_studio/create_s3_storage", response_model=CreateStorageResponse
 )
-def create_s3_storage(
+async def create_s3_storage(
     create_storage_request: CreateStorage, token: str = Depends(oauth2_scheme)
 ):
     """[API router to add S3 storage to Label studio project]
@@ -97,7 +97,7 @@ async def sync_s3_storage(
 @storage_router.delete(
     "/label_studio/delete_s3_storage", response_model=StorageDeleteResponse
 )
-def delete_s3_storage(
+async def delete_s3_storage(
     delete_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
     """[API router to remove S3 storage from label studio project]
@@ -135,7 +135,7 @@ def delete_s3_storage(
 @storage_router.post(
     "/label_studio/create_gcs_storage", response_model=CreateGCSStorageResponse
 )
-def create_gcs_storage(
+async def create_gcs_storage(
     create_storage_request: CreateGCSStorage, token: str = Depends(oauth2_scheme)
 ):
     """[API router to add GCS storage to label studio project]
@@ -211,7 +211,7 @@ async def sync_gcs_storage(
 @storage_router.delete(
     "/label_studio/delete_gcs_storage", response_model=StorageDeleteResponse
 )
-def delete_gcs_storage(
+async def delete_gcs_storage(
     delete_storage_request: Storage, token: str = Depends(oauth2_scheme)
 ):
     """[API router to remove GCS storage from label studio project]

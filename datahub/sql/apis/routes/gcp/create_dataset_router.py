@@ -21,7 +21,7 @@ create_dataset_router = APIRouter()
     "/gcp/automl/create_text_classification_dataset",
     response_model=CreateDatasetResponse,
 )
-def create_text_classification_dataset(
+async def create_text_classification_dataset(
     create_text_classification_dataset_request: CreateTextClassificationDataset,
     token: str = Depends(oauth2_scheme),
 ):
@@ -65,7 +65,7 @@ def create_text_classification_dataset(
     "/gcp/automl/create_ner_dataset",
     response_model=CreateDatasetResponse,
 )
-def create_ner_dataset(
+async def create_ner_dataset(
     create_ner_request: CreateNERDataset,
     token: str = Depends(oauth2_scheme),
 ):
@@ -105,7 +105,7 @@ def create_ner_dataset(
     "/gcp/automl/create_image_classification_dataset",
     response_model=CreateDatasetResponse,
 )
-def create_image_classification_dataset(
+async def create_image_classification_dataset(
     create_image_classification_dataset_request: CreateImageClassificationDataset,
     token: str = Depends(oauth2_scheme),
 ):
@@ -147,7 +147,7 @@ def create_image_classification_dataset(
     "/gcp/automl/create_object_detection_dataset",
     response_model=CreateDatasetResponse,
 )
-def create_object_detection_dataset(
+async def create_object_detection_dataset(
     create_object_detection_dataset_request: CreateObjectDetectionDataset,
     token: str = Depends(oauth2_scheme),
 ):

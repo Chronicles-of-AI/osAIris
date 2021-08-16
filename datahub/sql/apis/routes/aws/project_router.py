@@ -20,7 +20,7 @@ project_router = APIRouter()
 
 
 @project_router.post("/aws/rekog/create_project", response_model=CreateProjectResponse)
-def create_project(
+async def create_project(
     create_project_request: CreateProject, token: str = Depends(oauth2_scheme)
 ):
     """[API router to create project on AWS Rekognition]
@@ -56,7 +56,7 @@ def create_project(
 
 
 @project_router.post("/aws/rekog/delete_project", response_model=DeleteProjectResponse)
-def delete_project(
+async def delete_project(
     delete_project_request: DeleteProject, token: str = Depends(oauth2_scheme)
 ):
     """[API router to delete project on AWS Rekognition]
@@ -92,7 +92,7 @@ def delete_project(
 
 
 @project_router.get("/aws/rekog/get_all_projects")
-def get_all_projects(token: str = Depends(oauth2_scheme)):
+async def get_all_projects(token: str = Depends(oauth2_scheme)):
     """[API router to get all AWS Rekognition projects]
 
     Args:
@@ -122,7 +122,7 @@ def get_all_projects(token: str = Depends(oauth2_scheme)):
 
 
 @project_router.get("/aws/rekog/get_project_description")
-def get_project_status(
+async def get_project_status(
     project_arn: str,
     version_names: Optional[str] = None,
     token: str = Depends(oauth2_scheme),

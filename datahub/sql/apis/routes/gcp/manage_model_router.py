@@ -20,7 +20,7 @@ manage_model_router = APIRouter()
 @manage_model_router.post(
     "/gcp/automl/deploy_model", response_model=ManageModelResponse
 )
-def deploy_model(
+async def deploy_model(
     deploy_model_request: ManageModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -59,7 +59,7 @@ def deploy_model(
 @manage_model_router.post(
     "/gcp/automl/undeploy_model", response_model=ManageModelResponse
 )
-def undeploy_model(
+async def undeploy_model(
     undeploy_model_request: ManageModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -96,7 +96,7 @@ def undeploy_model(
 
 
 @manage_model_router.post("/gcp/automl/list_models")
-def list_models(
+async def list_models(
     list_models_request: ListModels,
     token: str = Depends(oauth2_scheme),
 ):
@@ -133,7 +133,7 @@ def list_models(
 
 
 @manage_model_router.post("/gcp/automl/get_model_description")
-def get_model_description(
+async def get_model_description(
     get_model_description_request: DescriptionModels,
     token: str = Depends(oauth2_scheme),
 ):
@@ -172,7 +172,7 @@ def get_model_description(
 @manage_model_router.post(
     "/gcp/automl/delete_model", response_model=ManageModelResponse
 )
-def delete_model(
+async def delete_model(
     delete_model_request: DeleteModels,
     token: str = Depends(oauth2_scheme),
 ):

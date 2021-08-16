@@ -22,7 +22,7 @@ sagemaker_router = APIRouter()
 @sagemaker_router.post(
     "/aws/sagemaker/start_training_job", response_model=TrainingJobResponse
 )
-def start_training_job(
+async def start_training_job(
     create_training_job_request: CreateTrainingJob, token: str = Depends(oauth2_scheme)
 ):
     """[API router to start training job on AWS Sagemaker]
@@ -60,7 +60,7 @@ def start_training_job(
 @sagemaker_router.post(
     "/aws/sagemaker/stop_training_job", response_model=TrainingStatus
 )
-def stop_training_job(
+async def stop_training_job(
     stop_training_job_request: TrainingJob, token: str = Depends(oauth2_scheme)
 ):
     """[API router to stop training job on AWS Sagemaker]
@@ -96,7 +96,7 @@ def stop_training_job(
 
 
 @sagemaker_router.post("/aws/sagemaker/describe_training_job")
-def describe_training_job(
+async def describe_training_job(
     describe_training_job_request: TrainingJob, token: str = Depends(oauth2_scheme)
 ):
     """[API router to describe a training job on AWS Sagemaker]
@@ -134,7 +134,7 @@ def describe_training_job(
 
 
 @sagemaker_router.get("/aws/sagemaker/list_training_job")
-def list_training_job(token: str = Depends(oauth2_scheme)):
+async def list_training_job(token: str = Depends(oauth2_scheme)):
     """[API router to list all the training jobs on AWS Sagemaker]
 
     Args:

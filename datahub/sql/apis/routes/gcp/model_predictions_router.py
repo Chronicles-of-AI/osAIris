@@ -8,7 +8,7 @@ get_predictions_router = APIRouter()
 
 
 @get_predictions_router.post("/gcp/automl/get_text_predictions")
-def get_text_predictions(
+async def get_text_predictions(
     get_text_predictions_request: GetPredictions,
 ):
     """[API router to get text classification predictions]

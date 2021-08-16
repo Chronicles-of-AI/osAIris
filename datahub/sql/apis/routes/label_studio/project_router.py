@@ -23,7 +23,7 @@ project_router = APIRouter()
 @project_router.post(
     "/label_studio/create_project", response_model=CreateProjectResponse
 )
-def create_project(
+async def create_project(
     create_project_request: CreateProject, token: str = Depends(oauth2_scheme)
 ):
     """[API router to create label studio project]
@@ -60,7 +60,7 @@ def create_project(
 
 
 @project_router.delete("/label_studio/delete_project", response_model=ProjectResponse)
-def delete_project(
+async def delete_project(
     delete_project_request: Project, token: str = Depends(oauth2_scheme)
 ):
     """[API router to delte label studio project]
@@ -98,7 +98,7 @@ def delete_project(
 @project_router.get(
     "/label_studio/export_annotations", response_model=ExportAnnotationResponse
 )
-def export_annotations(
+async def export_annotations(
     project_id: int,
     service_provider: str,
     bucket_name: str,
@@ -143,7 +143,7 @@ def export_annotations(
 @project_router.post(
     "/label_studio/transform_annotations", response_model=TransformAnnotationResponse
 )
-def transform_annotations(
+async def transform_annotations(
     transform_annotation_request: TransformAnnotation,
     token: str = Depends(oauth2_scheme),
 ):

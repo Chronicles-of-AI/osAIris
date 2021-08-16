@@ -23,7 +23,7 @@ manage_dataset_router = APIRouter()
 @manage_dataset_router.post(
     "/gcp/automl/list_datasets", response_model=ListDatasetsResponse
 )
-def list_datasets(
+async def list_datasets(
     list_datasets_request: ListDatasets,
     token: str = Depends(oauth2_scheme),
 ):
@@ -62,7 +62,7 @@ def list_datasets(
 @manage_dataset_router.post(
     "/gcp/automl/get_dataset_description", response_model=DescriptionDatasetsResponse
 )
-def get_dataset_description(
+async def get_dataset_description(
     get_dataset_description_request: DescriptionDataset,
     token: str = Depends(oauth2_scheme),
 ):
@@ -101,7 +101,7 @@ def get_dataset_description(
 @manage_dataset_router.post(
     "/gcp/automl/delete_dataset", response_model=DeleteDatasetResponse
 )
-def delete_dataset(
+async def delete_dataset(
     delete_dataset_request: DeleteDataset,
     token: str = Depends(oauth2_scheme),
 ):

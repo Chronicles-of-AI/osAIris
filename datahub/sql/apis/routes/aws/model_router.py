@@ -19,7 +19,7 @@ model_router = APIRouter()
 
 
 @model_router.post("/aws/rekog/start_training", response_model=ModelStatus)
-def start_training(
+async def start_training(
     start_training_request: StartTraining, token: str = Depends(oauth2_scheme)
 ):
     """[API router to start training on AWS Rekognition]
@@ -53,7 +53,7 @@ def start_training(
 
 
 @model_router.post("/aws/rekog/deploy_model", response_model=ModelStatus)
-def deploy_model(
+async def deploy_model(
     deploy_model_request: DeployModel, token: str = Depends(oauth2_scheme)
 ):
     """[API router to deploy trained AWS Rekognition model]
@@ -87,7 +87,7 @@ def deploy_model(
 
 
 @model_router.post("/aws/rekog/undeploy_model", response_model=ModelStatus)
-def undeploy_model(
+async def undeploy_model(
     undeploy_model_request: UndeployModel, token: str = Depends(oauth2_scheme)
 ):
     """[API router to un-deploy trained AWS Rekognition model]
@@ -123,7 +123,7 @@ def undeploy_model(
 
 
 @model_router.post("/aws/rekog/delete_model", response_model=ModelStatus)
-def delete_model(
+async def delete_model(
     delete_model_request: DeleteModel, token: str = Depends(oauth2_scheme)
 ):
     """[API router to delete trained AWS Rekognition model]
@@ -157,7 +157,7 @@ def delete_model(
 
 
 @model_router.get("/aws/rekog/get_model_evaluation")
-def get_model_evaluation(
+async def get_model_evaluation(
     project_arn: str,
     version_name: Optional[str] = None,
     token: str = Depends(oauth2_scheme),
@@ -196,7 +196,7 @@ def get_model_evaluation(
 
 
 @model_router.get("/aws/rekog/get_model_manifest")
-def get_model_manifest(
+async def get_model_manifest(
     project_arn: str,
     version_name: Optional[str] = None,
     token: str = Depends(oauth2_scheme),
@@ -235,7 +235,7 @@ def get_model_manifest(
 
 
 @model_router.get("/aws/rekog/get_predictions")
-def get_predictions(
+async def get_predictions(
     project_version_arn: str,
     s3_uri: str,
     confidence_threshold: int = 50,

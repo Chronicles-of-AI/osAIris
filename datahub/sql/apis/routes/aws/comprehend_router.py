@@ -25,7 +25,7 @@ comprehend_router = APIRouter()
     "/aws/comprehend/create_document_classifier",
     response_model=CreateDocumentClassifierResponse,
 )
-def create_document_classifier(
+async def create_document_classifier(
     create_document_classifier_request: CreateDocumentClassifier,
     token: str = Depends(oauth2_scheme),
 ):
@@ -67,7 +67,7 @@ def create_document_classifier(
     "/aws/comprehend/stop_training_document_classifier",
     response_model=DocumentClassifierResponse,
 )
-def stop_training_document_classifier(
+async def stop_training_document_classifier(
     stop_training_document_classifier_request: DocumentClassifier,
     token: str = Depends(oauth2_scheme),
 ):
@@ -113,7 +113,7 @@ def stop_training_document_classifier(
     "/aws/comprehend/delete_document_classifier",
     response_model=DocumentClassifierResponse,
 )
-def delete_document_classifier(
+async def delete_document_classifier(
     delete_document_classifier_requeset: DocumentClassifier,
     token: str = Depends(oauth2_scheme),
 ):
@@ -152,7 +152,7 @@ def delete_document_classifier(
 
 
 @comprehend_router.post("/aws/comprehend/describe_document_classifier")
-def describe_document_classifier(
+async def describe_document_classifier(
     describe_document_classifier_request: DocumentClassifier,
     token: str = Depends(oauth2_scheme),
 ):
@@ -191,7 +191,7 @@ def describe_document_classifier(
 
 
 @comprehend_router.get("/aws/comprehend/list_document_classifier")
-def list_document_classifier(
+async def list_document_classifier(
     token: str = Depends(oauth2_scheme),
 ):
     """[API router to list all document classifier using AWS Comprehend]
@@ -227,7 +227,7 @@ def list_document_classifier(
 @comprehend_router.post(
     "/aws/comprehend/deploy_document_classifier", response_model=DeployModelResponse
 )
-def deploy_document_classifier(
+async def deploy_document_classifier(
     deploy_model_request: DeployModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -268,7 +268,7 @@ def deploy_document_classifier(
 @comprehend_router.post(
     "/aws/comprehend/undeploy_document_classifier", response_model=UnDeployModelResponse
 )
-def undeploy_document_classifier(
+async def undeploy_document_classifier(
     undeploy_model_request: UnDeployModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -307,7 +307,9 @@ def undeploy_document_classifier(
 
 
 @comprehend_router.get("/aws/comprehend/get_predictions")
-def get_predictions(endpoint_arn: str, text: str, token: str = Depends(oauth2_scheme)):
+async def get_predictions(
+    endpoint_arn: str, text: str, token: str = Depends(oauth2_scheme)
+):
     """[API router to get predicts from a AWS Comprehend document classifier]
 
     Args:
