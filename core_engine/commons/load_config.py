@@ -3,7 +3,7 @@ import yaml
 import re
 
 
-def load_configuration(config_path="config.yaml", tag="!ENV"):
+def load_configuration(config_path="commons/config.yaml", tag="!ENV"):
     # pattern for global vars: look for ${word}
     pattern = re.compile(".*?\\${(\\w+)}.*?")
     loader = yaml.SafeLoader
