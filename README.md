@@ -67,3 +67,9 @@ Run below command to restart all your docker containers
 ```python
 ./restart_all.sh
 ```
+
+### User Registeration and Authentication
+To start using the APIs, user need to register and then authenticate their user.
+Follow the steps as shown in the video below to get authenticated.
+
+![User registration and Authentication steps](https://github.com/Chronicles-of-AI/osAIris/blob/22bc6c18bf25a78039b399a6596a55ba3d2283d0/docs/My%20Movie.gif)
