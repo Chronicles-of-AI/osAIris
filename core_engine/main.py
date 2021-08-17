@@ -1,6 +1,6 @@
 import uvicorn
 
-from apis.api import app
+from core_engine.apis.api import app
 
 
 if __name__ == "__main__":

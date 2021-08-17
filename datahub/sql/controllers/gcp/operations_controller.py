@@ -1,5 +1,6 @@
+import logging
 from commons.external_call import APIInterface
-from sql import config
+from sql import config, logger
 from sql.crud.operation_crud import CRUDOperations
 from sql.utils.operation_helper import (
     import_dataset_operation,
@@ -9,6 +10,8 @@ from sql.utils.operation_helper import (
     undeploy_model_operation,
     train_model_operation,
 )
+
+logging = logger(__name__)
 
 
 class OperationsController:
@@ -25,22 +28,40 @@ class OperationsController:
         }
 
     def get_operation_details_controller(self, operation_id):
-        get_operation_details_url = (
-            self.gcp_config.get("automl").get("common").get("get_operation_details")
-        )
-        response, status_code = APIInterface.get(
-            route=get_operation_details_url, params={"operation_id": operation_id}
-        )
-        if response.get("operation_completed"):
-            operation_data = self.CRUDOperations.read(operation_id=operation_id)
-            current_stage = operation_data.get("functional_stage")
-            service_id = operation_data.get("service_id")
-            self.functional_stages.get(current_stage)(
-                operation_id=operation_id,
-                service_id=service_id,
-                status=response.get("status_metadata"),
-                error=response.get("error_message"),
+        """[Controller function to get operation details]
+
+        Args:
+            operation_id ([str]): [Unique identifier for operation]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [dict]: [operation details]
+        """
+        try:
+            logging.info("executing get_operation_details_controller function")
+            get_operation_details_url = (
+                self.gcp_config.get("automl").get("common").get("get_operation_details")
             )
-            return response
-        else:
-            return response
+            response, status_code = APIInterface.get(
+                route=get_operation_details_url, params={"operation_id": operation_id}
+            )
+            if response.get("operation_completed"):
+                operation_data = self.CRUDOperations.read(operation_id=operation_id)
+                current_stage = operation_data.get("functional_stage")
+                service_id = operation_data.get("service_id")
+                self.functional_stages.get(current_stage)(
+                    operation_id=operation_id,
+                    service_id=service_id,
+                    status=response.get("status_metadata"),
+                    error=response.get("error_message"),
+                )
+                return response
+            else:
+                return response
+        except Exception as error:
+            logging.error(
+                f"Error in get_operation_details_controller function: {error}"
+            )
+            raise error

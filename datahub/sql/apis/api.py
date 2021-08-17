@@ -73,7 +73,7 @@ def custom_openapi():
         routes=app.routes,
     )
     openapi_schema["info"]["x-logo"] = {
-        "url": "https://media.istockphoto.com/vectors/blue-moebius-strip-or-moebius-band-vector-id585291060?k=6&m=585291060&s=612x612&w=0&h=Mmwq27FbLgP_SR5xm5mdDrArMd1NvafMSrDFJLOQgwU="
+        "url": "https://github.com/Chronicles-of-AI/osAIris/blob/ce6e33adf3bc0a9ca6e2e1cc16a49c16a983a798/docs/logo.jpeg?raw=true"
     }
     app.openapi_schema = openapi_schema
     return app.openapi_schema
