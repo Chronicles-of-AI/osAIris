@@ -10,9 +10,8 @@ fastapi==0.55.1
 h11==0.9.0
 httptools==0.0.13
 idna==2.8
-numpy==1.18.4
+numpy==1.19.2
 prompt-toolkit==2.0.10
-psycopg2-binary==2.8.5
 pydantic==1.4
 Pygments==2.3.1
 python-dateutil==2.8.1
