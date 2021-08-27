@@ -19,7 +19,7 @@ train_model_router = APIRouter()
 @train_model_router.post(
     "/gcp/automl/train_text_classification_model", response_model=TrainModelResponse
 )
-async def create_text_classification_dataset(
+async def create_text_classification_training(
     train_text_classification_model_request: TrainTextModel,
     token: str = Depends(oauth2_scheme),
 ):
@@ -62,7 +62,7 @@ async def create_text_classification_dataset(
 @train_model_router.post(
     "/gcp/automl/train_ner_model", response_model=TrainModelResponse
 )
-async def create_ner_dataset(
+async def create_ner_training(
     train_ner_model_request: TrainTextModel,
     token: str = Depends(oauth2_scheme),
 ):
