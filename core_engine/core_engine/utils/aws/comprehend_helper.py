@@ -49,6 +49,37 @@ def create_document_classifier(
         raise error
 
 
+def create_entity_recognizer(
+    recognizer_name: str, data_access_role_arn: str, input_data_config: dict
+):
+    """[Creates an Entity Recognizer for Entity Recognition on AWS]
+
+    Args:
+        recognizer_name (str): [Display Name of Entity Recognizer]
+        data_access_role_arn (str): [Data Access Role ARN]
+        input_data_config (dict): [Dataset path and config]
+
+    Raises:
+        error: [description]
+
+    Returns:
+        [type]: [Unique Identifier for Entity Recognizer]
+    """
+    try:
+        logging.info(f"Create Document Classifier: {recognizer_name}")
+        logging.info(f"{input_data_config=}")
+        response = client.create_entity_recognizer(
+            RecognizerName=recognizer_name,
+            DataAccessRoleArn=data_access_role_arn,
+            InputDataConfig=input_data_config,
+            LanguageCode="en",
+        )
+        return {"entity_recognizer_arn": response["EntityRecognizerArn"]}
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error
+
+
 def delete_document_classifier(document_classifier_arn: str):
     """[Deletes a Document Classifier for Text Classification on AWS]
 
@@ -64,6 +95,27 @@ def delete_document_classifier(document_classifier_arn: str):
     try:
         logging.info(f"Delete Document Classifier: {document_classifier_arn}")
         client.delete_document_classifier(DocumentClassifierArn=document_classifier_arn)
+        return {"status": "Deleted"}
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error
+
+
+def delete_entity_recognizer(entity_recognizer_arn: str):
+    """[Deletes a Entity Recognizer on AWS]
+
+    Args:
+        entity_recognizer_arn (str): [Unique Identifier for Entity Recognizer]
+
+    Raises:
+        error: [description]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        logging.info(f"Delete Entity Recognizer: {entity_recognizer_arn}")
+        client.delete_entity_recognizer(EntityRecognizerArn=entity_recognizer_arn)
         return {"status": "Deleted"}
     except Exception as error:
         logging.error(f"{error=}")
@@ -92,6 +144,28 @@ def describe_document_classifier(document_classifier_arn: str):
         raise error
 
 
+def describe_entity_recognizer(entity_recognizer_arn: str):
+    """[Describes a Entity Recognizer on AWS]
+
+    Args:
+        entity_recognizer_arn (str): [description]
+
+    Raises:
+        error: [Error]
+
+    Returns:
+        [type]: [Description of Entity Recognizer]
+    """
+    try:
+        logging.info(f"Describe Document Classifier: {entity_recognizer_arn}")
+        return client.describe_entity_recognizer(
+            EntityRecognizerArn=entity_recognizer_arn
+        )
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error
+
+
 def list_document_classifier():
     """[Lists Document Classifiers for Text Classification on AWS]
 
@@ -104,6 +178,23 @@ def list_document_classifier():
     try:
         logging.info(f"List Document Classifiers")
         return client.list_document_classifiers()
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error
+
+
+def list_entity_recognizer():
+    """[Lists Entity Recognizers on AWS]
+
+    Raises:
+        error: [description]
+
+    Returns:
+        [list]: [List of Entity Recognizers]
+    """
+    try:
+        logging.info(f"List Entity Recognizer")
+        return client.list_entity_recognizers()
     except Exception as error:
         logging.error(f"{error=}")
         raise error
@@ -125,6 +216,29 @@ def stop_training_document_classifier(document_classifier_arn: str):
         logging.info(f"Stop Training Document Classifier: {document_classifier_arn}")
         client.stop_training_document_classifier(
             DocumentClassifierArn=document_classifier_arn
+        )
+        return {"status": "Stopped"}
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error
+
+
+def stop_training_entity_recognizer(entity_recognizer_arn: str):
+    """[Stops Training a Entity Recognizer on AWS]
+
+    Args:
+        entity_recognizer_arn (str): [Unique Identifier for Entity Recognizer]
+
+    Raises:
+        error: [Error]
+
+    Returns:
+        [dict]: [Status]
+    """
+    try:
+        logging.info(f"Stop Training Entity Recognizer: {entity_recognizer_arn}")
+        client.stop_training_entity_recognizer(
+            EntityRecognizerArn=entity_recognizer_arn
         )
         return {"status": "Stopped"}
     except Exception as error:
