@@ -4,6 +4,11 @@ from core_engine.utils.aws.comprehend_helper import (
     describe_document_classifier,
     list_document_classifier,
     stop_training_document_classifier,
+    create_entity_recognizer,
+    delete_entity_recognizer,
+    describe_entity_recognizer,
+    list_entity_recognizer,
+    stop_training_entity_recognizer,
     deploy_document_classifier,
     undeploy_document_classifier,
     get_predictions,
@@ -129,6 +134,119 @@ class ComprehendController:
         """
         try:
             logging.info(f"List Document Classifier Controller")
+            return list_document_classifier()
+        except Exception as error:
+            logging.error(f"{error=}")
+            raise error
+
+    def create_entity_recognizer_controller(self, request):
+        """[Creates a Entity Recognizer ]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            error: [Error]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            logging.info(f"Create Entity Recognizer Controller: {request}")
+            create_entity_recognizer_request = request.dict(exclude_none=True)
+            return create_entity_recognizer(
+                recognizer_name=create_entity_recognizer_request.get("RecognizerName"),
+                data_access_role_arn=create_entity_recognizer_request.get(
+                    "DataAccessRoleArn"
+                ),
+                input_data_config=create_entity_recognizer_request.get(
+                    "InputDataConfig"
+                ),
+            )
+        except Exception as error:
+            logging.error(f"{error=}")
+            raise error
+
+    def delete_entity_recognizer_controller(self, request):
+        """[Deleted a Entity Recognizer ]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            error: [Error]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            logging.info(
+                f"Delete Entity Recognizer Controller: {request.EntityRecognizerArn}"
+            )
+            return delete_entity_recognizer(
+                entity_recognizer_arn=request.EntityRecognizerArn
+            )
+        except Exception as error:
+            logging.error(f"{error=}")
+            raise error
+
+    def describe_entity_recognizer_controller(self, request):
+        """[Describes a Entity Recognizer ]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            error: [Error]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            logging.info(
+                f"Describe Entity Recognizer Controller: {request.EntityRecognizerArn}"
+            )
+            return describe_entity_recognizer(
+                entity_recognizer_arn=request.EntityRecognizerArn
+            )
+        except Exception as error:
+            logging.error(f"{error=}")
+            raise error
+
+    def stop_training_entity_recognizer_controller(self, request):
+        """[Stops training a Entity Recognizer ]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            error: [Error]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            logging.info(
+                f"Stop Training Entity Recognizer Controller: {request.EntityRecognizerArn}"
+            )
+            return stop_training_entity_recognizer(
+                entity_recognizer_arn=request.EntityRecognizerArn
+            )
+        except Exception as error:
+            logging.error(f"{error=}")
+            raise error
+
+    def list_entity_recognizer_controller(self):
+        """[Lists Entity Recognizer ]
+
+        Raises:
+            error: [Error]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            logging.info(f"List Entity Recognizer Controller")
             return list_document_classifier()
         except Exception as error:
             logging.error(f"{error=}")

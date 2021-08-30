@@ -25,8 +25,19 @@ class CreateDocumentClassifier(BaseModel):
     Mode: str
 
 
+class CreateEntityRecognizer(BaseModel):
+    RecognizerName: str
+    DataAccessRoleArn: str
+    InputDataConfig: InputDataConfig
+    LanguageCode: str
+
+
 class DocumentClassifier(BaseModel):
     DocumentClassifierArn: str
+
+
+class EntityRecognizer(BaseModel):
+    EntityRecognizerArn: str
 
 
 class DeployModel(BaseModel):
