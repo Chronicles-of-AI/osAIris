@@ -8,7 +8,6 @@ Complete End-to-End Application for setting up and integrating with products for
 2. AWS Comprehend
 3. AWS SageMaker
 4. GCP AutoML
-5. GCP Vertex AI
 
 ## Integrations
 1. Label Studio -- Annotation tool
