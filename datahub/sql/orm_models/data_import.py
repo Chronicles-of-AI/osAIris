@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Enum
+from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.sql.sqltypes import Boolean
 from sql import Base
 
@@ -12,8 +12,5 @@ class DataImport(Base):
     auto_trigger = Column(Boolean)
     next_stage = Column(String)
     UUID = Column(String)
-    status = Column(
-        String,
-        Enum("Running", "Completed", "Failed", name="status_enum", create_type=False),
-    )
+    status = Column(String)
     error = Column(String)
