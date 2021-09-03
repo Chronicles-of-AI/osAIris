@@ -9,6 +9,7 @@ class DataImport(Base):
     row_id = Column(Integer, primary_key=True, autoincrement=True)
     uri = Column(String)
     dataset_id = Column(String, ForeignKey("datasets.dataset_id"))
+    pipeline_id = Column(Integer)
     auto_trigger = Column(Boolean)
     next_stage = Column(String)
     UUID = Column(String)

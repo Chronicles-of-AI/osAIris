@@ -1,8 +1,8 @@
-import logging
 from commons.external_call import APIInterface
 from sql import config, logger
 from sql.crud.import_data_crud import CRUDDataImport
 from sql.crud.operation_crud import CRUDOperations
+from sql.crud.project_flow_crud import CRUDProjectFlow
 from datetime import datetime
 
 logging = logger(__name__)
@@ -12,6 +12,7 @@ class ImportDatasetController:
     def __init__(self):
         self.CRUDDataImport = CRUDDataImport()
         self.CRUDOperations = CRUDOperations()
+        self.CRUDProjectFlow = CRUDProjectFlow()
         self.gcp_config = config.get("core_engine").get("gcp")
 
     def create_operation_record(self, api_response: dict):
@@ -26,6 +27,7 @@ class ImportDatasetController:
         try:
             logging.info("executing create_operation_record function")
             operation_crud_request = {
+                "pipeline_id": api_response.get("pipeline_id"),
                 "operation_id": api_response.get("operation_id"),
                 "status": api_response.get("status"),
                 "project_id": api_response.get("project_id"),
@@ -63,13 +65,26 @@ class ImportDatasetController:
             )
             if status_code == 200:
                 crud_request = {
+                    "pipeline_id": data_import_request.get("pipeline_id"),
                     "dataset_id": data_import_request.get("dataset_id"),
                     "UUID": uuid,
                     "uri": data_import_request.get("gcs_path"),
                     "status": "Import In-progress",
                 }
                 self.CRUDDataImport.create(**crud_request)
+                response.update(
+                    {
+                        "pipeline_id": data_import_request.get("pipeline_id"),
+                    }
+                )
                 self.create_operation_record(api_response=response)
+                project_flow_crud_request = {
+                    "pipeline_id": data_import_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("operation_id"),
+                    "current_stage": "IMPORTING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return response
             else:
                 raise Exception({"status": "import dataset failed"})

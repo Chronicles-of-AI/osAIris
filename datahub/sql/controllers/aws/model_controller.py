@@ -39,6 +39,7 @@ class ModelController:
             )
             if status_code == 200:
                 crud_request = {
+                    "pipeline_id": start_training_request.get("pipeline_id"),
                     "model_id": response.get("project_version_arn"),
                     "dataset_id": start_training_request.get("training_data"),
                     "artifacts": start_training_request.get("output_config"),

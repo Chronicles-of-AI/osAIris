@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 
 class ManageModel(BaseModel):
+    pipeline_id: int
     project_id: str
     model_id: str
     region: str

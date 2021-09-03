@@ -43,6 +43,9 @@ class ComprehendController:
             )
             if status_code == 200:
                 crud_request = {
+                    "pipeline_id": create_document_classifier_request.get(
+                        "pipeline_id"
+                    ),
                     "model_id": response.get("document_classifier_arn"),
                     "dataset_id": create_document_classifier_request.get(
                         "InputDataConfig"
@@ -245,6 +248,9 @@ class ComprehendController:
             )
             if status_code == 200:
                 deployment_crud_request = {
+                    "pipeline_id": deploy_document_classifier_request.get(
+                        "pipeline_id"
+                    ),
                     "UUID": uuid,
                     "model_id": request.model_arn,
                     "deployment_endpoint": response.get("endpoint_arn"),

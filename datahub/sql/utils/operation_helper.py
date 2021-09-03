@@ -1,9 +1,9 @@
-import logging
 from sql.crud.operation_crud import CRUDOperations
 from sql.crud.dataset_crud import CRUDDataset
 from sql.crud.import_data_crud import CRUDDataImport
 from sql.crud.model_crud import CRUDModel
 from sql.crud.deployment_crud import CRUDDeployment
+from sql.crud.project_flow_crud import CRUDProjectFlow
 from sql.controllers.gcp.model_management_controller import ManageModelController
 from sql.apis.schemas.requests.gcp.model_management_request import ListModels
 from datetime import datetime
@@ -77,6 +77,16 @@ def import_dataset_operation(
     try:
         logging.info("Import Dataset Operation")
         update_operations_record(operation_id=operation_id, status=status, error=error)
+        pipeline_id = (
+            CRUDOperations().read(operation_id=operation_id).get("pipeline_id")
+        )
+        project_flow_crud_request = {
+            "pipeline_id": pipeline_id,
+            "updated_at": datetime.now(),
+            "functional_stage_id": service_id,
+            "current_stage": "DATA_IMPORTED",
+        }
+        CRUDProjectFlow().update(**project_flow_crud_request)
         CRUDDataImport().update(dataset_id=service_id, status=status)
     except Exception as error:
         logging.error(f"Error in import_dataset_operation: {error}")
@@ -105,6 +115,16 @@ def deploy_model_operation(
             "status": status,
             "updated": datetime.now(),
         }
+        pipeline_id = (
+            CRUDOperations().read(operation_id=operation_id).get("pipeline_id")
+        )
+        project_flow_crud_request = {
+            "pipeline_id": pipeline_id,
+            "updated_at": datetime.now(),
+            "functional_stage_id": service_id,
+            "current_stage": "MODEL_DEPLOYED",
+        }
+        CRUDProjectFlow().update(**project_flow_crud_request)
         CRUDDeployment().update(deployment_request=deployment_request)
     except Exception as error:
         logging.error(f"Error in deploy_model_operation: {error}")
@@ -133,6 +153,16 @@ def undeploy_model_operation(
             "status": "Model Undeployed",
             "updated": datetime.now(),
         }
+        pipeline_id = (
+            CRUDOperations().read(operation_id=operation_id).get("pipeline_id")
+        )
+        project_flow_crud_request = {
+            "pipeline_id": pipeline_id,
+            "updated_at": datetime.now(),
+            "functional_stage_id": service_id,
+            "current_stage": "MODEL_UNDEPLOYED",
+        }
+        CRUDProjectFlow().update(**project_flow_crud_request)
         CRUDDeployment().update(deployment_request=deployment_request)
     except Exception as error:
         logging.error(f"Error in undeploy_model_operation: {error}")
@@ -205,6 +235,17 @@ def train_model_operation(
                     "status": status,
                     "updated": datetime.now(),
                 }
+                pipeline_id = (
+                    CRUDOperations().read(operation_id=operation_id).get("pipeline_id")
+                )
+                project_flow_crud_request = {
+                    "pipeline_id": pipeline_id,
+                    "updated_at": datetime.now(),
+                    "model_id": model_id,
+                    "functional_stage_id": model_id,
+                    "current_stage": "TRAINED",
+                }
+                CRUDProjectFlow().update(**project_flow_crud_request)
                 CRUDModel().update_by_operation_id(model_request=model_request)
     except Exception as error:
         logging.error(f"Error in train_model_operation: {error}")

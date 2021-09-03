@@ -3,6 +3,7 @@ from commons.external_call import APIInterface
 from sql import config, logger
 from sql.crud.model_crud import CRUDModel
 from sql.crud.operation_crud import CRUDOperations
+from sql.crud.project_flow_crud import CRUDProjectFlow
 from sql.controllers.gcp.model_management_controller import ManageModelController
 from datetime import datetime
 
@@ -13,6 +14,7 @@ class TrainModelController:
     def __init__(self):
         self.CRUDModel = CRUDModel()
         self.CRUDOperations = CRUDOperations()
+        self.CRUDProjectFlow = CRUDProjectFlow()
         self.ManageModelController = ManageModelController()
         self.gcp_config = config.get("core_engine").get("gcp")
 
@@ -79,6 +81,15 @@ class TrainModelController:
                 }
                 self.CRUDModel.create(**crud_request)
                 self.create_operation_record(api_response=response)
+                project_flow_crud_request = {
+                    "pipeline_id": train_classification_model_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("operation_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
                     "status": "Training Started",
@@ -125,6 +136,13 @@ class TrainModelController:
                 }
                 self.CRUDModel.create(**crud_request)
                 self.create_operation_record(api_response=response)
+                project_flow_crud_request = {
+                    "pipeline_id": train_ner_model_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("operation_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
                     "status": "Training Started",
@@ -173,6 +191,15 @@ class TrainModelController:
                 }
                 self.CRUDModel.create(**crud_request)
                 self.create_operation_record(api_response=response)
+                project_flow_crud_request = {
+                    "pipeline_id": train_image_classification_model_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("operation_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
                     "status": "Training Started",
@@ -225,6 +252,15 @@ class TrainModelController:
                 }
                 self.CRUDModel.create(**crud_request)
                 self.create_operation_record(api_response=response)
+                project_flow_crud_request = {
+                    "pipeline_id": train_edge_image_classification_model_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("operation_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
                     "status": "Training Started",
@@ -273,6 +309,15 @@ class TrainModelController:
                 }
                 self.CRUDModel.create(**crud_request)
                 self.create_operation_record(api_response=response)
+                project_flow_crud_request = {
+                    "pipeline_id": train_object_detection_model_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("operation_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
                     "status": "Training Started",
@@ -323,6 +368,15 @@ class TrainModelController:
                 }
                 self.CRUDModel.create(**crud_request)
                 self.create_operation_record(api_response=response)
+                project_flow_crud_request = {
+                    "pipeline_id": train_object_detection_edge_model_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("operation_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
                     "status": "Training Started",

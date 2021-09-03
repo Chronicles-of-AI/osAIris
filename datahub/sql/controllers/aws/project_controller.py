@@ -36,7 +36,13 @@ class ProjectController:
                 route=create_project_url, data=project_request
             )
             project_request.update(response)
-            project_request.update({"uuid": uuid, "status": "CREATED"})
+            project_request.update(
+                {
+                    "uuid": uuid,
+                    "status": "CREATED",
+                    "pipeline_id": project_request.get("pipeline_id"),
+                }
+            )
             self.CRUDProject.create(**project_request)
             project_flow_crud_request = {
                 "pipeline_id": project_request.get("pipeline_id"),

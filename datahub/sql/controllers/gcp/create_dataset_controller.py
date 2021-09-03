@@ -53,7 +53,7 @@ class CreateDatasetController:
                     "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "updated_at": datetime.now(),
                     "functional_stage_id": response.get("dataset_id"),
-                    "current_stage": "TRAINING",
+                    "current_stage": "DATASET_CREATED",
                 }
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
@@ -100,6 +100,13 @@ class CreateDatasetController:
                     "problem_type": "text_ner",
                 }
                 self.CRUDDataset.create(**crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": create_dataset_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("dataset_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "dataset_name": create_dataset_request.get("display_name"),
                     "dataset_id": response.get("dataset_id"),
@@ -146,6 +153,13 @@ class CreateDatasetController:
                     "problem_type": "image_classification",
                 }
                 self.CRUDDataset.create(**crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": create_dataset_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("dataset_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "dataset_name": create_dataset_request.get("display_name"),
                     "dataset_id": response.get("dataset_id"),
@@ -194,6 +208,13 @@ class CreateDatasetController:
                     "problem_type": "object_detection",
                 }
                 self.CRUDDataset.create(**crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": create_dataset_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("dataset_id"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "dataset_name": create_dataset_request.get("display_name"),
                     "dataset_id": response.get("dataset_id"),

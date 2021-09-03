@@ -74,6 +74,13 @@ class ManageModelController:
                 self.create_operation_record(
                     api_response=response, functional_stage="DEPLOY_MODEL"
                 )
+                project_flow_crud_request = {
+                    "pipeline_id": deploy_model_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("model_id"),
+                    "current_stage": "MODEL_DEPLOYING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "model_id": response.get("model_id"),
                     "operation_id": response.get("operation_id"),
@@ -117,6 +124,12 @@ class ManageModelController:
                 self.create_operation_record(
                     api_response=response, functional_stage="UNDEPLOY_MODEL"
                 )
+                project_flow_crud_request = {
+                    "pipeline_id": undeploy_model_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "current_stage": "MODEL_UNDEPLOYING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "model_id": response.get("model_id"),
                     "operation_id": response.get("operation_id"),

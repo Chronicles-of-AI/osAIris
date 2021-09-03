@@ -37,6 +37,7 @@ class SagemakerController:
             )
             if status_code == 200:
                 crud_request = {
+                    "pipeline_id": start_training_request.get("pipeline_id"),
                     "model_id": response.get("training_job_arn"),
                     "dataset_id": start_training_request.get("InputDataConfig"),
                     "artifacts": start_training_request.get("OutputDataConfig"),
