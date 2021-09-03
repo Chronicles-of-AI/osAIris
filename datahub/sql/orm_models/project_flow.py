@@ -22,3 +22,4 @@ class ProjectFlow(Base):
     created_by = Column(String)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
+    status = Column(String)

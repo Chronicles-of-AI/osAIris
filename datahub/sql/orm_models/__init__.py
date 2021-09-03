@@ -2,8 +2,10 @@ from sql.orm_models.datasets import *
 from sql.orm_models.data_import import *
 from sql.orm_models.deployment import *
 from sql.orm_models.data_monitoring import *
+from sql.orm_models.model_monitoring import *
 from sql.orm_models.models import *
 from sql.orm_models.operations import *
-from sql.orm_models.service_config import *
-from sql.orm_models.projects import *
+from sql.orm_models.services import *
+from sql.orm_models.rekog_projects import *
+from sql.orm_models.project_flow import *
 from sql.orm_models.user import *
