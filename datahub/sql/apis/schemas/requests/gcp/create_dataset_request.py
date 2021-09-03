@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 
 class CreateTextClassificationDataset(BaseModel):
+    pipeline_id: int
     project_id: str
     display_name: str
     region: str
@@ -10,12 +11,14 @@ class CreateTextClassificationDataset(BaseModel):
 
 
 class CreateNERDataset(BaseModel):
+    pipeline_id: int
     project_id: str
     display_name: str
     region: str
 
 
 class CreateImageClassificationDataset(BaseModel):
+    pipeline_id: int
     project_id: str
     display_name: str
     region: str
@@ -23,6 +26,7 @@ class CreateImageClassificationDataset(BaseModel):
 
 
 class CreateObjectDetectionDataset(BaseModel):
+    pipeline_id: int
     project_id: str
     display_name: str
     region: str

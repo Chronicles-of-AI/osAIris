@@ -9,5 +9,6 @@ class CreateProject(Base):
     uuid = Column(String)
     project_name = Column(String)
     project_arn = Column(String)
+    pipeline_id = Column(Integer)
     status = Column(String)
     error = Column(String)

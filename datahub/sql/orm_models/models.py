@@ -12,6 +12,7 @@ class Models(Base):
     artifacts = Column(JSONType)
     dataset_id = Column(JSONType)
     alias_name = Column(String)
+    pipeline_id = Column(Integer)
     auto_trigger = Column(Boolean)
     next_stage = Column(String)
     UUID = Column(String)
