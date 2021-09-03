@@ -8,7 +8,7 @@ class CreateProjectFlowResponse(BaseModel):
     pipeline_name: str
     pipeline_description: str
     annotation_project_name: str
-    annotation_project_description: str = None
+    annotation_project_id: str
 
 
 class ProjectFlowResponse(BaseModel):

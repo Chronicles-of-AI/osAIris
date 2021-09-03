@@ -1,8 +1,8 @@
 from datetime import datetime
-import logging
 from commons.external_call import APIInterface
 from sql import config, logger
 from sql.crud.model_crud import CRUDModel
+from sql.crud.project_flow_crud import CRUDProjectFlow
 
 logging = logger(__name__)
 
@@ -10,6 +10,7 @@ logging = logger(__name__)
 class SagemakerController:
     def __init__(self):
         self.CRUDModel = CRUDModel()
+        self.CRUDProjectFlow = CRUDProjectFlow()
         self.core_aws_model_config = (
             config.get("core_engine").get("aws").get("sagemaker_router")
         )
@@ -46,6 +47,14 @@ class SagemakerController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": start_training_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "model_id": response.get("training_job_arn"),
+                    "functional_stage_id": response.get("training_job_arn"),
+                    "current_stage": "SAGEMAKER_TRAINING_STARTED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 response.update({"status": "training started"})
                 return response
             else:
@@ -80,6 +89,12 @@ class SagemakerController:
                     "updated": datetime.now(),
                 }
                 self.CRUDModel.update_by_alias_name(crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": stop_training_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "current_stage": "SAGEMAKER_TRAINING_STOPPED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {"status": "training stopped"}
             else:
                 raise Exception({"status": "training failed"})

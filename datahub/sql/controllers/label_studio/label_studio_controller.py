@@ -117,6 +117,7 @@ class ProjectController:
             project_flow_crud_request = {
                 "raw_annotation_uri": cloud_uri,
                 "current_stage": "EXPORT_ANNOTATIONS",
+                "updated_at": datetime.now(),
                 "pipeline_id": pipeline_id,
             }
             self.CRUDProjectFlow.update(**project_flow_crud_request)
@@ -149,8 +150,9 @@ class ProjectController:
                 headers=self.header,
             )
             project_flow_crud_request = {
-                "raw_annotation_uri": response.get("cloud_uri"),
+                "transform_annotation_uri": response.get("cloud_uri"),
                 "current_stage": "TRANSFORM_ANNOTATIONS",
+                "updated_at": datetime.now(),
                 "pipeline_id": request.pipeline_id,
             }
             self.CRUDProjectFlow.update(**project_flow_crud_request)

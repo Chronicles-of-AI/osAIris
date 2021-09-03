@@ -39,6 +39,7 @@ class StoppingCondition(BaseModel):
 
 
 class CreateTrainingJob(BaseModel):
+    pipeline_id: int
     TrainingJobName: str
     AlgorithmSpecification: AlgorithmSpecification
     RoleArn: str
@@ -49,4 +50,5 @@ class CreateTrainingJob(BaseModel):
 
 
 class TrainingJob(BaseModel):
+    pipeline_id: int
     TrainingJobName: str

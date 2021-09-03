@@ -2,6 +2,7 @@ from commons.external_call import APIInterface
 from sql import config, logger
 from sql.crud.model_crud import CRUDModel
 from sql.crud.deployment_crud import CRUDDeployment
+from sql.crud.project_flow_crud import CRUDProjectFlow
 from datetime import datetime
 
 logging = logger(__name__)
@@ -11,6 +12,7 @@ class ComprehendController:
     def __init__(self):
         self.CRUDModel = CRUDModel()
         self.CRUDDeployment = CRUDDeployment()
+        self.CRUDProjectFlow = CRUDProjectFlow()
         self.core_aws_comprehend_config = (
             config.get("core_engine").get("aws").get("comprehend_router")
         )
@@ -57,6 +59,15 @@ class ComprehendController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": create_document_classifier_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("document_classifier_arn"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "document_classifier_arn": response.get("document_classifier_arn"),
                     "status": "training started",
@@ -167,6 +178,15 @@ class ComprehendController:
                     "updated": datetime.now(),
                 }
                 self.CRUDModel.update(crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": stop_training_document_classifier_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": request.DocumentClassifierArn,
+                    "current_stage": "TRAINING_STOPPED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {"status": "training stopped"}
             else:
                 raise Exception({"status": "training failed"})
@@ -223,15 +243,25 @@ class ComprehendController:
                 route=deploy_document_classifier_url,
                 data=deploy_document_classifier_request,
             )
-            deployment_crud_request = {
-                "UUID": uuid,
-                "model_id": request.model_arn,
-                "deployment_endpoint": response.get("endpoint_arn"),
-                "created": datetime.now(),
-                "status": "Deployed",
-            }
             if status_code == 200:
+                deployment_crud_request = {
+                    "UUID": uuid,
+                    "model_id": request.model_arn,
+                    "deployment_endpoint": response.get("endpoint_arn"),
+                    "created": datetime.now(),
+                    "status": "Deployed",
+                }
                 self.CRUDDeployment.create(**deployment_crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": deploy_document_classifier_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "model_id": request.model_arn,
+                    "functional_stage_id": request.model_arn,
+                    "current_stage": "MODEL_DEPLOYED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 response.update({"status": "model deployed successfully"})
                 return response
             else:
@@ -264,15 +294,23 @@ class ComprehendController:
                 route=undeploy_document_classifier_url,
                 data=undeploy_document_classifier_request,
             )
-            undeployment_crud_request = {
-                "deployment_endpoint": request.endpoint_arn,
-                "updated": datetime.now(),
-                "status": "UnDeployed",
-            }
             if status_code == 200:
+                undeployment_crud_request = {
+                    "deployment_endpoint": request.endpoint_arn,
+                    "updated": datetime.now(),
+                    "status": "UnDeployed",
+                }
                 self.CRUDDeployment.update_by_endpoint(
                     deployment_request=undeployment_crud_request
                 )
+                project_flow_crud_request = {
+                    "pipeline_id": undeploy_document_classifier_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "current_stage": "MODEL_UNDEPLOYED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {"status": "model undeployed successfully"}
             else:
                 raise Exception({"status": "model undeployment failed"})

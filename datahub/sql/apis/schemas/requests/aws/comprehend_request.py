@@ -17,6 +17,7 @@ class OutputDataConfig(BaseModel):
 
 
 class CreateDocumentClassifier(BaseModel):
+    pipeline_id: int
     DocumentClassifierName: str
     DataAccessRoleArn: str
     InputDataConfig: InputDataConfig
@@ -26,14 +27,17 @@ class CreateDocumentClassifier(BaseModel):
 
 
 class DocumentClassifier(BaseModel):
+    pipeline_id: int
     DocumentClassifierArn: str
 
 
 class DeployModel(BaseModel):
+    pipeline_id: int
     model_arn: str
     min_inference_units: int
     endpoint_name: str
 
 
 class UnDeployModel(BaseModel):
+    pipeline_id: int
     endpoint_arn: str

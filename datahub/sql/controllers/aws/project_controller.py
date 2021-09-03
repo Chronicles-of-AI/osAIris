@@ -1,5 +1,5 @@
-import logging
 from sql.crud.project_crud import CRUDProject
+from sql.crud.project_flow_crud import CRUDProjectFlow
 from commons.external_call import APIInterface
 from sql import config, logger
 from datetime import datetime
@@ -10,6 +10,7 @@ logging = logger(__name__)
 class ProjectController:
     def __init__(self):
         self.CRUDProject = CRUDProject()
+        self.CRUDProjectFlow = CRUDProjectFlow()
         self.core_aws_project_config = (
             config.get("core_engine").get("aws").get("project_router")
         )
@@ -37,6 +38,13 @@ class ProjectController:
             project_request.update(response)
             project_request.update({"uuid": uuid, "status": "CREATED"})
             self.CRUDProject.create(**project_request)
+            project_flow_crud_request = {
+                "pipeline_id": project_request.get("pipeline_id"),
+                "updated_at": datetime.now(),
+                "functional_stage_id": response.get("project_arn"),
+                "current_stage": "REKOGNITION_PROJECT_CREATED",
+            }
+            self.CRUDProjectFlow.update(**project_flow_crud_request)
             return project_request
         except Exception as error:
             logging.error(f"Error in create_project function: {error}")

@@ -1,5 +1,6 @@
 from sql.crud.model_crud import CRUDModel
 from sql.crud.deployment_crud import CRUDDeployment
+from sql.crud.project_flow_crud import CRUDProjectFlow
 from sql import config, logger
 from commons.external_call import APIInterface
 from datetime import datetime
@@ -11,6 +12,7 @@ class ModelController:
     def __init__(self):
         self.CRUDModel = CRUDModel()
         self.CRUDDeployment = CRUDDeployment()
+        self.CRUDProjectFlow = CRUDProjectFlow()
         self.core_aws_model_config = (
             config.get("core_engine").get("aws").get("model_router")
         )
@@ -47,6 +49,13 @@ class ModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": start_training_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("project_version_arn"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {"status": "training started"}
             else:
                 raise Exception({"status": "training failed"})
@@ -82,6 +91,14 @@ class ModelController:
             }
             if status_code == 200:
                 self.CRUDDeployment.create(**deployment_crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": deploy_model_request.get("pipeline_id"),
+                    "model_id": request.project_version_arn,
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": request.project_version_arn,
+                    "current_stage": "MODEL_DEPLOYED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {"status": "model deployed successfully"}
             else:
                 raise Exception({"status": "model deployment failed"})
@@ -115,6 +132,12 @@ class ModelController:
             }
             if status_code == 200:
                 self.CRUDDeployment.update(undeployment_crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": undeploy_model_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "current_stage": "MODEL_UNDEPLOYED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {"status": "model undeployed successfully"}
             else:
                 raise Exception({"status": "model undeployment failed"})
