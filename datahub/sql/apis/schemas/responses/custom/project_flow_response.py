@@ -4,6 +4,7 @@ from datetime import datetime
 
 
 class CreateProjectFlowResponse(BaseModel):
+    pipeline_id: int
     pipeline_name: str
     pipeline_description: str
     annotation_project_name: str
@@ -11,6 +12,7 @@ class CreateProjectFlowResponse(BaseModel):
 
 
 class ProjectFlowResponse(BaseModel):
+    pipeline_id: int
     pipeline_name: str
     pipeline_description: str
     use_case: str
@@ -22,11 +24,11 @@ class ProjectFlowResponse(BaseModel):
     raw_annotation_uri: str = None
     transform_annotation_uri: str = None
     model_id: str = None
-    functional_stage_id: str = None
-    current_stage: str = None
+    functional_stage_id: str
+    current_stage: str
     created_by: str = None
     created_at: datetime
-    updated_at: datetime = None
+    updated_at: datetime
     status: str = None
 
 

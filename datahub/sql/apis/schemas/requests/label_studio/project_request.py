@@ -25,6 +25,7 @@ class Project(BaseModel):
 
 
 class TransformAnnotation(BaseModel):
+    pipeline_id: int
     input_data_uri: str
     output_data_bucket_name: str
     output_data_file_prefix: str = None

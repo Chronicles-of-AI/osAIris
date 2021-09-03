@@ -62,9 +62,12 @@ class ProjectFlowController:
                 "current_stage": "CREATE_ANNOTATION_PROJECT",
                 "functional_stage_id": response.get("id"),
                 "created_at": datetime.now(),
+                "updated_at": datetime.now(),
             }
-            self.CRUDProjectFlow.create(**crud_request)
+            project_flow_record = self.CRUDProjectFlow.create(**crud_request)
+
             return {
+                "pipeline_id": project_flow_record,
                 "pipeline_name": create_project_flow_request.get("pipeline_name"),
                 "pipeline_description": create_project_flow_request.get(
                     "pipeline_description"
@@ -86,10 +89,10 @@ class ProjectFlowController:
             logging.error(f"Error in create_project_flow_controller function: {error}")
             raise error
 
-    def get_project_flow_by_name_controller(self, pipeline_name: str):
+    def get_project_flow_by_name_controller(self, pipeline_id: str):
         try:
             logging.info("executing create_project_flow_controller function")
-            return self.CRUDProjectFlow.read(pipeline_name=pipeline_name)
+            return self.CRUDProjectFlow.read(pipeline_id=pipeline_id)
         except Exception as error:
             logging.error(f"Error in create_project_flow_controller function: {error}")
             raise error

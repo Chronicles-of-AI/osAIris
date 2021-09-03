@@ -18,6 +18,7 @@ class CRUDProjectFlow:
                 transaction_session.add(project)
                 transaction_session.commit()
                 transaction_session.refresh(project)
+            return project.pipeline_id
         except Exception as error:
             logging.error(f"Error in CRUDProjectFlow create function : {error}")
             raise error
@@ -61,7 +62,7 @@ class CRUDProjectFlow:
             logging.error(f"Error in CRUDProjectFlow Read aLL function : {error}")
             raise error
 
-    def read(self, pipeline_name: str):
+    def read(self, pipeline_id: str):
         """[CRUD function to Read a Project Flow]
 
         Args:
@@ -75,7 +76,7 @@ class CRUDProjectFlow:
             with session() as transaction_session:
                 obj: ProjectFlow = (
                     transaction_session.query(ProjectFlow)
-                    .filter(ProjectFlow.pipeline_name == pipeline_name)
+                    .filter(ProjectFlow.pipeline_id == pipeline_id)
                     .first()
                 )
                 return obj.__dict__
@@ -116,12 +117,10 @@ class CRUDProjectFlow:
             with session() as transaction_session:
                 obj: ProjectFlow = (
                     transaction_session.query(ProjectFlow)
-                    .filter(ProjectFlow.pipeline_name == kwargs.get("pipeline_name"))
-                    .first()
-                    .update(kwargs)
+                    .filter(ProjectFlow.pipeline_id == kwargs.get("pipeline_id"))
+                    .update(kwargs, synchronize_session=False)
                 )
                 transaction_session.commit()
-                transaction_session.refresh(obj)
         except Exception as error:
             logging.error(f"Error in CRUDProjectFlow update function : {error}")
             raise error
@@ -141,11 +140,9 @@ class CRUDProjectFlow:
                         ProjectFlow.functional_stage_id
                         == kwargs.get("functional_stage_id")
                     )
-                    .first()
-                    .update(kwargs)
+                    .update(kwargs, synchronize_session=False)
                 )
                 transaction_session.commit()
-                transaction_session.refresh(obj)
         except Exception as error:
             logging.error(f"Error in CRUDProjectFlow update function : {error}")
             raise error

@@ -6,7 +6,8 @@ from sql import Base
 class ProjectFlow(Base):
     __tablename__ = "project_flow"
     __table_args__ = {"extend_existing": True}
-    pipeline_name = Column(String, primary_key=True)
+    pipeline_id = Column(Integer, primary_key=True, autoincrement=True)
+    pipeline_name = Column(String)
     pipeline_description = Column(String)
     use_case = Column(String)
     cloud_service_provider = Column(String)

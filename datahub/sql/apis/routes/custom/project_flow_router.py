@@ -98,7 +98,7 @@ async def get_all_project_flow(
     response_model=ProjectFlowResponse,
 )
 async def get_project_flow(
-    pipeline_name: str,
+    pipeline_id: str,
     token: str = Depends(oauth2_scheme),
 ):
     """[API router to create document classifier using AWS Comprehend]
@@ -116,10 +116,10 @@ async def get_project_flow(
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
-        logging.debug(f"Request: {pipeline_name}")
+        logging.debug(f"Request: {pipeline_id}")
         if decodeJWT(token=token):
             response = ProjectFlowController().get_project_flow_by_name_controller(
-                pipeline_name=pipeline_name
+                pipeline_id=pipeline_id
             )
             return ProjectFlowResponse(**response)
         else:
