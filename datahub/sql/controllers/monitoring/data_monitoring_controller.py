@@ -58,23 +58,42 @@ class DataMonitoringController:
             creat_annotation_url = (
                 f"{self.create_label_studio_task_url}/{task_id}/annotations/"
             )
-            create_annotation_request = {
-                "result": [
-                    {
-                        "value": {
-                            "choices": [
-                                create_image_classification_record_request.get(
-                                    "inferred_value"
-                                )
-                            ]
-                        },
-                        "from_name": "choice",
-                        "to_name": "image",
-                        "type": "choices",
-                    }
-                ],
-                "ground_truth": True,
-            }
+            if create_image_classification_record_request.get("ground_truth"):
+                create_annotation_request = {
+                    "result": [
+                        {
+                            "value": {
+                                "choices": [
+                                    create_image_classification_record_request.get(
+                                        "ground_truth"
+                                    )
+                                ]
+                            },
+                            "from_name": "choice",
+                            "to_name": "image",
+                            "type": "choices",
+                        }
+                    ],
+                    "ground_truth": True,
+                }
+            else:
+                create_annotation_request = {
+                    "result": [
+                        {
+                            "value": {
+                                "choices": [
+                                    create_image_classification_record_request.get(
+                                        "inferred_value"
+                                    )
+                                ]
+                            },
+                            "from_name": "choice",
+                            "to_name": "image",
+                            "type": "choices",
+                        }
+                    ],
+                    "ground_truth": False,
+                }
             annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,
@@ -118,23 +137,42 @@ class DataMonitoringController:
             creat_annotation_url = (
                 f"{self.create_label_studio_task_url}/{task_id}/annotations/"
             )
-            create_annotation_request = {
-                "result": [
-                    {
-                        "value": {
-                            "choices": [
-                                create_text_classification_record_request.get(
-                                    "inferred_value"
-                                )
-                            ]
-                        },
-                        "from_name": "sentiment",
-                        "to_name": "text",
-                        "type": "choices",
-                    }
-                ],
-                "ground_truth": True,
-            }
+            if create_text_classification_record_request.get("ground_truth"):
+                create_annotation_request = {
+                    "result": [
+                        {
+                            "value": {
+                                "choices": [
+                                    create_text_classification_record_request.get(
+                                        "ground_truth"
+                                    )
+                                ]
+                            },
+                            "from_name": "sentiment",
+                            "to_name": "text",
+                            "type": "choices",
+                        }
+                    ],
+                    "ground_truth": True,
+                }
+            else:
+                create_annotation_request = {
+                    "result": [
+                        {
+                            "value": {
+                                "choices": [
+                                    create_text_classification_record_request.get(
+                                        "inferred_value"
+                                    )
+                                ]
+                            },
+                            "from_name": "sentiment",
+                            "to_name": "text",
+                            "type": "choices",
+                        }
+                    ],
+                    "ground_truth": False,
+                }
             annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,
@@ -176,20 +214,36 @@ class DataMonitoringController:
             creat_annotation_url = (
                 f"{self.create_label_studio_task_url}/{task_id}/annotations/"
             )
-            final_result = [
-                result_data.update(
-                    {
-                        "type": "labels",
-                        "to_name": "text",
-                        "from_name": "label",
-                    }
-                )
-                for result_data in request.inferred_value
-            ]
-            create_annotation_request = {
-                "result": final_result,
-                "ground_truth": True,
-            }
+            if request.ground_truth:
+                final_result = [
+                    result_data.update(
+                        {
+                            "type": "labels",
+                            "to_name": "text",
+                            "from_name": "label",
+                        }
+                    )
+                    for result_data in request.ground_truth
+                ]
+                create_annotation_request = {
+                    "result": final_result,
+                    "ground_truth": True,
+                }
+            else:
+                final_result = [
+                    result_data.update(
+                        {
+                            "type": "labels",
+                            "to_name": "text",
+                            "from_name": "label",
+                        }
+                    )
+                    for result_data in request.inferred_value
+                ]
+                create_annotation_request = {
+                    "result": final_result,
+                    "ground_truth": False,
+                }
             annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,
@@ -231,20 +285,36 @@ class DataMonitoringController:
             creat_annotation_url = (
                 f"{self.create_label_studio_task_url}/{task_id}/annotations/"
             )
-            final_result = [
-                result_data.update(
-                    {
-                        "type": "labels",
-                        "to_name": "text",
-                        "from_name": "label",
-                    }
-                )
-                for result_data in request.inferred_value
-            ]
-            create_annotation_request = {
-                "result": final_result,
-                "ground_truth": True,
-            }
+            if request.ground_truth:
+                final_result = [
+                    result_data.update(
+                        {
+                            "type": "labels",
+                            "to_name": "text",
+                            "from_name": "label",
+                        }
+                    )
+                    for result_data in request.ground_truth
+                ]
+                create_annotation_request = {
+                    "result": final_result,
+                    "ground_truth": True,
+                }
+            else:
+                final_result = [
+                    result_data.update(
+                        {
+                            "type": "labels",
+                            "to_name": "text",
+                            "from_name": "label",
+                        }
+                    )
+                    for result_data in request.inferred_value
+                ]
+                create_annotation_request = {
+                    "result": final_result,
+                    "ground_truth": False,
+                }
             annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,

@@ -4,8 +4,8 @@ from sql.apis.schemas.requests.monitoring.data_monitoring_request import (
     CreateObjectDetectionRecord,
     CreateNERRecord,
 )
-from sql.apis.schemas.responses.aws.comprehend_response import (
-    CreateDocumentClassifierResponse,
+from sql.apis.schemas.responses.monitoring.data_monitoring_response import (
+    DataMonitoringRecord,
 )
 from sql.controllers.monitoring.data_monitoring_controller import (
     DataMonitoringController,
@@ -21,7 +21,7 @@ data_monitoring_router = APIRouter()
 
 @data_monitoring_router.post(
     "/osairis/data_monitoring/image_classification/create",
-    response_model=CreateDocumentClassifierResponse,
+    response_model=DataMonitoringRecord,
 )
 async def create_image_classification_record(
     create_image_classification_record_request: CreateClassificationDataRecord,
@@ -38,7 +38,7 @@ async def create_image_classification_record(
         error: [Exception in underlying controller]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -61,7 +61,7 @@ async def create_image_classification_record(
 
 @data_monitoring_router.post(
     "/osairis/data_monitoring/text_classification/create",
-    response_model=CreateDocumentClassifierResponse,
+    response_model=DataMonitoringRecord,
 )
 async def create_text_classification_record(
     create_text_classification_record_request: CreateClassificationDataRecord,
@@ -78,7 +78,7 @@ async def create_text_classification_record(
         error: [Exception in underlying controller]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -103,7 +103,7 @@ async def create_text_classification_record(
 
 @data_monitoring_router.post(
     "/osairis/data_monitoring/object_detection/create",
-    response_model=CreateDocumentClassifierResponse,
+    response_model=DataMonitoringRecord,
 )
 async def create_object_detection_record(
     create_object_detection_record_request: CreateObjectDetectionRecord,
@@ -120,7 +120,7 @@ async def create_object_detection_record(
         error: [Exception in underlying controller]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -145,7 +145,7 @@ async def create_object_detection_record(
 
 @data_monitoring_router.post(
     "/osairis/data_monitoring/ner/create",
-    response_model=CreateDocumentClassifierResponse,
+    response_model=DataMonitoringRecord,
 )
 async def create_ner_record(
     create_ner_record_request: CreateNERRecord,
@@ -162,7 +162,7 @@ async def create_ner_record(
         error: [Exception in underlying controller]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
