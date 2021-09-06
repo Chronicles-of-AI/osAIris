@@ -145,7 +145,9 @@ class ProjectController:
                 .get("F1Score")
             )
             create_model_monitoring_request = {
-                "model_uri": project_arn,
+                "model_uri": response.get("ProjectVersionDescriptions")[0].get(
+                    "ProjectVersionArn"
+                ),
                 "model_f1_score": f1_score,
                 "model_recall": "",
                 "model_precision": "",
