@@ -14,8 +14,8 @@ class DataMonitoringController:
         self.CRUDProjectFlow = CRUDProjectFlow()
         self.CRUDServices = CRUDServices()
         self.label_studio_config = config.get("label_studio").get("endpoint")
-        self.header = {"Authorization": f"Token {self.label_studio_token}"}
         self.label_studio_token = config.get("label_studio").get("token")
+        self.header = {"Authorization": f"Token {self.label_studio_token}"}
         self.create_label_studio_task_url = self.label_studio_config.get("create_task")
 
     def get_task_id(self, request):
