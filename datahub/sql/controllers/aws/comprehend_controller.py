@@ -259,7 +259,7 @@ class ComprehendController:
             f1_score = evaluation_metrics.get("F1Score")
             precision = evaluation_metrics.get("Precision")
             recall = evaluation_metrics.get("Recall")
-            status = response.get("EntityRecognizerProperties").get("Status")
+            status = response.get("DocumentClassifierProperties").get("Status")
             if status == "TRAINED":
                 create_model_monitoring_request = {
                     "model_uri": request.DocumentClassifierArn,
