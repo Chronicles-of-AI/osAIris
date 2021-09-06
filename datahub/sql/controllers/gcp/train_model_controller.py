@@ -79,7 +79,7 @@ class TrainModelController:
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
-                    "status": "Training Started",
+                    "status": "Running",
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
@@ -95,7 +95,7 @@ class TrainModelController:
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
-                    "status": "Training Started",
+                    "status": "Running",
                 }
             else:
                 raise Exception({"status": "Training failed"})
@@ -137,7 +137,7 @@ class TrainModelController:
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
-                    "status": "Training Started",
+                    "status": "Running",
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
@@ -151,7 +151,7 @@ class TrainModelController:
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
-                    "status": "Training Started",
+                    "status": "Running",
                 }
             else:
                 raise Exception({"status": "Training failed"})
@@ -195,7 +195,7 @@ class TrainModelController:
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
-                    "status": "Training Started",
+                    "status": "Running",
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
@@ -211,7 +211,7 @@ class TrainModelController:
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
-                    "status": "Training Started",
+                    "status": "Running",
                 }
             else:
                 raise Exception({"status": "Training failed"})
@@ -259,7 +259,7 @@ class TrainModelController:
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
-                    "status": "Training Started",
+                    "status": "Running",
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
@@ -275,7 +275,7 @@ class TrainModelController:
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
-                    "status": "Training Started",
+                    "status": "Running",
                 }
             else:
                 raise Exception({"status": "Training failed"})
@@ -319,7 +319,7 @@ class TrainModelController:
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
-                    "status": "Training Started",
+                    "status": "Running",
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
@@ -335,7 +335,7 @@ class TrainModelController:
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
-                    "status": "Training Started",
+                    "status": "Running",
                 }
             else:
                 raise Exception({"status": "Training failed"})
@@ -381,7 +381,7 @@ class TrainModelController:
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
-                    "status": "Training Started",
+                    "status": "Running",
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
@@ -397,7 +397,7 @@ class TrainModelController:
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "operation_id": response.get("operation_id"),
-                    "status": "Training Started",
+                    "status": "Running",
                 }
             else:
                 raise Exception({"status": "Training failed"})
