@@ -169,6 +169,43 @@ async def get_model_description(
         raise error
 
 
+@manage_model_router.post("/gcp/automl/get_model_evaluation")
+async def get_model_evaluation(
+    get_model_evaluation_request: DescriptionModels,
+    token: str = Depends(oauth2_scheme),
+):
+    """[API router to get model description]
+
+    Args:
+        get_model_evaluation_request (DescriptionModels): [Get AutoML model description request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
+
+    Returns:
+        [dict]: [AutoML model description]
+    """
+    try:
+        logging.info("Calling /gcp/automl/get_model_evaluation endpoint")
+        logging.debug(f"Request: {get_model_evaluation_request}")
+        if decodeJWT(token=token):
+            response = ManageModelController().get_model_evaluation_controller(
+                request=get_model_evaluation_request
+            )
+            return response
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        logging.error(f"Error in /gcp/automl/get_model_evaluation endpoint: {error}")
+        raise error
+
+
 @manage_model_router.post(
     "/gcp/automl/delete_model", response_model=ManageModelResponse
 )

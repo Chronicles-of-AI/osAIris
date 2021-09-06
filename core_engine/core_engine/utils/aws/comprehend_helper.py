@@ -246,9 +246,7 @@ def stop_training_entity_recognizer(entity_recognizer_arn: str):
         raise error
 
 
-def deploy_document_classifier(
-    min_inference_units: int, endpoint_name: str, model_arn: str
-):
+def deploy_model(min_inference_units: int, endpoint_name: str, model_arn: str):
     """[Deploys a Document Classifier for Text Classification on AWS]
 
     Args:
@@ -280,7 +278,7 @@ def deploy_document_classifier(
         raise error
 
 
-def undeploy_document_classifier(endpoint_arn: str):
+def undeploy_model(endpoint_arn: str):
     """[Un-deploys a Document Classifier for Text Classification on AWS]
 
     Args:

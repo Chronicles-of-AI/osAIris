@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String, DateTime, Integer
-from sqlalchemy.sql.sqltypes import Boolean
+from sqlalchemy.sql.sqltypes import JSON, Boolean
 from sql import Base
 
 
@@ -10,7 +10,7 @@ class DataMonitoring(Base):
     model_uri = Column(String)
     data = Column(String)
     feedback = Column(Boolean)
-    inferred_value = Column(String)
+    inferred_value = Column(JSON)
     ground_truth = Column(String)
     annotation_task_id = Column(String)
     created_by = Column(String)

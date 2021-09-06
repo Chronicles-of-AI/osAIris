@@ -24,8 +24,13 @@ core_engine:
       describe_document_classifier: !ENV ${core_url}/aws/comprehend/describe_document_classifier
       list_document_classifier: !ENV ${core_url}/aws/comprehend/list_document_classifier
       stop_training_document_classifier: !ENV ${core_url}/aws/comprehend/stop_training_document_classifier
-      deploy_document_classifier: !ENV ${core_url}/aws/comprehend/deploy_document_classifier
-      undeploy_document_classifier: !ENV ${core_url}/aws/comprehend/undeploy_document_classifier
+      create_entity_recognizer: !ENV ${core_url}/aws/comprehend/create_entity_recognizer
+      delete_entity_recognizer: !ENV ${core_url}/aws/comprehend/delete_entity_recognizer
+      describe_entity_recognizer: !ENV ${core_url}/aws/comprehend/describe_entity_recognizer
+      list_entity_recognizer: !ENV ${core_url}/aws/comprehend/list_entity_recognizer
+      stop_training_entity_recognizer: !ENV ${core_url}/aws/comprehend/stop_training_entity_recognizer
+      deploy_model: !ENV ${core_url}/aws/comprehend/deploy_model
+      undeploy_model: !ENV ${core_url}/aws/comprehend/undeploy_model
       get_predictions: !ENV ${core_url}/aws/comprehend/get_predictions
   label_studio_router:
     transform_annotations: !ENV ${core_url}/label_studio/transform_annotations
@@ -51,6 +56,7 @@ core_engine:
         undeploy_model: !ENV ${core_url}/gcp/automl/undeploy_model
         list_models: !ENV ${core_url}/gcp/automl/list_models
         get_model_description: !ENV ${core_url}/gcp/automl/get_model_description
+        get_model_evaluation: !ENV ${core_url}/gcp/automl/get_model_evaluation
         delete_model: !ENV ${core_url}/gcp/automl/delete_model
         list_datasets: !ENV ${core_url}/gcp/automl/list_datasets
         get_dataset_description: !ENV ${core_url}/gcp/automl/get_dataset_description

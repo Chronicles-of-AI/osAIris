@@ -2,6 +2,7 @@ from core_engine.utils.gcp.automl_manage_model import (
     model_deployment,
     model_undeployment,
     get_model_description,
+    get_model_evaluation,
     delete_model,
 )
 from core_engine.utils.gcp.automl_list_models import list_models
@@ -98,6 +99,29 @@ class ManageModelController:
         try:
             logging.info(f"Get Model Description Controller: {request}")
             return get_model_description(
+                project_id=request.project_id,
+                region=request.region,
+                model_id=request.model_id,
+            )
+        except Exception as error:
+            logging.error(f"{error=}")
+            raise error
+
+    def get_model_evaluation_controller(self, request):
+        """[Evaluate a Model In AutoML GCP]
+
+        Args:
+            request ([type]): [Based on the Input Schema]
+
+        Raises:
+            error: [Error]
+
+        Returns:
+            [type]: [description]
+        """
+        try:
+            logging.info(f"Get Model Evaluation Controller: {request}")
+            return get_model_evaluation(
                 project_id=request.project_id,
                 region=request.region,
                 model_id=request.model_id,

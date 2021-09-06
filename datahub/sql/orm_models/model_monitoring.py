@@ -8,12 +8,10 @@ class ModelMonitoring(Base):
     __table_args__ = {"extend_existing": True}
     row_id = Column(Integer, primary_key=True, autoincrement=True)
     model_uri = Column(String, ForeignKey("models.model_id"))
-    model_accuracy = Column(String)
     model_f1_score = Column(String)
     model_recall = Column(String)
     model_precision = Column(String)
     model_drift_threshold = Column(String)
-    production_accuracy = Column(String)
     production_f1_score = Column(String)
     production_recall = Column(String)
     production_precision = Column(String)

@@ -304,9 +304,9 @@ def list_entity_recognizer():
 
 
 @comprehend_router.post(
-    "/aws/comprehend/deploy_document_classifier", response_model=DeployModelResponse
+    "/aws/comprehend/deploy_model", response_model=DeployModelResponse
 )
-def deploy_document_classifier(deploy_model_request: DeployModel):
+def deploy_model(deploy_model_request: DeployModel):
     """[Deploy a Document Classifier Router]
 
     Args:
@@ -320,9 +320,7 @@ def deploy_document_classifier(deploy_model_request: DeployModel):
     """
     try:
         logging.info(f"Deploy Document Classifier Router: {deploy_model_request}")
-        response = ComprehendController().deploy_document_classifier_controller(
-            deploy_model_request
-        )
+        response = ComprehendController().deploy_model_controller(deploy_model_request)
         return DeployModelResponse(**response)
     except Exception as error:
         logging.error(f"{error=}")
@@ -330,9 +328,9 @@ def deploy_document_classifier(deploy_model_request: DeployModel):
 
 
 @comprehend_router.post(
-    "/aws/comprehend/undeploy_document_classifier", response_model=UnDeployModelResponse
+    "/aws/comprehend/undeploy_model", response_model=UnDeployModelResponse
 )
-def undeploy_document_classifier(undeploy_model_request: UnDeployModel):
+def undeploy_model(undeploy_model_request: UnDeployModel):
     """[Un-Deploy a Document Classifier Router]
 
     Args:
@@ -346,7 +344,7 @@ def undeploy_document_classifier(undeploy_model_request: UnDeployModel):
     """
     try:
         logging.info(f"Un-Deploy Document Classifier Router: {undeploy_model_request}")
-        response = ComprehendController().undeploy_document_classifier_controller(
+        response = ComprehendController().undeploy_model_controller(
             undeploy_model_request
         )
         return UnDeployModelResponse(**response)

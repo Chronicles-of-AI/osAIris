@@ -27,24 +27,12 @@ class DataMonitoringController:
         task_id = response.get("id")
         return task_id
 
-    def create_classification_crud_request(self, request, task_id):
+    def create_data_monitoring_crud_request(self, request, task_id, inferred_results):
         crud_request = {
             "model_uri": request.get("model_uri"),
             "data": request.get("data"),
             "feedback": request.get("feedback"),
-            "inferred_value": request.get("inferred_value"),
-            "ground_truth": request.get("ground_truth"),
-            "annotation_task_id": task_id,
-            "created_at": datetime.now(),
-        }
-        return crud_request
-
-    def create_object_detection_crud_request(self, request, task_id):
-        crud_request = {
-            "model_uri": request.get("model_uri"),
-            "data": request.get("data"),
-            "feedback": request.get("feedback"),
-            "inferred_value": request.get("inferred_value"),
+            "inferred_value": inferred_results,
             "ground_truth": request.get("ground_truth"),
             "annotation_task_id": task_id,
             "created_at": datetime.now(),
@@ -93,8 +81,10 @@ class DataMonitoringController:
                 headers=self.header,
             )
             if status_code == 200:
-                crud_request = self.create_classification_crud_request(
-                    request=create_image_classification_record_request, task_id=task_id
+                crud_request = self.create_data_monitoring_crud_request(
+                    request=create_image_classification_record_request,
+                    task_id=task_id,
+                    inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
                 return {"success": "yo"}
@@ -148,8 +138,10 @@ class DataMonitoringController:
                 headers=self.header,
             )
             if status_code == 200:
-                crud_request = self.create_classification_crud_request(
-                    request=create_text_classification_record_request, task_id=task_id
+                crud_request = self.create_data_monitoring_crud_request(
+                    request=create_text_classification_record_request,
+                    task_id=task_id,
+                    inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
                 return {"success": "yo"}
@@ -170,7 +162,7 @@ class DataMonitoringController:
                 model_id=create_object_detection_record_request.get("model_uri")
             )
             create_label_studio_task_request = {
-                "data": {"image": request.data},
+                "data": {"image": request.inferred_value},
                 "is_labeled": False,
                 "project": project_flow_record.get("annotation_project_id"),
             }
@@ -186,7 +178,7 @@ class DataMonitoringController:
                         "from_name": "label",
                     }
                 )
-                for result_data in request.data
+                for result_data in request.inferred_value
             ]
             create_annotation_request = {
                 "result": final_result,
@@ -198,8 +190,10 @@ class DataMonitoringController:
                 headers=self.header,
             )
             if status_code == 200:
-                crud_request = self.create_object_detection_crud_request(
-                    request=create_object_detection_record_request, task_id=task_id
+                crud_request = self.create_data_monitoring_crud_request(
+                    request=create_object_detection_record_request,
+                    task_id=task_id,
+                    inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
                 return {"success": "yo"}
@@ -236,7 +230,7 @@ class DataMonitoringController:
                         "from_name": "label",
                     }
                 )
-                for result_data in request.data
+                for result_data in request.inferred_value
             ]
             create_annotation_request = {
                 "result": final_result,
@@ -248,8 +242,10 @@ class DataMonitoringController:
                 headers=self.header,
             )
             if status_code == 200:
-                crud_request = self.create_classification_crud_request(
-                    request=create_ner_record_request, task_id=task_id
+                crud_request = self.create_data_monitoring_crud_request(
+                    request=create_ner_record_request,
+                    task_id=task_id,
+                    inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
                 return {"success": "yo"}

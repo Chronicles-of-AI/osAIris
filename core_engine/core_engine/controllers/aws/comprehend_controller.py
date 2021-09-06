@@ -9,8 +9,8 @@ from core_engine.utils.aws.comprehend_helper import (
     describe_entity_recognizer,
     list_entity_recognizer,
     stop_training_entity_recognizer,
-    deploy_document_classifier,
-    undeploy_document_classifier,
+    deploy_model,
+    undeploy_model,
     get_predictions,
 )
 from core_engine import logger
@@ -252,7 +252,7 @@ class ComprehendController:
             logging.error(f"{error=}")
             raise error
 
-    def deploy_document_classifier_controller(self, request):
+    def deploy_model_controller(self, request):
         """[Deploys a Document Classifier ]
 
         Args:
@@ -267,7 +267,7 @@ class ComprehendController:
         try:
             logging.info(f"Deploy Document Classifier Controller: {request.model_arn}")
             logging.info(f"Endpoint ARN: {request.endpoint_name}")
-            return deploy_document_classifier(
+            return deploy_model(
                 min_inference_units=request.min_inference_units,
                 endpoint_name=request.endpoint_name,
                 model_arn=request.model_arn,
@@ -276,7 +276,7 @@ class ComprehendController:
             logging.error(f"{error=}")
             raise error
 
-    def undeploy_document_classifier_controller(self, request):
+    def undeploy_model_controller(self, request):
         """[Un-Deploys a Document Classifier ]
 
         Args:
@@ -292,7 +292,7 @@ class ComprehendController:
             logging.info(
                 f"Undeploy Document Classifier Controller: {request.endpoint_arn}"
             )
-            undeploy_document_classifier(endpoint_arn=request.endpoint_arn)
+            undeploy_model(endpoint_arn=request.endpoint_arn)
             return {"status": "Document Classifier Un-deployed"}
         except Exception as error:
             logging.error(f"{error=}")

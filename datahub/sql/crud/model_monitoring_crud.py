@@ -81,11 +81,9 @@ class CRUDModelMonitoring:
                 obj: ModelMonitoring = (
                     transaction_session.query(ModelMonitoring)
                     .filter(ModelMonitoring.model_uri == kwargs.get("model_uri"))
-                    .first()
                     .update(kwargs)
                 )
                 transaction_session.commit()
-                transaction_session.refresh(obj)
         except Exception as error:
             logging.error(f"Error in CRUDModelMonitoring update function : {error}")
             raise error

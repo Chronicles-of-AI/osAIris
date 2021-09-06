@@ -197,6 +197,33 @@ class ManageModelController:
             )
             raise error
 
+    def get_model_evaluation_controller(self, request):
+        """[Controller function to get all model evaluation]
+
+        Args:
+            request ([dict]): [get list of model request]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [dict]: [list of all models]
+        """
+        try:
+            logging.info("executing get_model_evaluation_controller function")
+            model_evaluation_url = (
+                self.gcp_config.get("automl").get("common").get("get_model_evaluation")
+            )
+            model_evaluation_request = request.dict(exclude_none=True)
+            response, status_code = APIInterface.post(
+                route=model_evaluation_url,
+                data=model_evaluation_request,
+            )
+            return response
+        except Exception as error:
+            logging.error(f"Error in get_model_evaluation_controller function: {error}")
+            raise error
+
     def delete_model_controller(self, request):
         """[Controller function to delete a trained model]
 

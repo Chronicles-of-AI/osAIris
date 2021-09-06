@@ -115,6 +115,31 @@ def get_model_description(
         raise error
 
 
+@manage_model_router.post("/gcp/automl/get_model_evaluation")
+def get_model_evaluation(
+    get_model_evaluation_request: DescriptionModels,
+):
+    """[Describe a Model in AutoML GCP]
+
+    Args:
+        get_model_evaluation_request (DescriptionModels): [Based on Input Schema]
+
+    Raises:
+        error: [Error]
+
+    Returns:
+        [type]: [description]
+    """
+    try:
+        logging.info(f"Get Model Description Router: {get_model_evaluation_request}")
+        return ManageModelController().get_model_evaluation_controller(
+            request=get_model_evaluation_request
+        )
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error
+
+
 @manage_model_router.post("/gcp/automl/delete_model")
 def delete_model(
     delete_model_request: DeleteModels,

@@ -27,6 +27,7 @@ class CreateDocumentClassifier(BaseModel):
 
 
 class CreateEntityRecognizer(BaseModel):
+    pipeline_id: int
     RecognizerName: str
     DataAccessRoleArn: str
     InputDataConfig: InputDataConfig
@@ -39,6 +40,7 @@ class DocumentClassifier(BaseModel):
 
 
 class EntityRecognizer(BaseModel):
+    pipeline_id: int
     EntityRecognizerArn: str
 
 

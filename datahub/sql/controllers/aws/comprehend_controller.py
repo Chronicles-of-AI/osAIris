@@ -3,6 +3,7 @@ from sql import config, logger
 from sql.crud.model_crud import CRUDModel
 from sql.crud.deployment_crud import CRUDDeployment
 from sql.crud.project_flow_crud import CRUDProjectFlow
+from sql.crud.model_monitoring_crud import CRUDModelMonitoring
 from datetime import datetime
 
 logging = logger(__name__)
@@ -13,6 +14,7 @@ class ComprehendController:
         self.CRUDModel = CRUDModel()
         self.CRUDDeployment = CRUDDeployment()
         self.CRUDProjectFlow = CRUDProjectFlow()
+        self.CRUDModelMonitoring = CRUDModelMonitoring()
         self.core_aws_comprehend_config = (
             config.get("core_engine").get("aws").get("comprehend_router")
         )
@@ -83,6 +85,68 @@ class ComprehendController:
             )
             raise error
 
+    def create_entity_recognizer_controller(self, request):
+        """[Controller function to create a new entity recognizer using AWS Comprehend]
+
+        Args:
+            request ([dict]): [Create entity recognizer request]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [str]: [entity_recognizer_arn]
+            [str]: [status]
+        """
+        try:
+            logging.info("executing create_entity_recognizer_controller function")
+            uuid = str(int(datetime.now().timestamp()))
+            create_entity_recognizer_request = request.dict(exclude_none=True)
+            create_entity_recognizer_url = self.core_aws_comprehend_config.get(
+                "create_entity_recognizer"
+            )
+            response, status_code = APIInterface.post(
+                route=create_entity_recognizer_url,
+                data=create_entity_recognizer_request,
+            )
+            if status_code == 200:
+                crud_request = {
+                    "pipeline_id": create_entity_recognizer_request.get("pipeline_id"),
+                    "model_id": response.get("entity_recognizer_arn"),
+                    "dataset_id": create_entity_recognizer_request.get(
+                        "InputDataConfig"
+                    ),
+                    "artifacts": create_entity_recognizer_request.get(
+                        "OutputDataConfig"
+                    ),
+                    "alias_name": create_entity_recognizer_request.get(
+                        "RecognizerName"
+                    ),
+                    "auto_trigger": False,
+                    "UUID": uuid,
+                    "status": "Running",
+                    "created": datetime.now(),
+                }
+                self.CRUDModel.create(**crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": create_entity_recognizer_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("entity_recognizer_arn"),
+                    "current_stage": "TRAINING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
+                return {
+                    "entity_recognizer_arn": response.get("entity_recognizer_arn"),
+                    "status": "training started",
+                }
+            else:
+                raise Exception({"status": "training failed"})
+        except Exception as error:
+            logging.error(
+                f"Error in create_entity_recognizer_controller function: {error}"
+            )
+            raise error
+
     def delete_document_classifier_controller(self, request):
         """[Controller function to delete a document classifier using AWS Comprehend]
 
@@ -121,6 +185,44 @@ class ComprehendController:
             )
             raise error
 
+    def delete_entity_recognizer_controller(self, request):
+        """[Controller function to delete a entity_recognizer using AWS Comprehend]
+
+        Args:
+            request ([dict]): [Delete entity_recognizer request]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [str]: [status]
+        """
+        try:
+            logging.info("executing delete_entity_recognizer_controller function")
+            delete_entity_recognizer_request = request.dict(exclude_none=True)
+            delete_entity_recognizer_url = self.core_aws_comprehend_config.get(
+                "delete_entity_recognizer"
+            )
+            response, status_code = APIInterface.post(
+                route=delete_entity_recognizer_url,
+                data=delete_entity_recognizer_request,
+            )
+            if status_code == 200:
+                crud_request = {
+                    "model_id": request.DocumentClassifierArn,
+                    "status": "Deleted",
+                    "updated": datetime.now(),
+                }
+                self.CRUDModel.update(crud_request)
+                return {"status": "recognizer deleted"}
+            else:
+                raise Exception({"status": "deletion failed"})
+        except Exception as error:
+            logging.error(
+                f"Error in delete_entity_recognizer_controller function: {error}"
+            )
+            raise error
+
     def describe_document_classifier_controller(self, request):
         """[Controller function to describe a document classifier using AWS Comprehend]
 
@@ -143,10 +245,81 @@ class ComprehendController:
                 route=describe_document_classifier_url,
                 data=describe_document_classifier_request,
             )
+            crud_request = {
+                "model_id": request.DocumentClassifierArn,
+                "status": response.get("Status"),
+                "updated": datetime.now(),
+            }
+            self.CRUDModel.update(crud_request)
+            evaluation_metrics = response.get("DocumentClassifierProperties").get(
+                "EvaluationMetrics"
+            )
+            f1_score = evaluation_metrics.get("F1Score")
+            precision = evaluation_metrics.get("Precision")
+            recall = evaluation_metrics.get("Recall")
+            create_model_monitoring_request = {
+                "model_uri": request.DocumentClassifierArn,
+                "model_f1_score": f1_score,
+                "model_recall": recall,
+                "model_precision": precision,
+                "model_drift_threshold": "0.8",
+            }
+            self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
         except Exception as error:
             logging.error(
                 f"Error in describe_document_classifier_controller function: {error}"
+            )
+            raise error
+
+    def describe_entity_recognizer_controller(self, request):
+        """[Controller function to describe a entity recognizer using AWS Comprehend]
+
+        Args:
+            request ([dict]): [Describe entity recognizer request]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [dict]: [entity recognizer description returned from core engine]
+        """
+        try:
+            logging.info("executing describe_entity_recognizer_controller function")
+            describe_entity_recognizer_request = request.dict(exclude_none=True)
+            describe_entity_recognizer_url = self.core_aws_comprehend_config.get(
+                "describe_entity_recognizer"
+            )
+            response, status_code = APIInterface.post(
+                route=describe_entity_recognizer_url,
+                data=describe_entity_recognizer_request,
+            )
+            crud_request = {
+                "model_id": request.EntityRecognizerArn,
+                "status": response.get("Status"),
+                "updated": datetime.now(),
+            }
+            self.CRUDModel.update(crud_request)
+            evaluation_metrics = (
+                response.get("EntityRecognizerProperties")
+                .get("RecognizerMetadata")
+                .get("EvaluationMetrics")
+            )
+            f1_score = evaluation_metrics.get("F1Score")
+            precision = evaluation_metrics.get("Precision")
+            recall = evaluation_metrics.get("Recall")
+            create_model_monitoring_request = {
+                "model_uri": request.EntityRecognizerArn,
+                "model_f1_score": f1_score,
+                "model_recall": recall,
+                "model_precision": precision,
+                "model_drift_threshold": "0.8",
+            }
+            self.CRUDModelMonitoring.create(**create_model_monitoring_request)
+            return response
+        except Exception as error:
+            logging.error(
+                f"Error in describe_entity_recognizer_controller function: {error}"
             )
             raise error
 
@@ -199,6 +372,55 @@ class ComprehendController:
             )
             raise error
 
+    def stop_training_entity_recognizer_controller(self, request):
+        """[Controller function to stop a training job on AWS Comprehend]
+
+        Args:
+            request ([dict]): [Stop training request]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [str]: [Status of training job]
+        """
+        try:
+            logging.info(
+                "executing stop_training_entity_recognizer_controller function"
+            )
+            stop_training_entity_recognizer_request = request.dict(exclude_none=True)
+            stop_training_entity_recognizer_url = self.core_aws_comprehend_config.get(
+                "stop_training_entity_recognizer"
+            )
+            response, status_code = APIInterface.post(
+                route=stop_training_entity_recognizer_url,
+                data=stop_training_entity_recognizer_request,
+            )
+            if status_code == 200:
+                crud_request = {
+                    "model_id": request.EntityRecognizerArn,
+                    "status": "Stopped",
+                    "updated": datetime.now(),
+                }
+                self.CRUDModel.update(crud_request)
+                project_flow_crud_request = {
+                    "pipeline_id": stop_training_entity_recognizer_request.get(
+                        "pipeline_id"
+                    ),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": request.EntityRecognizerArn,
+                    "current_stage": "TRAINING_STOPPED",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
+                return {"status": "training stopped"}
+            else:
+                raise Exception({"status": "training failed"})
+        except Exception as error:
+            logging.error(
+                f"Error in stop_training_entity_recognizer_controller function: {error}"
+            )
+            raise error
+
     def list_document_classifier_controller(self):
         """[Controller function to list all the document classifiers on AWS Comprehend]
 
@@ -223,7 +445,31 @@ class ComprehendController:
             )
             raise error
 
-    def deploy_document_classifier_controller(self, request):
+    def list_entity_recognizer_controller(self):
+        """[Controller function to list all the entity recognizers on AWS Comprehend]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [dict]: [List of all the entity recognizers on AWS Comprehend]
+        """
+        try:
+            logging.info("executing list_entity_recognizer_controller function")
+            list_entity_recognizer_url = self.core_aws_comprehend_config.get(
+                "list_entity_recognizer"
+            )
+            response, status_code = APIInterface.get(
+                route=list_entity_recognizer_url,
+            )
+            return response
+        except Exception as error:
+            logging.error(
+                f"Error in list_entity_recognizer_controller function: {error}"
+            )
+            raise error
+
+    def deploy_model_controller(self, request):
         """[Controller function to deploy a document classifier]
 
         Args:
@@ -236,21 +482,17 @@ class ComprehendController:
             [dict]: [Details of the deployed document classifier model]
         """
         try:
-            logging.info("executing deploy_document_classifier_controller function")
+            logging.info("executing deploy_model_controller function")
             uuid = str(int(datetime.now().timestamp()))
-            deploy_document_classifier_request = request.dict(exclude_none=True)
-            deploy_document_classifier_url = self.core_aws_comprehend_config.get(
-                "deploy_document_classifier"
-            )
+            deploy_model_request = request.dict(exclude_none=True)
+            deploy_model_url = self.core_aws_comprehend_config.get("deploy_model")
             response, status_code = APIInterface.post(
-                route=deploy_document_classifier_url,
-                data=deploy_document_classifier_request,
+                route=deploy_model_url,
+                data=deploy_model_request,
             )
             if status_code == 200:
                 deployment_crud_request = {
-                    "pipeline_id": deploy_document_classifier_request.get(
-                        "pipeline_id"
-                    ),
+                    "pipeline_id": deploy_model_request.get("pipeline_id"),
                     "UUID": uuid,
                     "model_id": request.model_arn,
                     "deployment_endpoint": response.get("endpoint_arn"),
@@ -259,9 +501,7 @@ class ComprehendController:
                 }
                 self.CRUDDeployment.create(**deployment_crud_request)
                 project_flow_crud_request = {
-                    "pipeline_id": deploy_document_classifier_request.get(
-                        "pipeline_id"
-                    ),
+                    "pipeline_id": deploy_model_request.get("pipeline_id"),
                     "updated_at": datetime.now(),
                     "model_id": request.model_arn,
                     "functional_stage_id": request.model_arn,
@@ -273,12 +513,10 @@ class ComprehendController:
             else:
                 raise Exception({"status": "model deployment failed"})
         except Exception as error:
-            logging.error(
-                f"Error in deploy_document_classifier_controller function: {error}"
-            )
+            logging.error(f"Error in deploy_model_controller function: {error}")
             raise error
 
-    def undeploy_document_classifier_controller(self, request):
+    def undeploy_model_controller(self, request):
         """[Controller function to undeploy a document classifier]
 
         Args:
@@ -291,14 +529,12 @@ class ComprehendController:
             [dict]: [Details of the undeployed document classifier model]
         """
         try:
-            logging.info("executing undeploy_document_classifier_controller function")
-            undeploy_document_classifier_request = request.dict(exclude_none=True)
-            undeploy_document_classifier_url = self.core_aws_comprehend_config.get(
-                "undeploy_document_classifier"
-            )
+            logging.info("executing undeploy_model_controller function")
+            undeploy_model_request = request.dict(exclude_none=True)
+            undeploy_model_url = self.core_aws_comprehend_config.get("undeploy_model")
             response, status_code = APIInterface.post(
-                route=undeploy_document_classifier_url,
-                data=undeploy_document_classifier_request,
+                route=undeploy_model_url,
+                data=undeploy_model_request,
             )
             if status_code == 200:
                 undeployment_crud_request = {
@@ -310,9 +546,7 @@ class ComprehendController:
                     deployment_request=undeployment_crud_request
                 )
                 project_flow_crud_request = {
-                    "pipeline_id": undeploy_document_classifier_request.get(
-                        "pipeline_id"
-                    ),
+                    "pipeline_id": undeploy_model_request.get("pipeline_id"),
                     "updated_at": datetime.now(),
                     "current_stage": "MODEL_UNDEPLOYED",
                 }
@@ -321,9 +555,7 @@ class ComprehendController:
             else:
                 raise Exception({"status": "model undeployment failed"})
         except Exception as error:
-            logging.error(
-                f"Error in undeploy_document_classifier_controller function: {error}"
-            )
+            logging.error(f"Error in undeploy_model_controller function: {error}")
             raise error
 
     def get_predictions_controller(self, endpoint_arn: str, text: str):

@@ -1,5 +1,7 @@
 from sql.crud.project_crud import CRUDProject
 from sql.crud.project_flow_crud import CRUDProjectFlow
+from sql.crud.model_crud import CRUDModel
+from sql.crud.model_monitoring_crud import CRUDModelMonitoring
 from commons.external_call import APIInterface
 from sql import config, logger
 from datetime import datetime
@@ -11,6 +13,8 @@ class ProjectController:
     def __init__(self):
         self.CRUDProject = CRUDProject()
         self.CRUDProjectFlow = CRUDProjectFlow()
+        self.CRUDModel = CRUDModel()
+        self.CRUDModelMonitoring = CRUDModelMonitoring()
         self.core_aws_project_config = (
             config.get("core_engine").get("aws").get("project_router")
         )
@@ -127,6 +131,25 @@ class ProjectController:
             response, _ = APIInterface.get(
                 route=project_description_url, params=project_params
             )
+            crud_request = {
+                "model_id": project_arn,
+                "status": response.get("Status"),
+                "updated": datetime.now(),
+            }
+            self.CRUDModel.update(crud_request)
+            f1_score = (
+                response.get("ProjectVersionDescriptions")[0]
+                .get("EvaluationResult")
+                .get("F1Score")
+            )
+            create_model_monitoring_request = {
+                "model_uri": project_arn,
+                "model_f1_score": f1_score,
+                "model_recall": "",
+                "model_precision": "",
+                "model_drift_threshold": "0.8",
+            }
+            self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
         except Exception as error:
             logging.error(f"Error in get_project_description function: {error}")

@@ -21,9 +21,9 @@ class ObjectDetectionCoords(BaseModel):
 
 class CreateObjectDetectionRecord(BaseModel):
     model_uri: str
-    data: List[ObjectDetectionCoords]
+    data: str
     feedback: bool = False
-    inferred_value: str
+    inferred_value: List[ObjectDetectionCoords]
     ground_truth: str
 
 
@@ -36,9 +36,9 @@ class NERTags(BaseModel):
 
 class CreateNERRecord(BaseModel):
     model_uri: str
-    data: List[NERTags]
+    data: str
     feedback: bool = False
-    inferred_value: str
+    inferred_value: List[NERTags]
     ground_truth: str
 
 

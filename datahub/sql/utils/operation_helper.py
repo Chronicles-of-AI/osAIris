@@ -4,8 +4,12 @@ from sql.crud.import_data_crud import CRUDDataImport
 from sql.crud.model_crud import CRUDModel
 from sql.crud.deployment_crud import CRUDDeployment
 from sql.crud.project_flow_crud import CRUDProjectFlow
+from sql.crud.model_monitoring_crud import CRUDModelMonitoring
 from sql.controllers.gcp.model_management_controller import ManageModelController
-from sql.apis.schemas.requests.gcp.model_management_request import ListModels
+from sql.apis.schemas.requests.gcp.model_management_request import (
+    ListModels,
+    DescriptionModels,
+)
 from datetime import datetime
 from sql import logger
 
@@ -247,6 +251,22 @@ def train_model_operation(
                 }
                 CRUDProjectFlow().update(**project_flow_crud_request)
                 CRUDModel().update_by_operation_id(model_request=model_request)
+                evaluate_model_request = DescriptionModels(
+                    project_id=project_id, region=region, model_id=model_id
+                )
+                model_evaluation_response = (
+                    ManageModelController().get_model_evaluation_controller(
+                        request=evaluate_model_request
+                    )
+                )
+                create_model_monitoring_request = {
+                    "model_uri": model_id,
+                    "model_f1_score": model_evaluation_response.get("f1_score"),
+                    "model_recall": model_evaluation_response.get("recall"),
+                    "model_precision": model_evaluation_response.get("precision"),
+                    "model_drift_threshold": "0.8",
+                }
+                CRUDModelMonitoring().create(**create_model_monitoring_request)
     except Exception as error:
         logging.error(f"Error in train_model_operation: {error}")
         raise error
