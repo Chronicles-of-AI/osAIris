@@ -270,10 +270,13 @@ class ComprehendController:
                     "created_at": datetime.now(),
                     "updated_at": datetime.now(),
                 }
-                if len(
-                    self.CRUDModelMonitoring.read(
-                        model_uri=request.DocumentClassifierArn
+                if (
+                    len(
+                        self.CRUDModelMonitoring.read(
+                            model_uri=request.DocumentClassifierArn
+                        )
                     )
+                    == 0
                 ):
                     self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
@@ -330,8 +333,13 @@ class ComprehendController:
                     "created_at": datetime.now(),
                     "updated_at": datetime.now(),
                 }
-                if len(
-                    self.CRUDModelMonitoring.read(model_uri=request.EntityRecognizerArn)
+                if (
+                    len(
+                        self.CRUDModelMonitoring.read(
+                            model_uri=request.EntityRecognizerArn
+                        )
+                    )
+                    == 0
                 ):
                     self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
