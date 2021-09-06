@@ -26,18 +26,18 @@ async def create_project_flow(
     create_project_flow_request: CreateProjectFlow,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[API Router to Create a Project Flow]
 
     Args:
-        create_data_record_request (CreateProjectFlow): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        create_project_flow_request (CreateProjectFlow): [Based on the Input Schema]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [type]: [Basedon Output Response]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -64,18 +64,17 @@ async def create_project_flow(
 async def get_all_project_flow(
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[API Router to list all Project Flows]
 
     Args:
-        create_data_record_request (CreateProjectFlow): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [type]: [Basedon Output Response]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -101,18 +100,18 @@ async def get_project_flow(
     pipeline_id: str,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[API Router to get a Project Flow based on pipeline ID]
 
     Args:
-        create_data_record_request (CreateProjectFlow): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        pipeline_id (str): [Unique Identifier for every Project Flow]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [type]: [Basedon Output Response]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")

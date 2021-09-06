@@ -26,18 +26,18 @@ async def add_service_data(
     add_service_data_request: AddServiceData,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[Add a type of Service to the Table]
 
     Args:
-        create_data_record_request (CreateProjectFlow): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        add_service_data_request (AddServiceData): [Based on Input Schema]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [type]: [Based on Output Schema]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -64,18 +64,17 @@ async def add_service_data(
 async def list_all_service_data(
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[list all types of Service from the Table]
 
     Args:
-        create_data_record_request (CreateProjectFlow): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [type]: [description]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -102,18 +101,19 @@ async def list_service_data(
     use_case: str,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[list a type of Service from the Table]
 
     Args:
-        create_data_record_request (CreateProjectFlow): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        cloud_service_provider (str): [description]
+        use_case (str): [description]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [CreateDocumentClassifierResponse]: [Document Classifier response from AWS Comprehend]
+        [type]: [description]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")

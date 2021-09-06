@@ -40,6 +40,18 @@ class DataMonitoringController:
         return crud_request
 
     def create_image_classification_record_controller(self, request):
+        """[Create a Data monitoring Record in Table]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            Exception: [Exception]
+            error: [Error]
+
+        Returns:
+            [type]: [Annotation and Task IDs]
+        """
         try:
             logging.info(
                 "executing create_image_classification_record_controller function"
@@ -119,6 +131,18 @@ class DataMonitoringController:
             raise error
 
     def create_text_classification_record_controller(self, request):
+        """[Create a Data monitoring Record in Table]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            Exception: [Exception]
+            error: [Error]
+
+        Returns:
+            [type]: [Annotation and Task IDs]
+        """
         try:
             logging.info(
                 "executing create_text_classification_record_controller function"
@@ -198,6 +222,18 @@ class DataMonitoringController:
             raise error
 
     def create_object_detection_record_controller(self, request):
+        """[Create a Data monitoring Record in Table]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            Exception: [Exception]
+            error: [Error]
+
+        Returns:
+            [type]: [Annotation and Task IDs]
+        """
         try:
             logging.info("executing create_object_detection_record_controller function")
             create_object_detection_record_request = request.dict(exclude_none=True)
@@ -269,6 +305,18 @@ class DataMonitoringController:
             raise error
 
     def create_ner_record_controller(self, request):
+        """[Create a Data monitoring Record in Table]
+
+        Args:
+            request ([type]): [Based on Input Schema]
+
+        Raises:
+            Exception: [Exception]
+            error: [Error]
+
+        Returns:
+            [type]: [Annotation and Task IDs]
+        """
         try:
             logging.info("executing create_object_detection_record_controller function")
             create_ner_record_request = request.dict(exclude_none=True)

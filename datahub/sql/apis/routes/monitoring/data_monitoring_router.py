@@ -27,18 +27,18 @@ async def create_image_classification_record(
     create_image_classification_record_request: CreateClassificationDataRecord,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[API Router to Create a NERimage Classification Data Record in Table]
 
     Args:
-        create_data_record_request (CreateDataRecord): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        create_image_classification_record_request (CreateClassificationDataRecord): [Based on Input Schema]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
+        [type]: [Based on Output Schema]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -67,18 +67,18 @@ async def create_text_classification_record(
     create_text_classification_record_request: CreateClassificationDataRecord,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[API Router to Create a Text Classification Data Record in Table]
 
     Args:
-        create_data_record_request (CreateDataRecord): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        create_text_classification_record_request (CreateClassificationDataRecord): [Based on Input Schema]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
+        [type]: [Based on Output Schema]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -109,18 +109,18 @@ async def create_object_detection_record(
     create_object_detection_record_request: CreateObjectDetectionRecord,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[API Router to Create a Object Detection Data Record in Table]
 
     Args:
-        create_data_record_request (CreateDataRecord): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        create_object_detection_record_request (CreateObjectDetectionRecord): [Based on Input Schema]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
+        [type]: [Based on Output Schema]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
@@ -151,18 +151,18 @@ async def create_ner_record(
     create_ner_record_request: CreateNERRecord,
     token: str = Depends(oauth2_scheme),
 ):
-    """[API router to create document classifier using AWS Comprehend]
+    """[API Router to Create a NER Data Record in Table]
 
     Args:
-        create_data_record_request (CreateDataRecord): [Create Data Record]
-        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+        create_ner_record_request (CreateNERRecord): [Based on Input Schema]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
 
     Raises:
-        HTTPException: [Unauthorized exception when invalid token is passed]
-        error: [Exception in underlying controller]
+        HTTPException: [Exception]
+        error: [Error]
 
     Returns:
-        [DataMonitoringRecord]: [Document Classifier response from AWS Comprehend]
+        [type]: [Based on Output Schema]
     """
     try:
         logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
