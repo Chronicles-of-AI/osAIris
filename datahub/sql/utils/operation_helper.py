@@ -265,6 +265,8 @@ def train_model_operation(
                     "model_recall": model_evaluation_response.get("recall"),
                     "model_precision": model_evaluation_response.get("precision"),
                     "model_drift_threshold": "0.8",
+                    "created_at": datetime.now(),
+                    "updated_at": datetime.now(),
                 }
                 CRUDModelMonitoring().create(**create_model_monitoring_request)
     except Exception as error:

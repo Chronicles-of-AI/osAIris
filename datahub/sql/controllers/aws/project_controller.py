@@ -131,29 +131,35 @@ class ProjectController:
             response, _ = APIInterface.get(
                 route=project_description_url, params=project_params
             )
+            model_version_arn = response.get("ProjectVersionDescriptions")[0].get(
+                "ProjectVersionArn"
+            )
             crud_request = {
-                "model_id": response.get("ProjectVersionDescriptions")[0].get(
-                    "ProjectVersionArn"
-                ),
+                "model_id": model_version_arn,
                 "status": response.get("Status"),
                 "updated": datetime.now(),
             }
             self.CRUDModel.update(crud_request)
-            f1_score = (
-                response.get("ProjectVersionDescriptions")[0]
-                .get("EvaluationResult")
-                .get("F1Score")
-            )
-            create_model_monitoring_request = {
-                "model_uri": response.get("ProjectVersionDescriptions")[0].get(
-                    "ProjectVersionArn"
-                ),
-                "model_f1_score": f1_score,
-                "model_recall": "",
-                "model_precision": "",
-                "model_drift_threshold": "0.8",
-            }
-            self.CRUDModelMonitoring.create(**create_model_monitoring_request)
+            status = response.get("ProjectVersionDescriptions")[0].get("Status")
+            if status == "TRAINING_COMPLETED":
+                f1_score = (
+                    response.get("ProjectVersionDescriptions")[0]
+                    .get("EvaluationResult")
+                    .get("F1Score")
+                )
+                create_model_monitoring_request = {
+                    "model_uri": model_version_arn,
+                    "model_f1_score": f1_score,
+                    "model_recall": "",
+                    "model_precision": "",
+                    "model_drift_threshold": "0.8",
+                    "created_at": datetime.now(),
+                    "updated_at": datetime.now(),
+                }
+                if len(self.CRUDModelMonitoring.read(model_uri=model_version_arn)) == 0:
+                    self.CRUDModelMonitoring.create(**create_model_monitoring_request)
+            else:
+                pass
             return response
         except Exception as error:
             logging.error(f"Error in get_project_description function: {error}")

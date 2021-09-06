@@ -257,14 +257,23 @@ class ComprehendController:
             f1_score = evaluation_metrics.get("F1Score")
             precision = evaluation_metrics.get("Precision")
             recall = evaluation_metrics.get("Recall")
-            create_model_monitoring_request = {
-                "model_uri": request.DocumentClassifierArn,
-                "model_f1_score": f1_score,
-                "model_recall": recall,
-                "model_precision": precision,
-                "model_drift_threshold": "0.8",
-            }
-            self.CRUDModelMonitoring.create(**create_model_monitoring_request)
+            status = response.get("EntityRecognizerProperties").get("Status")
+            if status == "TRAINED":
+                create_model_monitoring_request = {
+                    "model_uri": request.DocumentClassifierArn,
+                    "model_f1_score": f1_score,
+                    "model_recall": recall,
+                    "model_precision": precision,
+                    "model_drift_threshold": "0.8",
+                    "created_at": datetime.now(),
+                    "updated_at": datetime.now(),
+                }
+                if len(
+                    self.CRUDModelMonitoring.read(
+                        model_uri=request.DocumentClassifierArn
+                    )
+                ):
+                    self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
         except Exception as error:
             logging.error(
@@ -308,14 +317,21 @@ class ComprehendController:
             f1_score = evaluation_metrics.get("F1Score")
             precision = evaluation_metrics.get("Precision")
             recall = evaluation_metrics.get("Recall")
-            create_model_monitoring_request = {
-                "model_uri": request.EntityRecognizerArn,
-                "model_f1_score": f1_score,
-                "model_recall": recall,
-                "model_precision": precision,
-                "model_drift_threshold": "0.8",
-            }
-            self.CRUDModelMonitoring.create(**create_model_monitoring_request)
+            status = response.get("EntityRecognizerProperties").get("Status")
+            if status == "TRAINED":
+                create_model_monitoring_request = {
+                    "model_uri": request.EntityRecognizerArn,
+                    "model_f1_score": f1_score,
+                    "model_recall": recall,
+                    "model_precision": precision,
+                    "model_drift_threshold": "0.8",
+                    "created_at": datetime.now(),
+                    "updated_at": datetime.now(),
+                }
+                if len(
+                    self.CRUDModelMonitoring.read(model_uri=request.EntityRecognizerArn)
+                ):
+                    self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
         except Exception as error:
             logging.error(

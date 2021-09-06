@@ -16,7 +16,6 @@ class ModelMonitoring(Base):
     production_recall = Column(String)
     production_precision = Column(String)
     model_drift = Column(Boolean)
-    timestamp = Column(DateTime)
     created_by = Column(String)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
