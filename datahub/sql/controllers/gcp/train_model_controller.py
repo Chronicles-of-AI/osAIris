@@ -73,6 +73,9 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
+                    "pipeline_id": train_classification_model_request.get(
+                        "pipeline_id"
+                    ),
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
@@ -128,6 +131,9 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
+                    "pipeline_id": train_classification_model_request.get(
+                        "pipeline_id"
+                    ),
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
@@ -183,6 +189,9 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
+                    "pipeline_id": train_classification_model_request.get(
+                        "pipeline_id"
+                    ),
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
@@ -244,6 +253,9 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
+                    "pipeline_id": train_classification_model_request.get(
+                        "pipeline_id"
+                    ),
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
@@ -301,6 +313,9 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
+                    "pipeline_id": train_classification_model_request.get(
+                        "pipeline_id"
+                    ),
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
@@ -360,6 +375,9 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
+                    "pipeline_id": train_classification_model_request.get(
+                        "pipeline_id"
+                    ),
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,

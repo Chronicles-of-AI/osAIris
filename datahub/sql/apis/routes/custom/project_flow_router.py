@@ -94,7 +94,7 @@ async def get_all_project_flow(
 
 
 @project_flow_router.get(
-    "/osairis/project_flow/by_name",
+    "/osairis/project_flow/by_id",
     response_model=ProjectFlowResponse,
 )
 async def get_project_flow(
