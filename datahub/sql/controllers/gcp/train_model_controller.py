@@ -30,6 +30,7 @@ class TrainModelController:
         try:
             logging.info("executing create_operation_record function")
             operation_crud_request = {
+                "pipeline_id": api_response.get("pipeline_id"),
                 "operation_id": api_response.get("operation_id"),
                 "status": api_response.get("status"),
                 "project_id": api_response.get("project_id"),
@@ -83,6 +84,13 @@ class TrainModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                response.update(
+                    {
+                        "pipeline_id": train_classification_model_request.get(
+                            "pipeline_id"
+                        ),
+                    }
+                )
                 self.create_operation_record(api_response=response)
                 project_flow_crud_request = {
                     "pipeline_id": train_classification_model_request.get(
@@ -131,9 +139,7 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
-                    "pipeline_id": train_classification_model_request.get(
-                        "pipeline_id"
-                    ),
+                    "pipeline_id": train_ner_model_request.get("pipeline_id"),
                     "dataset_id": request.dataset_id,
                     "alias_name": request.model_display_name,
                     "UUID": uuid,
@@ -141,6 +147,11 @@ class TrainModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                response.update(
+                    {
+                        "pipeline_id": train_ner_model_request.get("pipeline_id"),
+                    }
+                )
                 self.create_operation_record(api_response=response)
                 project_flow_crud_request = {
                     "pipeline_id": train_ner_model_request.get("pipeline_id"),
@@ -189,7 +200,7 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
-                    "pipeline_id": train_classification_model_request.get(
+                    "pipeline_id": train_image_classification_model_request.get(
                         "pipeline_id"
                     ),
                     "dataset_id": request.dataset_id,
@@ -199,6 +210,13 @@ class TrainModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                response.update(
+                    {
+                        "pipeline_id": train_image_classification_model_request.get(
+                            "pipeline_id"
+                        ),
+                    }
+                )
                 self.create_operation_record(api_response=response)
                 project_flow_crud_request = {
                     "pipeline_id": train_image_classification_model_request.get(
@@ -253,7 +271,7 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
-                    "pipeline_id": train_classification_model_request.get(
+                    "pipeline_id": train_edge_image_classification_model_request.get(
                         "pipeline_id"
                     ),
                     "dataset_id": request.dataset_id,
@@ -263,6 +281,13 @@ class TrainModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                response.update(
+                    {
+                        "pipeline_id": train_edge_image_classification_model_request.get(
+                            "pipeline_id"
+                        ),
+                    }
+                )
                 self.create_operation_record(api_response=response)
                 project_flow_crud_request = {
                     "pipeline_id": train_edge_image_classification_model_request.get(
@@ -313,7 +338,7 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
-                    "pipeline_id": train_classification_model_request.get(
+                    "pipeline_id": train_object_detection_model_request.get(
                         "pipeline_id"
                     ),
                     "dataset_id": request.dataset_id,
@@ -323,6 +348,13 @@ class TrainModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                response.update(
+                    {
+                        "pipeline_id": train_object_detection_model_request.get(
+                            "pipeline_id"
+                        ),
+                    }
+                )
                 self.create_operation_record(api_response=response)
                 project_flow_crud_request = {
                     "pipeline_id": train_object_detection_model_request.get(
@@ -375,7 +407,7 @@ class TrainModelController:
             if status_code == 200:
                 crud_request = {
                     "model_id": response.get("operation_id"),
-                    "pipeline_id": train_classification_model_request.get(
+                    "pipeline_id": train_object_detection_edge_model_request.get(
                         "pipeline_id"
                     ),
                     "dataset_id": request.dataset_id,
@@ -385,6 +417,13 @@ class TrainModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDModel.create(**crud_request)
+                response.update(
+                    {
+                        "pipeline_id": train_object_detection_edge_model_request.get(
+                            "pipeline_id"
+                        ),
+                    }
+                )
                 self.create_operation_record(api_response=response)
                 project_flow_crud_request = {
                     "pipeline_id": train_object_detection_edge_model_request.get(

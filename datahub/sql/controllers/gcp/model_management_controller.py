@@ -27,6 +27,7 @@ class ManageModelController:
         try:
             logging.info("executing create_operation_record function")
             operation_crud_request = {
+                "pipeline_id": api_response.get("pipeline_id"),
                 "operation_id": api_response.get("operation_id"),
                 "status": api_response.get("status"),
                 "project_id": api_response.get("project_id"),
@@ -71,6 +72,11 @@ class ManageModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDDeployment.upsert(crud_request)
+                response.update(
+                    {
+                        "pipeline_id": deploy_model_request.get("pipeline_id"),
+                    }
+                )
                 self.create_operation_record(
                     api_response=response, functional_stage="DEPLOY_MODEL"
                 )
@@ -121,6 +127,11 @@ class ManageModelController:
                     "updated": datetime.now(),
                 }
                 self.CRUDDeployment.update(deployment_request=crud_request)
+                response.update(
+                    {
+                        "pipeline_id": undeploy_model_request.get("pipeline_id"),
+                    }
+                )
                 self.create_operation_record(
                     api_response=response, functional_stage="UNDEPLOY_MODEL"
                 )

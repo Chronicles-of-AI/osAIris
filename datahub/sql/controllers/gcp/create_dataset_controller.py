@@ -43,6 +43,7 @@ class CreateDatasetController:
             if status_code == 200:
                 crud_request = {
                     "dataset_id": response.get("dataset_id"),
+                    "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "alias_name": create_dataset_request.get("display_name"),
                     "UUID": uuid,
                     "status": "Created",
@@ -94,6 +95,7 @@ class CreateDatasetController:
             if status_code == 200:
                 crud_request = {
                     "dataset_id": response.get("dataset_id"),
+                    "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "alias_name": create_dataset_request.get("display_name"),
                     "UUID": uuid,
                     "status": "Created",
@@ -147,6 +149,7 @@ class CreateDatasetController:
             if status_code == 200:
                 crud_request = {
                     "dataset_id": response.get("dataset_id"),
+                    "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "alias_name": create_dataset_request.get("display_name"),
                     "UUID": uuid,
                     "status": "Created",
@@ -202,6 +205,7 @@ class CreateDatasetController:
             if status_code == 200:
                 crud_request = {
                     "dataset_id": response.get("dataset_id"),
+                    "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "alias_name": create_dataset_request.get("display_name"),
                     "UUID": uuid,
                     "status": "Created",
