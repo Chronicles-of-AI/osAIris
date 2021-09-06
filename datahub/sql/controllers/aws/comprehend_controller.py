@@ -278,6 +278,12 @@ class ComprehendController:
                     )
                     == 0
                 ):
+                    project_flow_crud_request = {
+                        "pipeline_id": request.pipeline_id,
+                        "updated_at": datetime.now(),
+                        "current_stage": "TRAINED",
+                    }
+                    self.CRUDProjectFlow.update(**project_flow_crud_request)
                     self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
         except Exception as error:
@@ -341,6 +347,12 @@ class ComprehendController:
                     )
                     == 0
                 ):
+                    project_flow_crud_request = {
+                        "pipeline_id": request.pipeline_id,
+                        "updated_at": datetime.now(),
+                        "current_stage": "TRAINED",
+                    }
+                    self.CRUDProjectFlow.update(**project_flow_crud_request)
                     self.CRUDModelMonitoring.create(**create_model_monitoring_request)
             return response
         except Exception as error:

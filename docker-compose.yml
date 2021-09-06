@@ -26,7 +26,7 @@ services:
             - ./label_studio/mydata:/label-studio/data:rw
             - ${GOOGLE_APPLICATION_CREDENTIALS}:/label-studio/data/google_credential.json
             - static:/label-studio/label_studio:rw
-        command: [ "./deploy/wait-for-postgres.sh", "bash", "/label-studio/deploy/start_label_studio.sh" ]
+        # command: [ "./deploy/wait-for-postgres.sh", "bash", "/label-studio/deploy/start_label_studio.sh" ]
         networks:
             - osairis
 

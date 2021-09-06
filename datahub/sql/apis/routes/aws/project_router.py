@@ -123,6 +123,7 @@ async def get_all_projects(token: str = Depends(oauth2_scheme)):
 
 @project_router.get("/aws/rekog/get_project_description")
 async def get_project_status(
+    pipeline_id: int,
     project_arn: str,
     version_names: Optional[str] = None,
     token: str = Depends(oauth2_scheme),
@@ -146,7 +147,9 @@ async def get_project_status(
         logging.debug(f"Request: {project_arn=},{version_names=}")
         if decodeJWT(token=token):
             response = ProjectController().get_project_description(
-                project_arn=project_arn, version_names=version_names
+                project_arn=project_arn,
+                version_names=version_names,
+                pipeline_id=pipeline_id,
             )
             return response
         else:

@@ -109,7 +109,9 @@ class ProjectController:
             logging.error(f"Error in get_all_projects function: {error}")
             raise error
 
-    def get_project_description(self, project_arn: str, version_names: str = None):
+    def get_project_description(
+        self, project_arn: str, pipeline_id: int, version_names: str = None
+    ):
         """[Controller function to get description of an AWS Rekognition project]
 
         Args:
@@ -158,6 +160,12 @@ class ProjectController:
                 }
                 if len(self.CRUDModelMonitoring.read(model_uri=model_version_arn)) == 0:
                     self.CRUDModelMonitoring.create(**create_model_monitoring_request)
+                    project_flow_crud_request = {
+                        "pipeline_id": pipeline_id,
+                        "updated_at": datetime.now(),
+                        "current_stage": "TRAINED",
+                    }
+                    self.CRUDProjectFlow.update(**project_flow_crud_request)
             else:
                 pass
             return response
