@@ -132,7 +132,7 @@ class ProjectController:
                 route=project_description_url, params=project_params
             )
             crud_request = {
-                "model_id": project_arn,
+                "model_id": response[0].get("ProjectVersionArn"),
                 "status": response.get("Status"),
                 "updated": datetime.now(),
             }
