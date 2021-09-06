@@ -30,7 +30,7 @@ class TestingData(BaseModel):
 
 
 class StartTraining(BaseModel):
-    pipeline_id: str
+    pipeline_id: int
     project_arn: str
     version_name: str
     output_config: OutputConfig
@@ -39,13 +39,13 @@ class StartTraining(BaseModel):
 
 
 class DeployModel(BaseModel):
-    pipeline_id: str
+    pipeline_id: int
     project_version_arn: str
     min_inference_units: int
 
 
 class UndeployModel(BaseModel):
-    pipeline_id: str
+    pipeline_id: int
     project_version_arn: str
 
 
