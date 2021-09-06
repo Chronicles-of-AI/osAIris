@@ -82,7 +82,7 @@ class ImportDatasetController:
                     "pipeline_id": data_import_request.get("pipeline_id"),
                     "updated_at": datetime.now(),
                     "functional_stage_id": response.get("operation_id"),
-                    "current_stage": "IMPORTING",
+                    "current_stage": "IMPORTING_DATASET",
                 }
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return response

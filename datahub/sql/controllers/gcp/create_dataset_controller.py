@@ -104,7 +104,7 @@ class CreateDatasetController:
                     "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "updated_at": datetime.now(),
                     "functional_stage_id": response.get("dataset_id"),
-                    "current_stage": "TRAINING",
+                    "current_stage": "DATASET_CREATED",
                 }
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
@@ -157,7 +157,7 @@ class CreateDatasetController:
                     "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "updated_at": datetime.now(),
                     "functional_stage_id": response.get("dataset_id"),
-                    "current_stage": "TRAINING",
+                    "current_stage": "DATASET_CREATED",
                 }
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
@@ -212,7 +212,7 @@ class CreateDatasetController:
                     "pipeline_id": create_dataset_request.get("pipeline_id"),
                     "updated_at": datetime.now(),
                     "functional_stage_id": response.get("dataset_id"),
-                    "current_stage": "TRAINING",
+                    "current_stage": "DATASET_CREATED",
                 }
                 self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
