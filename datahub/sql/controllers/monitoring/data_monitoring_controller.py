@@ -75,19 +75,22 @@ class DataMonitoringController:
                 ],
                 "ground_truth": True,
             }
-            _, status_code = APIInterface.post(
+            annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,
                 headers=self.header,
             )
-            if status_code == 200:
+            if status_code == 201:
                 crud_request = self.create_data_monitoring_crud_request(
                     request=create_image_classification_record_request,
                     task_id=task_id,
                     inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
-                return {"success": "yo"}
+                return {
+                    "annotation_id": annotation_response.get("id"),
+                    "task_id": task_id,
+                }
             else:
                 raise Exception({"status": "Data creation failed"})
         except Exception as error:
@@ -132,19 +135,22 @@ class DataMonitoringController:
                 ],
                 "ground_truth": True,
             }
-            _, status_code = APIInterface.post(
+            annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,
                 headers=self.header,
             )
-            if status_code == 200:
+            if status_code == 201:
                 crud_request = self.create_data_monitoring_crud_request(
                     request=create_text_classification_record_request,
                     task_id=task_id,
                     inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
-                return {"success": "yo"}
+                return {
+                    "annotation_id": annotation_response.get("id"),
+                    "task_id": task_id,
+                }
             else:
                 raise Exception({"status": "Data creation failed"})
         except Exception as error:
@@ -184,19 +190,22 @@ class DataMonitoringController:
                 "result": final_result,
                 "ground_truth": True,
             }
-            _, status_code = APIInterface.post(
+            annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,
                 headers=self.header,
             )
-            if status_code == 200:
+            if status_code == 201:
                 crud_request = self.create_data_monitoring_crud_request(
                     request=create_object_detection_record_request,
                     task_id=task_id,
                     inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
-                return {"success": "yo"}
+                return {
+                    "annotation_id": annotation_response.get("id"),
+                    "task_id": task_id,
+                }
             else:
                 raise Exception({"status": "Data creation failed"})
         except Exception as error:
@@ -236,19 +245,22 @@ class DataMonitoringController:
                 "result": final_result,
                 "ground_truth": True,
             }
-            _, status_code = APIInterface.post(
+            annotation_response, status_code = APIInterface.post(
                 route=creat_annotation_url,
                 data=create_annotation_request,
                 headers=self.header,
             )
-            if status_code == 200:
+            if status_code == 201:
                 crud_request = self.create_data_monitoring_crud_request(
                     request=create_ner_record_request,
                     task_id=task_id,
                     inferred_results=create_annotation_request,
                 )
                 self.CRUDDataMonitoring.create(**crud_request)
-                return {"success": "yo"}
+                return {
+                    "annotation_id": annotation_response.get("id"),
+                    "task_id": task_id,
+                }
             else:
                 raise Exception({"status": "Data creation failed"})
         except Exception as error:
