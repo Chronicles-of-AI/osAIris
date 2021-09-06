@@ -251,8 +251,10 @@ class ComprehendController:
                 "updated": datetime.now(),
             }
             self.CRUDModel.update(crud_request)
-            evaluation_metrics = response.get("DocumentClassifierProperties").get(
-                "EvaluationMetrics"
+            evaluation_metrics = (
+                response.get("DocumentClassifierProperties")
+                .get("ClassifierMetadata")
+                .get("EvaluationMetrics")
             )
             f1_score = evaluation_metrics.get("F1Score")
             precision = evaluation_metrics.get("Precision")
