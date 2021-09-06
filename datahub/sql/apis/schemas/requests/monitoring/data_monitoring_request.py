@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 
@@ -7,7 +7,7 @@ class CreateClassificationDataRecord(BaseModel):
     data: str
     feedback: bool = False
     inferred_value: str
-    ground_truth: str
+    ground_truth: Optional[str]
 
 
 class ObjectDetectionCoords(BaseModel):
@@ -24,7 +24,7 @@ class CreateObjectDetectionRecord(BaseModel):
     data: str
     feedback: bool = False
     inferred_value: List[ObjectDetectionCoords]
-    ground_truth: List[ObjectDetectionCoords]
+    ground_truth: Optional[List[ObjectDetectionCoords]]
 
 
 class NERTags(BaseModel):
@@ -39,7 +39,7 @@ class CreateNERRecord(BaseModel):
     data: str
     feedback: bool = False
     inferred_value: List[NERTags]
-    ground_truth: List[NERTags]
+    ground_truth: Optional[List[NERTags]]
 
 
 class UpdateDataRecord(BaseModel):
