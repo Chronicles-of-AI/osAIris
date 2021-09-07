@@ -3,7 +3,9 @@ from sql.apis.schemas.requests.aws.comprehend_request import (
     CreateDocumentClassifier,
     CreateEntityRecognizer,
     DocumentClassifier,
+    DocumentClassifierStatus,
     EntityRecognizer,
+    EntityRecognizerStatus,
     DeployModel,
     UnDeployModel,
 )
@@ -11,6 +13,8 @@ from sql.apis.schemas.responses.aws.comprehend_response import (
     CreateDocumentClassifierResponse,
     CreateEntityRecognizerResponse,
     DocumentClassifierResponse,
+    DocumentClassifierStatusResponse,
+    EntiyRecognizerStatusResponse,
     EntiyRecognizerResponse,
     DeployModelResponse,
     UnDeployModelResponse,
@@ -322,9 +326,12 @@ async def describe_document_classifier(
         raise error
 
 
-@comprehend_router.post("/aws/comprehend/describe_document_classifier_status")
+@comprehend_router.post(
+    "/aws/comprehend/describe_document_classifier_status",
+    response_model=DocumentClassifierStatusResponse,
+)
 async def describe_document_classifier_status(
-    describe_document_classifier_status_request: DocumentClassifier,
+    describe_document_classifier_status_request: DocumentClassifierStatus,
     token: str = Depends(oauth2_scheme),
 ):
     """[API router to describe document classifier status using AWS Comprehend]
@@ -349,7 +356,7 @@ async def describe_document_classifier_status(
                     describe_document_classifier_status_request
                 )
             )
-            return response
+            return DocumentClassifierStatusResponse(**response)
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -402,9 +409,12 @@ async def describe_entity_recognizer(
         raise error
 
 
-@comprehend_router.post("/aws/comprehend/describe_entity_recognizer_status")
+@comprehend_router.post(
+    "/aws/comprehend/describe_entity_recognizer_status",
+    response_model=EntiyRecognizerStatusResponse,
+)
 async def describe_entity_recognizer_status(
-    describe_entity_recognizer_status_request: EntityRecognizer,
+    describe_entity_recognizer_status_request: EntityRecognizerStatus,
     token: str = Depends(oauth2_scheme),
 ):
     """[API router to describe Entity Recognizer using AWS Comprehend]
@@ -431,7 +441,7 @@ async def describe_entity_recognizer_status(
                     describe_entity_recognizer_status_request
                 )
             )
-            return response
+            return EntityRecognizerStatus(**response)
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

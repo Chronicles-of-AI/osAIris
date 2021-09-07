@@ -16,6 +16,9 @@ class ModelController:
         self.core_aws_model_config = (
             config.get("core_engine").get("aws").get("model_router")
         )
+        self.core_aws_project_config = (
+            config.get("core_engine").get("aws").get("project_router")
+        )
 
     def train_model_controller(self, request):
         """[Controller function to train a AWS Rekognition model]
