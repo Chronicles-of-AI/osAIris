@@ -3,9 +3,7 @@ from sql.apis.schemas.requests.aws.comprehend_request import (
     CreateDocumentClassifier,
     CreateEntityRecognizer,
     DocumentClassifier,
-    DocumentClassifierStatus,
     EntityRecognizer,
-    EntityRecognizerStatus,
     DeployModel,
     UnDeployModel,
 )
@@ -331,7 +329,7 @@ async def describe_document_classifier(
     response_model=DocumentClassifierStatusResponse,
 )
 async def describe_document_classifier_status(
-    describe_document_classifier_status_request: DocumentClassifierStatus,
+    describe_document_classifier_status_request: Docu,
     token: str = Depends(oauth2_scheme),
 ):
     """[API router to describe document classifier status using AWS Comprehend]
@@ -414,7 +412,7 @@ async def describe_entity_recognizer(
     response_model=EntiyRecognizerStatusResponse,
 )
 async def describe_entity_recognizer_status(
-    describe_entity_recognizer_status_request: EntityRecognizerStatus,
+    describe_entity_recognizer_status_request: EntityRecognizer,
     token: str = Depends(oauth2_scheme),
 ):
     """[API router to describe Entity Recognizer using AWS Comprehend]

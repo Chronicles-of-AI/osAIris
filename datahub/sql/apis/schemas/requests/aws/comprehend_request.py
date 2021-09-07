@@ -39,16 +39,8 @@ class EntityRecognizer(BaseModel):
     EntityRecognizerArn: str
 
 
-class EntityRecognizerStatus(BaseModel):
-    EntityRecognizerArn: str
-
-
 class DocumentClassifier(BaseModel):
     pipeline_id: int
-    DocumentClassifierArn: str
-
-
-class DocumentClassifierStatus(BaseModel):
     DocumentClassifierArn: str
 
 
