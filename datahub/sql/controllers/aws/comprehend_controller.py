@@ -292,6 +292,40 @@ class ComprehendController:
             )
             raise error
 
+    def describe_document_classifier_status_controller(self, request):
+        """[Controller function to describe a document classifier status using AWS Comprehend]
+
+        Args:
+            request ([dict]): [Describe document classifier request]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [dict]: [Document Classifier description returned from core engine]
+        """
+        try:
+            logging.info(
+                "executing describe_document_classifier_status_controller function"
+            )
+            describe_document_classifier_request = request.dict(exclude_none=True)
+            describe_document_classifier_url = self.core_aws_comprehend_config.get(
+                "describe_document_classifier"
+            )
+            response, status_code = APIInterface.post(
+                route=describe_document_classifier_url,
+                data=describe_document_classifier_request,
+            )
+            document_classifier_status = response.get(
+                "DocumentClassifierProperties"
+            ).get("Status")
+            return {"model_status": document_classifier_status}
+        except Exception as error:
+            logging.error(
+                f"Error in describe_document_classifier_status_controller function: {error}"
+            )
+            raise error
+
     def describe_entity_recognizer_controller(self, request):
         """[Controller function to describe a entity recognizer using AWS Comprehend]
 
