@@ -1,6 +1,3 @@
-from osAIris.datahub.sql.controllers.label_studio.label_studio_controller import (
-    ProjectController,
-)
 from fastapi import APIRouter, Depends, HTTPException, status
 from sql.apis.schemas.requests.label_studio.storage_request import (
     CreateStorage,
@@ -14,7 +11,10 @@ from sql.apis.schemas.responses.label_studio.storage_response import (
     StorageResponse,
     ListStoragesResponse,
 )
-from sql.controllers.label_studio.label_studio_controller import StorageController
+from sql.controllers.label_studio.label_studio_controller import (
+    StorageController,
+    ProjectController,
+)
 from fastapi.security import OAuth2PasswordBearer
 from commons.auth import decodeJWT
 from sql import logger
