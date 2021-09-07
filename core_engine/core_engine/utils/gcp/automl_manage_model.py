@@ -145,7 +145,7 @@ def model_evaluation_helper(iterator):
         if metric.confidence_threshold >= 0.9:
             recall = metric.recall
             precision = metric.precision
-            f1Score = metric.f1Score
+            f1Score = (2 * precision * recall) / (precision + recall)
             metrics.update(
                 {
                     "recall": recall,
@@ -172,6 +172,7 @@ def get_model_evaluation(project_id: str, model_id: str, region: str):
         [dict]: [Status]
     """
     try:
+        # TODO: Add training loss to the evaluation metrics
         logging.info(f"Evaluate Model for project id: {project_id}")
         logging.info(f"{model_id=}")
         model_full_id = client.model_path(project_id, region, model_id)
