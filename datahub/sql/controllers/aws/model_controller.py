@@ -179,6 +179,34 @@ class ModelController:
             logging.error(f"Error in delete_model_controller function: {error}")
             raise error
 
+    def get_model_status(self, project_arn: str, version_names: str = None):
+        """[Controller function to get description of an AWS Rekognition model]
+
+        Args:
+            project_arn (str): [Unique identifier for AWS Rekognition project]
+            version_names (str, optional): [Unique identifier for project version]. Defaults to None.
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [dict]: [project description response from AWS Rekognition]
+        """
+        try:
+            logging.info("executing get_project_description function")
+            model_description_url = self.core_aws_project_config.get(
+                "project_description"
+            )
+            project_params = {"project_arn": project_arn, "version_name": version_names}
+            response, _ = APIInterface.get(
+                route=model_description_url, params=project_params
+            )
+            model_status = response.get("ProjectVersionDescriptions")[0].get("Status")
+            return {"model_status": model_status}
+        except Exception as error:
+            logging.error(f"Error in get_project_description function: {error}")
+            raise error
+
     def get_evaluation_controller(self, project_arn, version_name):
         """[Controller function to get model evaluation for a AWS Rekognition model]
 

@@ -49,8 +49,8 @@ class StorageRsponse(BaseModel):
     last_sync: str
     last_sync_count: int
     bucket: str
-    prefix: str
-    regex_filter: str
+    prefix: str = None
+    regex_filter: str = None
     use_blob_urls: bool
     project: int
 
