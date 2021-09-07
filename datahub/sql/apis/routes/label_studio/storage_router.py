@@ -132,6 +132,40 @@ async def delete_s3_storage(
         raise error
 
 
+@storage_router.get("/label_studio/list_storages")
+async def list_storages(project_id: int, token: str = Depends(oauth2_scheme)):
+    """[API Router to list Storages attached in your Annotation Project]
+
+    Args:
+        project_id (int): [Unique Identifier for the Annotation Project]
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Error]
+
+    Returns:
+        [type]: [List of Storages]
+    """
+    try:
+        logging.info("Calling /label_studio/list_storages endpoint")
+        logging.debug(f"Request: {project_id}")
+        if decodeJWT(token=token):
+            response = StorageController().list_storages_controller(
+                project_id=project_id
+            )
+            return response
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        logging.error(f"Error in /label_studio/list_storages endpoint: {error}")
+        raise error
+
+
 @storage_router.post(
     "/label_studio/create_gcs_storage", response_model=CreateGCSStorageResponse
 )
