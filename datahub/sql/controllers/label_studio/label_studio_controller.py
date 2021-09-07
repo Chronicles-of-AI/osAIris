@@ -60,7 +60,7 @@ class ProjectController:
             logging.info(f"list all annotation project on Label Studio")
             list_project_url = self.label_studio_config.get("list_projects")
             logging.info(f"{list_project_url=}")
-            response, status_code = APIInterface.post(
+            response, status_code = APIInterface.get(
                 route=list_project_url,
                 params={"ordering": "id"},
                 headers=self.header,
