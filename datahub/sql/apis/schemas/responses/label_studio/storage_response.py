@@ -1,5 +1,6 @@
 from typing import List
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class CreateStorageResponse(BaseModel):
@@ -36,6 +37,26 @@ class StorageResponse(BaseModel):
 
 class StorageDeleteResponse(BaseModel):
     status: str
+
+
+class StorageRsponse(BaseModel):
+    id: int
+    type: str
+    presign: bool
+    title: str
+    description: str = None
+    created_at: str
+    last_sync: str = None
+    last_sync_count: int = None
+    bucket: str
+    prefix: str = None
+    regex_filter: str = None
+    use_blob_urls: bool
+    project: int
+
+
+class ListStoragesResponse(BaseModel):
+    storages: List[StorageRsponse]
 
 
 class CreateGCSStorageResponse(BaseModel):

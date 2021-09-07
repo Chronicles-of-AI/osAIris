@@ -156,6 +156,45 @@ async def delete_model(
         raise error
 
 
+@model_router.get("/aws/rekog/get_model_status")
+async def get_model_status(
+    project_arn: str,
+    version_name: Optional[str] = None,
+    token: str = Depends(oauth2_scheme),
+):
+    """[API router to get status for AWS Rekognition model]
+
+    Args:
+        project_arn (str): [Unique identifier for AWS Rekognition project]
+        version_name (str, optional): [Unique identifier for AWS Rekognition model version]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
+
+    Returns:
+        [dict]: [Status of model]
+    """
+    try:
+        logging.info("Calling /aws/rekog/get_model_status endpoint")
+        logging.debug(f"Request: {project_arn=},{version_name=}")
+        if decodeJWT(token=token):
+            response = ModelController().get_model_status(
+                project_arn=project_arn, version_name=version_name
+            )
+            return response
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        logging.error(f"Error in /aws/rekog/get_model_status endpoint: {error}")
+        raise error
+
+
 @model_router.get("/aws/rekog/get_model_evaluation")
 async def get_model_evaluation(
     project_arn: str,

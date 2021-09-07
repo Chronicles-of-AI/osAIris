@@ -47,6 +47,29 @@ class ProjectController:
             logging.error(f"Error in create_project_controller: {error}")
             raise error
 
+    def list_projects_controller(self):
+        """[Controller function to list label studio projects]
+
+        Raises:
+            error: [Error from label studio controller]
+
+        Returns:
+            [dict]: [label studio projects details]
+        """
+        try:
+            logging.info(f"list all annotation project on Label Studio")
+            list_project_url = self.label_studio_config.get("list_projects")
+            logging.info(f"{list_project_url=}")
+            response, status_code = APIInterface.get(
+                route=list_project_url,
+                params={"ordering": "id"},
+                headers=self.header,
+            )
+            return response
+        except Exception as error:
+            logging.error(f"Error in list_projects_controller: {error}")
+            raise error
+
     def delete_project_controller(self, request):
         """[Controller function to delete label studio project]
 
@@ -238,7 +261,7 @@ class StorageController:
             [dict]: [storage details]
         """
         try:
-            logging.info(f"Delete S3 annotations from Label Studio project")
+            logging.info(f"Delete S3 storage from Label Studio project")
             delete_storage_url = (
                 f"{self.label_studio_config.get('s3_storage')}/{request.storage_id}"
             )
@@ -249,6 +272,34 @@ class StorageController:
                 return {"status": "Storage Deleted Successfully"}
             else:
                 raise Exception({"status": "Cannot Delete The Storage"})
+        except Exception as error:
+            logging.error(f"Error in delete_s3_storage_controller: {error}")
+            raise error
+
+    def list_storages_controller(self, project_id: int):
+        """[Controller function to list S3 storages]
+
+        Args:
+            request ([dict]): [list S3 storages]
+
+        Raises:
+            error: [Error from label studio controller]
+
+        Returns:
+            [dict]: [storage details]
+        """
+        try:
+            logging.info(f"list S3 storages from Label Studio project")
+            list_storage_url = f"{self.label_studio_config.get('storage')}"
+            response, status_code = APIInterface.get(
+                route=list_storage_url,
+                params={"project": project_id},
+                headers=self.header,
+            )
+            if status_code == 200:
+                return {"storages": response}
+            else:
+                raise Exception({"status": "Cannot list Storages"})
         except Exception as error:
             logging.error(f"Error in delete_s3_storage_controller: {error}")
             raise error

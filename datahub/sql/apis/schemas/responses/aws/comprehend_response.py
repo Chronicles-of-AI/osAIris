@@ -17,8 +17,16 @@ class DocumentClassifierResponse(BaseModel):
     status: str
 
 
+class DocumentClassifierStatusResponse(BaseModel):
+    model_status: str
+
+
 class EntiyRecognizerResponse(BaseModel):
     status: str
+
+
+class EntiyRecognizerStatusResponse(BaseModel):
+    model_status: str
 
 
 class AugmentedManifests(BaseModel):
