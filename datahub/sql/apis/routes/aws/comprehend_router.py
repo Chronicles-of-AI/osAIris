@@ -329,7 +329,7 @@ async def describe_document_classifier(
     response_model=DocumentClassifierStatusResponse,
 )
 async def describe_document_classifier_status(
-    describe_document_classifier_status_request: Docu,
+    describe_document_classifier_status_request: DocumentClassifier,
     token: str = Depends(oauth2_scheme),
 ):
     """[API router to describe document classifier status using AWS Comprehend]
