@@ -66,6 +66,7 @@ core_engine:
 label_studio:
   endpoint:
     label_studio_project: !ENV ${label_studio_url}/api/projects
+    list_projects: !ENV ${label_studio_url}/api/projects
     storage: !ENV ${label_studio_url}/api/storages
     s3_storage: !ENV ${label_studio_url}/api/storages/s3
     gcs_storage: !ENV ${label_studio_url}/api/storages/gcs

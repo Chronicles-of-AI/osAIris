@@ -1,3 +1,6 @@
+from osAIris.datahub.sql.controllers.label_studio.label_studio_controller import (
+    ProjectController,
+)
 from fastapi import APIRouter, Depends, HTTPException, status
 from sql.apis.schemas.requests.label_studio.storage_request import (
     CreateStorage,
@@ -9,6 +12,7 @@ from sql.apis.schemas.responses.label_studio.storage_response import (
     CreateStorageResponse,
     StorageDeleteResponse,
     StorageResponse,
+    ListStoragesResponse,
 )
 from sql.controllers.label_studio.label_studio_controller import StorageController
 from fastapi.security import OAuth2PasswordBearer
@@ -132,7 +136,37 @@ async def delete_s3_storage(
         raise error
 
 
-@storage_router.get("/label_studio/list_storages")
+@storage_router.get("/label_studio/list_projects")
+async def list_projects(token: str = Depends(oauth2_scheme)):
+    """[API Router to list Projects attached in your Annotation Project]
+
+    Args:
+        token (str, optional): [description]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Error]
+
+    Returns:
+        [type]: [List of Projects]
+    """
+    try:
+        logging.info("Calling /label_studio/list_projects endpoint")
+        if decodeJWT(token=token):
+            response = ProjectController().list_projects_controller()
+            return response
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        logging.error(f"Error in /label_studio/list_projects endpoint: {error}")
+        raise error
+
+
+@storage_router.get("/label_studio/list_storages", response_model=ListStoragesResponse)
 async def list_storages(project_id: int, token: str = Depends(oauth2_scheme)):
     """[API Router to list Storages attached in your Annotation Project]
 
@@ -154,7 +188,7 @@ async def list_storages(project_id: int, token: str = Depends(oauth2_scheme)):
             response = StorageController().list_storages_controller(
                 project_id=project_id
             )
-            return response
+            return ListStoragesResponse(**response)
         else:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

@@ -47,6 +47,29 @@ class ProjectController:
             logging.error(f"Error in create_project_controller: {error}")
             raise error
 
+    def list_projects_controller(self):
+        """[Controller function to list label studio projects]
+
+        Raises:
+            error: [Error from label studio controller]
+
+        Returns:
+            [dict]: [label studio projects details]
+        """
+        try:
+            logging.info(f"list all annotation project on Label Studio")
+            list_project_url = self.label_studio_config.get("list_projects")
+            logging.info(f"{list_project_url=}")
+            response, status_code = APIInterface.post(
+                route=list_project_url,
+                params={"ordering": "id"},
+                headers=self.header,
+            )
+            return response
+        except Exception as error:
+            logging.error(f"Error in list_projects_controller: {error}")
+            raise error
+
     def delete_project_controller(self, request):
         """[Controller function to delete label studio project]
 
