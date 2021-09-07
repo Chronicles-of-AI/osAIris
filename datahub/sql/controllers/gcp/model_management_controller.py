@@ -27,6 +27,7 @@ class ManageModelController:
         try:
             logging.info("executing create_operation_record function")
             operation_crud_request = {
+                "pipeline_id": api_response.get("pipeline_id"),
                 "operation_id": api_response.get("operation_id"),
                 "status": api_response.get("status"),
                 "project_id": api_response.get("project_id"),
@@ -71,9 +72,21 @@ class ManageModelController:
                     "created": datetime.now(),
                 }
                 self.CRUDDeployment.upsert(crud_request)
+                response.update(
+                    {
+                        "pipeline_id": deploy_model_request.get("pipeline_id"),
+                    }
+                )
                 self.create_operation_record(
                     api_response=response, functional_stage="DEPLOY_MODEL"
                 )
+                project_flow_crud_request = {
+                    "pipeline_id": deploy_model_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "functional_stage_id": response.get("model_id"),
+                    "current_stage": "MODEL_DEPLOYING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "model_id": response.get("model_id"),
                     "operation_id": response.get("operation_id"),
@@ -114,9 +127,20 @@ class ManageModelController:
                     "updated": datetime.now(),
                 }
                 self.CRUDDeployment.update(deployment_request=crud_request)
+                response.update(
+                    {
+                        "pipeline_id": undeploy_model_request.get("pipeline_id"),
+                    }
+                )
                 self.create_operation_record(
                     api_response=response, functional_stage="UNDEPLOY_MODEL"
                 )
+                project_flow_crud_request = {
+                    "pipeline_id": undeploy_model_request.get("pipeline_id"),
+                    "updated_at": datetime.now(),
+                    "current_stage": "MODEL_UNDEPLOYING",
+                }
+                self.CRUDProjectFlow.update(**project_flow_crud_request)
                 return {
                     "model_id": response.get("model_id"),
                     "operation_id": response.get("operation_id"),
@@ -182,6 +206,33 @@ class ManageModelController:
             logging.error(
                 f"Error in get_model_description_controller function: {error}"
             )
+            raise error
+
+    def get_model_evaluation_controller(self, request):
+        """[Controller function to get all model evaluation]
+
+        Args:
+            request ([dict]): [get list of model request]
+
+        Raises:
+            error: [Error raised from controller layer]
+
+        Returns:
+            [dict]: [list of all models]
+        """
+        try:
+            logging.info("executing get_model_evaluation_controller function")
+            model_evaluation_url = (
+                self.gcp_config.get("automl").get("common").get("get_model_evaluation")
+            )
+            model_evaluation_request = request.dict(exclude_none=True)
+            response, status_code = APIInterface.post(
+                route=model_evaluation_url,
+                data=model_evaluation_request,
+            )
+            return response
+        except Exception as error:
+            logging.error(f"Error in get_model_evaluation_controller function: {error}")
             raise error
 
     def delete_model_controller(self, request):

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Integer, ForeignKey, Enum
+from sqlalchemy import Column, String, DateTime, Integer, ForeignKey
 from sql import Base
 
 
@@ -9,6 +9,7 @@ class Deployment(Base):
     UUID = Column(String)
     model_id = Column(String, ForeignKey("models.model_id"))
     deployment_endpoint = Column(String)
+    pipeline_id = Column(Integer)
     created = Column(DateTime)
     updated = Column(DateTime)
     status = Column(String)

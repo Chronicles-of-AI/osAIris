@@ -10,6 +10,7 @@ class Operations(Base):
     region = Column(String)
     operation_id = Column(String)
     functional_stage = Column(String)
+    pipeline_id = Column(Integer)
     service_id = Column(String)
     status = Column(String)
     created = Column(DateTime)

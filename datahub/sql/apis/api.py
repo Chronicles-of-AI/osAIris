@@ -16,6 +16,9 @@ from sql.apis.routes.gcp.model_predictions_router import get_predictions_router
 from sql.apis.routes.gcp.manage_dataset_router import manage_dataset_router
 from sql.apis.routes.gcp.operations_router import operations_router
 from sql.apis.routes.user_management.user_router import user_router
+from sql.apis.routes.custom.project_flow_router import project_flow_router
+from sql.apis.routes.custom.services_router import services_router
+from sql.apis.routes.monitoring.data_monitoring_router import data_monitoring_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(
@@ -51,6 +54,9 @@ app.include_router(train_model_router, tags=["gcp automl model"])
 app.include_router(manage_model_router, tags=["gcp automl model"])
 app.include_router(get_predictions_router, tags=["gcp automl model"])
 app.include_router(operations_router, tags=["gcp automl operations"])
+app.include_router(project_flow_router, tags=["osairis"])
+app.include_router(services_router, tags=["osairis"])
+app.include_router(data_monitoring_router, tags=["osairis monitoring"])
 
 
 @app.get("/")

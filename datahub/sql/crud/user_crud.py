@@ -1,4 +1,3 @@
-import logging
 from sql import session, logger
 from sql.orm_models.user import User
 

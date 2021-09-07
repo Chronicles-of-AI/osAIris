@@ -100,6 +100,7 @@ async def delete_project(
 )
 async def export_annotations(
     project_id: int,
+    pipeline_id: int,
     service_provider: str,
     bucket_name: str,
     token: str = Depends(oauth2_scheme),
@@ -127,6 +128,7 @@ async def export_annotations(
                 project_id=project_id,
                 service_provider=service_provider,
                 bucket_name=bucket_name,
+                pipeline_id=pipeline_id,
             )
             return ExportAnnotationResponse(**response)
         else:

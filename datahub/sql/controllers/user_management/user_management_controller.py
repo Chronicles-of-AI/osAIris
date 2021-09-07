@@ -1,4 +1,3 @@
-import logging
 from sql.crud.user_crud import CRUDUser
 from commons.auth import encrypt_password, verify_hash_password, signJWT
 from sql import logger

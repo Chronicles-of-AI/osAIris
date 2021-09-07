@@ -8,7 +8,16 @@ class CreateDocumentClassifierResponse(BaseModel):
     status: str
 
 
+class CreateEntityRecognizerResponse(BaseModel):
+    entity_recognizer_arn: str
+    status: str
+
+
 class DocumentClassifierResponse(BaseModel):
+    status: str
+
+
+class EntiyRecognizerResponse(BaseModel):
     status: str
 
 

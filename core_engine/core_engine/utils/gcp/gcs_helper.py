@@ -44,7 +44,7 @@ def upload_blob_string(
         error: [Error]
 
     Returns:
-        [type]: [description]
+        [type]: [gcs_uri]
     """
     try:
         logging.info(f"Upload to GCS bucket: {bucket_name}")

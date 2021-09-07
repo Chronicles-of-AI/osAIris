@@ -36,6 +36,7 @@ class ProjectController:
                 transformed_annotation_data = transform_annotations(
                     json_data=annotations_data,
                     service_provider=request.service_provider,
+                    request=request,
                 )
                 transformed_cloud_uri = write_annotations_to_s3(
                     bucket_name=request.output_data_bucket_name,
@@ -53,6 +54,7 @@ class ProjectController:
                 transformed_annotation_df = transform_annotations(
                     json_data=json.loads(annotations_data.decode("UTF-8")),
                     service_provider=request.service_provider,
+                    request=request,
                 )
                 transformed_cloud_uri = upload_blob_string(
                     bucket_name=request.output_data_bucket_name,

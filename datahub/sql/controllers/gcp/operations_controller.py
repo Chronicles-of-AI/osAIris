@@ -1,4 +1,3 @@
-import logging
 from commons.external_call import APIInterface
 from sql import config, logger
 from sql.crud.operation_crud import CRUDOperations

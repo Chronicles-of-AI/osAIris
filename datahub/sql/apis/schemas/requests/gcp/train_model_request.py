@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 
 class TrainTextModel(BaseModel):
+    pipeline_id: int
     project_id: str
     dataset_id: str
     model_display_name: str
@@ -10,6 +11,7 @@ class TrainTextModel(BaseModel):
 
 
 class TrainImageModel(BaseModel):
+    pipeline_id: int
     project_id: str
     dataset_id: str
     model_display_name: str
@@ -17,6 +19,7 @@ class TrainImageModel(BaseModel):
 
 
 class TrainImageEdgeModel(BaseModel):
+    pipeline_id: int
     project_id: str
     dataset_id: str
     model_display_name: str

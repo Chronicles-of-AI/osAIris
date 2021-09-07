@@ -1,6 +1,5 @@
-import logging
 from sql import session, logger
-from sql.orm_models.projects import CreateProject
+from sql.orm_models.rekog_projects import CreateProject
 
 logging = logger(__name__)
 

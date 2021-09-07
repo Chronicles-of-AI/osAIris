@@ -10,5 +10,6 @@ class CreateDataset(Base):
     UUID = Column(String)
     alias_name = Column(String)
     problem_type = Column(String)
+    pipeline_id = Column(Integer)
     status = Column(String)
     error = Column(String)

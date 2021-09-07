@@ -5,12 +5,14 @@ from commons.external_call import APIInterface
 from sql import config, logger
 from sql.utils.s3_helper import write_annotations_to_s3
 from sql.utils.gcs_helper import upload_blob_string
+from sql.crud.project_flow_crud import CRUDProjectFlow
 
 logging = logger(__name__)
 
 
 class ProjectController:
     def __init__(self):
+        self.CRUDProjectFlow = CRUDProjectFlow()
         self.label_studio_config = config.get("label_studio").get("endpoint")
         self.label_studio_token = config.get("label_studio").get("token")
         self.core_label_studio_config = config.get("core_engine").get(
@@ -72,7 +74,7 @@ class ProjectController:
             raise error
 
     def export_annotations_controller(
-        self, project_id: int, service_provider: str, bucket_name: str
+        self, project_id: int, service_provider: str, bucket_name: str, pipeline_id: int
     ):
         """[Controller function to export annotations from label studio project]
 
@@ -112,6 +114,13 @@ class ProjectController:
             else:
                 cloud_uri = ""
 
+            project_flow_crud_request = {
+                "raw_annotation_uri": cloud_uri,
+                "current_stage": "EXPORT_ANNOTATIONS",
+                "updated_at": datetime.now(),
+                "pipeline_id": pipeline_id,
+            }
+            self.CRUDProjectFlow.update(**project_flow_crud_request)
             return {"cloud_uri": cloud_uri}
         except Exception as error:
             logging.error(f"Error in export_annotations_controller: {error}")
@@ -140,6 +149,13 @@ class ProjectController:
                 data=transform_annotation_request,
                 headers=self.header,
             )
+            project_flow_crud_request = {
+                "transform_annotation_uri": response.get("cloud_uri"),
+                "current_stage": "TRANSFORM_ANNOTATIONS",
+                "updated_at": datetime.now(),
+                "pipeline_id": request.pipeline_id,
+            }
+            self.CRUDProjectFlow.update(**project_flow_crud_request)
             return response
         except Exception as error:
             logging.error(f"Error in transform_annotations_controller: {error}")

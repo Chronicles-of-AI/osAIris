@@ -137,3 +137,69 @@ def delete_model(project_id: str, model_id: str, region: str):
     except Exception as error:
         logging.error(f"{error=}")
         raise error
+
+
+def model_evaluation_helper(iterator):
+    metrics = {}
+    for metric in iterator:
+        if metric.confidence_threshold >= 0.9:
+            recall = metric.recall
+            precision = metric.precision
+            f1Score = (2 * precision * recall) / (precision + recall)
+            metrics.update(
+                {
+                    "recall": recall,
+                    "precision": precision,
+                    "f1_score": f1Score,
+                }
+            )
+            break
+    return metrics
+
+
+def get_model_evaluation(project_id: str, model_id: str, region: str):
+    """[Model Evaluation in AutoML GCP]
+
+    Args:
+        project_id (str): [Unique Identifier for your Project]
+        model_id (str): [Unique Identifier for your Model]
+        region (str): [Region]
+
+    Raises:
+        error: [Error]
+
+    Returns:
+        [dict]: [Status]
+    """
+    try:
+        # TODO: Add training loss to the evaluation metrics
+        logging.info(f"Evaluate Model for project id: {project_id}")
+        logging.info(f"{model_id=}")
+        model_full_id = client.model_path(project_id, region, model_id)
+        for evaluation in client.list_model_evaluations(parent=model_full_id):
+            response = client.get_model_evaluation(name=evaluation.name)
+            if response.display_name == "":
+                if response.classification_evaluation_metrics:
+                    metrics = model_evaluation_helper(
+                        iterator=response.classification_evaluation_metrics.confidence_metrics_entry
+                    )
+                elif response.image_object_detection_evaluation_metrics:
+                    metrics = model_evaluation_helper(
+                        iterator=response.image_object_detection_evaluation_metrics.bounding_box_metrics_entries
+                    )
+                elif response.text_extraction_evaluation_metrics:
+                    metrics = model_evaluation_helper(
+                        iterator=response.text_extraction_evaluation_metrics.confidence_metrics_entries
+                    )
+                else:
+                    metrics = {"recall": 0.0, "precision": 0.0, "f1_score": 0.0}
+                break
+        return {
+            "model_id": model_id,
+            "metrics": metrics,
+            "project_id": project_id,
+            "region": region,
+        }
+    except Exception as error:
+        logging.error(f"{error=}")
+        raise error

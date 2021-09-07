@@ -1,5 +1,7 @@
-import logging
 from sql.crud.project_crud import CRUDProject
+from sql.crud.project_flow_crud import CRUDProjectFlow
+from sql.crud.model_crud import CRUDModel
+from sql.crud.model_monitoring_crud import CRUDModelMonitoring
 from commons.external_call import APIInterface
 from sql import config, logger
 from datetime import datetime
@@ -10,6 +12,9 @@ logging = logger(__name__)
 class ProjectController:
     def __init__(self):
         self.CRUDProject = CRUDProject()
+        self.CRUDProjectFlow = CRUDProjectFlow()
+        self.CRUDModel = CRUDModel()
+        self.CRUDModelMonitoring = CRUDModelMonitoring()
         self.core_aws_project_config = (
             config.get("core_engine").get("aws").get("project_router")
         )
@@ -35,8 +40,21 @@ class ProjectController:
                 route=create_project_url, data=project_request
             )
             project_request.update(response)
-            project_request.update({"uuid": uuid, "status": "CREATED"})
+            project_request.update(
+                {
+                    "uuid": uuid,
+                    "status": "CREATED",
+                    "pipeline_id": project_request.get("pipeline_id"),
+                }
+            )
             self.CRUDProject.create(**project_request)
+            project_flow_crud_request = {
+                "pipeline_id": project_request.get("pipeline_id"),
+                "updated_at": datetime.now(),
+                "functional_stage_id": response.get("project_arn"),
+                "current_stage": "REKOGNITION_PROJECT_CREATED",
+            }
+            self.CRUDProjectFlow.update(**project_flow_crud_request)
             return project_request
         except Exception as error:
             logging.error(f"Error in create_project function: {error}")
@@ -91,7 +109,9 @@ class ProjectController:
             logging.error(f"Error in get_all_projects function: {error}")
             raise error
 
-    def get_project_description(self, project_arn: str, version_names: str = None):
+    def get_project_description(
+        self, project_arn: str, pipeline_id: int, version_names: str = None
+    ):
         """[Controller function to get description of an AWS Rekognition project]
 
         Args:
@@ -113,6 +133,41 @@ class ProjectController:
             response, _ = APIInterface.get(
                 route=project_description_url, params=project_params
             )
+            model_version_arn = response.get("ProjectVersionDescriptions")[0].get(
+                "ProjectVersionArn"
+            )
+            crud_request = {
+                "model_id": model_version_arn,
+                "status": response.get("Status"),
+                "updated": datetime.now(),
+            }
+            self.CRUDModel.update(crud_request)
+            status = response.get("ProjectVersionDescriptions")[0].get("Status")
+            if status == "TRAINING_COMPLETED":
+                f1_score = (
+                    response.get("ProjectVersionDescriptions")[0]
+                    .get("EvaluationResult")
+                    .get("F1Score")
+                )
+                create_model_monitoring_request = {
+                    "model_uri": model_version_arn,
+                    "model_f1_score": f1_score,
+                    "model_recall": "",
+                    "model_precision": "",
+                    "model_drift_threshold": "0.8",
+                    "created_at": datetime.now(),
+                    "updated_at": datetime.now(),
+                }
+                if len(self.CRUDModelMonitoring.read(model_uri=model_version_arn)) == 0:
+                    self.CRUDModelMonitoring.create(**create_model_monitoring_request)
+                    project_flow_crud_request = {
+                        "pipeline_id": pipeline_id,
+                        "updated_at": datetime.now(),
+                        "current_stage": "TRAINED",
+                    }
+                    self.CRUDProjectFlow.update(**project_flow_crud_request)
+            else:
+                pass
             return response
         except Exception as error:
             logging.error(f"Error in get_project_description function: {error}")
