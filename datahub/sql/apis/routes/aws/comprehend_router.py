@@ -358,7 +358,7 @@ async def describe_document_classifier_status(
             )
     except Exception as error:
         logging.error(
-            f"Error in /aws/comprehend/describe_document_classifier endpoint: {error}"
+            f"Error in /aws/comprehend/describe_document_classifier_status endpoint: {error}"
         )
         raise error
 
@@ -385,7 +385,7 @@ async def describe_entity_recognizer(
         logging.info("Calling /aws/comprehend/describe_entity_recognizer endpoint")
         logging.debug(f"Request: {describe_entity_recognizer_request}")
         if decodeJWT(token=token):
-            response = ComprehendController().describe_document_classifier_controller(
+            response = ComprehendController().describe_entity_recognizer_controller(
                 describe_entity_recognizer_request
             )
             return response
@@ -398,6 +398,49 @@ async def describe_entity_recognizer(
     except Exception as error:
         logging.error(
             f"Error in /aws/comprehend/describe_entity_recognizer endpoint: {error}"
+        )
+        raise error
+
+
+@comprehend_router.post("/aws/comprehend/describe_entity_recognizer_status")
+async def describe_entity_recognizer_status(
+    describe_entity_recognizer_status_request: EntityRecognizer,
+    token: str = Depends(oauth2_scheme),
+):
+    """[API router to describe Entity Recognizer using AWS Comprehend]
+
+    Args:
+        describe_entity_recognizer_request (EntityRecognizer): [Describe Entity Recognizer request]
+        token (str, optional): [Bearer token for authentication]. Defaults to Depends(oauth2_scheme).
+
+    Raises:
+        HTTPException: [Unauthorized exception when invalid token is passed]
+        error: [Exception in underlying controller]
+
+    Returns:
+        [dict]: [Response with all the entity recognizer details]
+    """
+    try:
+        logging.info(
+            "Calling /aws/comprehend/describe_entity_recognizer_status endpoint"
+        )
+        logging.debug(f"Request: {describe_entity_recognizer_status_request}")
+        if decodeJWT(token=token):
+            response = (
+                ComprehendController().describe_entity_recognizer_status_controller(
+                    describe_entity_recognizer_status_request
+                )
+            )
+            return response
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid access token",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+    except Exception as error:
+        logging.error(
+            f"Error in /aws/comprehend/describe_entity_recognizer_status endpoint: {error}"
         )
         raise error
 

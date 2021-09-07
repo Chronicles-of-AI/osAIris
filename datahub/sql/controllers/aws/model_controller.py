@@ -179,7 +179,7 @@ class ModelController:
             logging.error(f"Error in delete_model_controller function: {error}")
             raise error
 
-    def get_model_status(self, project_arn: str, version_names: str = None):
+    def get_model_status(self, project_arn: str, version_name: str = None):
         """[Controller function to get description of an AWS Rekognition model]
 
         Args:
@@ -197,7 +197,7 @@ class ModelController:
             model_description_url = self.core_aws_project_config.get(
                 "project_description"
             )
-            project_params = {"project_arn": project_arn, "version_name": version_names}
+            project_params = {"project_arn": project_arn, "version_name": version_name}
             response, _ = APIInterface.get(
                 route=model_description_url, params=project_params
             )
