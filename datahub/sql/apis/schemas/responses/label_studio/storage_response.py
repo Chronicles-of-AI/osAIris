@@ -44,10 +44,10 @@ class StorageRsponse(BaseModel):
     type: str
     presign: bool
     title: str
-    description: str
+    description: str = None
     created_at: str
-    last_sync: str
-    last_sync_count: int
+    last_sync: str = None
+    last_sync_count: int = None
     bucket: str
     prefix: str = None
     regex_filter: str = None
