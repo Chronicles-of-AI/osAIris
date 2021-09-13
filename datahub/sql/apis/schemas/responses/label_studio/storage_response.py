@@ -64,10 +64,10 @@ class CreateGCSStorageResponse(BaseModel):
     type: str
     presign: bool
     bucket: str
-    prefix: str
+    prefix: str = None
     use_blob_urls: bool
     title: str
     description: str
     created_at: str
-    last_sync: str
+    last_sync: str = None
     project: int
