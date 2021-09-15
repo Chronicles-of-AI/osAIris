@@ -143,7 +143,7 @@ if submitted:
 
 st.sidebar.markdown(
     """
-<large>[DOCUMENTATION](http://0.0.0.0:7000/documentation)</large>
+<large>[DOCUMENTATION]({DATA_HUB}/documentation)</large>
     """,
     unsafe_allow_html=True,
 )
