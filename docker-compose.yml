@@ -108,6 +108,23 @@ services:
             - osairis_datahub
         networks: 
             - osairis
+
+    osairis_streamlit:
+        build: streamlit/.
+        image: osairis/streamlit:latest
+        container_name: osairis-streamlit
+        environment: 
+            - asset_name=osairis
+            - logo=logo.jpeg
+            - IP=osairis_datahub
+        volumes: 
+            - ./streamlit:/app
+        ports: 
+            - 8504:8504
+        depends_on: 
+            - osairis_datahub
+        networks: 
+            - osairis
   
 networks: 
     osairis:

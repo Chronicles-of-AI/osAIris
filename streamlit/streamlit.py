@@ -5,20 +5,18 @@ from external_call import APIInterface
 from PIL import Image
 import pandas as pd
 
-IP = os.environ.get("IP", "192.168.29.208")
+IP = os.environ.get("IP", "192.168.29.137")
 DATA_HUB = f"http://{IP}:7000"
 DOCUMENTATION = f"http://{IP}:80"
 asset_name = "mObius"
-page_icon_path = "/Users/arpitkjain/Desktop/Data/POC/osAIris/docs/logo.jpeg"
-home_page_image = "/Users/arpitkjain/Desktop/Data/POC/osAIris/docs/logo.jpeg"
-sidebar_image_path = "/Users/arpitkjain/Desktop/Data/POC/osAIris/docs/logo.jpeg"
+page_icon_path = "logo.jpeg"
+sidebar_image_path = "logo.jpeg"
 
 st.set_page_config(
     page_title=asset_name,
     page_icon=Image.open(page_icon_path),
     initial_sidebar_state="auto",
 )
-st.image(home_page_image)
 st.title(f"Welcome to {asset_name}")
 
 
