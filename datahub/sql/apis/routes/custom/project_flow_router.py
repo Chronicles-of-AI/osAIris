@@ -40,7 +40,7 @@ async def create_project_flow(
         [type]: [Basedon Output Response]
     """
     try:
-        logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
+        logging.info("Calling /osairis/project_flow/create endpoint")
         logging.debug(f"Request: {create_project_flow_request}")
         if decodeJWT(token=token):
             response = ProjectFlowController().create_project_flow_controller(
@@ -54,7 +54,7 @@ async def create_project_flow(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
-        logging.error(f"Error in /osairis/data_monitoring/create endpoint: {error}")
+        logging.error(f"Error in /osairis/project_flow/create endpoint: {error}")
         raise error
 
 
@@ -77,7 +77,7 @@ async def get_all_project_flow(
         [type]: [Basedon Output Response]
     """
     try:
-        logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
+        logging.info("Calling /osairis/project_flow endpoint")
         if decodeJWT(token=token):
             response = ProjectFlowController().get_all_project_flow_controller()
             return response
@@ -88,7 +88,7 @@ async def get_all_project_flow(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
-        logging.error(f"Error in /osairis/data_monitoring/create endpoint: {error}")
+        logging.error(f"Error in /osairis/project_flow endpoint: {error}")
         raise error
 
 
@@ -114,7 +114,7 @@ async def get_project_flow(
         [type]: [Basedon Output Response]
     """
     try:
-        logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
+        logging.info("Calling /osairis/project_flow/by_id endpoint")
         logging.debug(f"Request: {pipeline_id}")
         if decodeJWT(token=token):
             response = ProjectFlowController().get_project_flow_by_name_controller(
@@ -128,5 +128,5 @@ async def get_project_flow(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
-        logging.error(f"Error in /osairis/data_monitoring/create endpoint: {error}")
+        logging.error(f"Error in /osairis/project_flow/by_id endpoint: {error}")
         raise error

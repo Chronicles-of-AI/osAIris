@@ -40,7 +40,7 @@ async def add_service_data(
         [type]: [Based on Output Schema]
     """
     try:
-        logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
+        logging.info("Calling /osairis/services/add endpoint")
         logging.debug(f"Request: {add_service_data_request}")
         if decodeJWT(token=token):
             response = ServicesController().create_service_controller(
@@ -54,7 +54,7 @@ async def add_service_data(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
-        logging.error(f"Error in /osairis/data_monitoring/create endpoint: {error}")
+        logging.error(f"Error in /osairis/services/add endpoint: {error}")
         raise error
 
 
@@ -77,7 +77,7 @@ async def list_all_service_data(
         [type]: [description]
     """
     try:
-        logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
+        logging.info("Calling /osairis/services/list_all endpoint")
         if decodeJWT(token=token):
             response = ServicesController().get_all_services_controller()
             return response
@@ -88,7 +88,7 @@ async def list_all_service_data(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
-        logging.error(f"Error in /osairis/data_monitoring/create endpoint: {error}")
+        logging.error(f"Error in /osairis/services/list_allendpoint: {error}")
         raise error
 
 
@@ -116,7 +116,7 @@ async def list_service_data(
         [type]: [description]
     """
     try:
-        logging.info("Calling /aws/comprehend/create_document_classifier endpoint")
+        logging.info("Calling /osairis/services/by_cloud_and_use_case endpoint")
         if decodeJWT(token=token):
             response = ServicesController().get_services_by_use_case_controller(
                 cloud_service_provider=cloud_service_provider, use_case=use_case
@@ -129,5 +129,7 @@ async def list_service_data(
                 headers={"WWW-Authenticate": "Bearer"},
             )
     except Exception as error:
-        logging.error(f"Error in /osairis/data_monitoring/create endpoint: {error}")
+        logging.error(
+            f"Error in /osairis/services/by_cloud_and_use_case endpoint: {error}"
+        )
         raise error
