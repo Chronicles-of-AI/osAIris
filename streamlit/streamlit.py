@@ -8,7 +8,7 @@ import pandas as pd
 IP = os.environ.get("IP", "192.168.29.137")
 DATA_HUB = f"http://{IP}:7000"
 DOCUMENTATION = f"http://{IP}:80"
-asset_name = "mObius"
+asset_name = "osAIris"
 page_icon_path = "logo.jpeg"
 sidebar_image_path = "logo.jpeg"
 
@@ -56,10 +56,10 @@ with st.beta_expander("Login"):
             st.success("Done!")
             st.json({"status": "User Authenticated"})
 
-with st.beta_expander("Step 1: Create mobius Poject"):
+with st.beta_expander("Step 1: Create osAIris Poject"):
     token_obj = json.load(open("token.json", "r"))
     token = token_obj.get("token")
-    with st.form("create_mobius_project"):
+    with st.form("create_osAIris_project"):
         st.subheader("Configure Project")
         pipeline_name = st.text_input("Pipeline Name")
         pipeline_description = st.text_input("Pipeline Description")
