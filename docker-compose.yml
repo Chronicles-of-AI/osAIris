@@ -115,6 +115,19 @@ services:
         networks: 
             - osairis
 
+    osairis_triton:
+        image: nvcr.io/nvidia/tritonserver:20.06-py3
+        container_name: osairis-triton
+        volumes:
+            - /Users/vsatpathy/Desktop/off_POCs/test/server-main/docs/examples/model_repository:/models nvcr.io/nvidia/tritonserver:20.06-py3
+        command: ["tritonsesrver", "--model-repository=/models", "--model-control-model=poll", "--repository-poll-secs=5"]
+        ports:
+            - 8000:8000
+            - 8001:8001
+            - 8002:8002
+        networks:
+            - osairis
+
     osairis_streamlit:
         build: streamlit/.
         image: osairis/streamlit:latest
