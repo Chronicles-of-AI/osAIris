@@ -120,7 +120,7 @@ services:
         container_name: osairis-triton
         volumes:
             - /Users/vsatpathy/Desktop/off_POCs/test/server-main/docs/examples/model_repository:/models nvcr.io/nvidia/tritonserver:20.06-py3
-        command: ["tritonsesrver", "--model-repository=/models", "--model-control-model=poll", "--repository-poll-secs=5"]
+        command: ["tritonserver", "--model-repository=/models", "--model-control-model=poll", "--repository-poll-secs=5"]
         ports:
             - 8000:8000
             - 8001:8001
